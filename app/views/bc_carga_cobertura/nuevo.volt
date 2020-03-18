@@ -9,7 +9,7 @@
     {{ select("mes", meses, "class" : "form-control") }}
   </div>
 </div>
-<div class="form-group">
+<!-- <div class="form-group">
   <label class="col-sm-2 control-label" for="modalidad">Modalidad</label>
   <div class="col-sm-10">
     <select class="form-control" name="id_modalidad">
@@ -19,7 +19,7 @@
       <option value="4">Otras Poblaciones</option>
     </select>
   </div>
-</div>
+</div> -->
 <div class="form-group">
   <label class="col-sm-2 control-label">Archivo MAT</label>
   <div class="col-sm-10">

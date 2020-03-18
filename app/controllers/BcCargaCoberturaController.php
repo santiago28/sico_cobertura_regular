@@ -52,6 +52,7 @@ class BcCargaCoberturaController extends ControllerBase
         ($upload->moveTo($path)) ? $isUploaded = true : $isUploaded = false;
         $i++;
       }
+
       if($isUploaded){
         if (!$bc_carga->save()) {
           foreach ($bc_carga->getMessages() as $message) {
@@ -61,17 +62,18 @@ class BcCargaCoberturaController extends ControllerBase
           return $this->response->redirect("bc_carga_cobertura/nuevo");
         }
 
-        $id_modalidad = $this->request->getPost("id_modalidad");
-        if ($id_modalidad == "1") {
-          CobPersonaRegular::cargarBdRegularConfesiones($bc_carga);
-        }else if ($id_modalidad == "2") {
-          CobPersonaRegular::cargarBdRegularAdultos($bc_carga);
-        }else if ($id_modalidad == "3") {
-          CobPersonaRegular::cargarBdRegularOferentes($bc_carga);
-        }else if ($id_modalidad == "4") {
-          CobPersonaRegular::cargarBdRegularOtrasPoblaciones($bc_carga);
-        }
-
+        // $id_modalidad = $this->request->getPost("id_modalidad");
+        // if ($id_modalidad == "1") {
+        //   CobPersonaRegular::cargarBdRegularConfesiones($bc_carga);
+        // }else if ($id_modalidad == "2") {
+        //   CobPersonaRegular::cargarBdRegularAdultos($bc_carga);
+        // }else if ($id_modalidad == "3") {
+        //   CobPersonaRegular::cargarBdRegularOferentes($bc_carga);
+        // }else if ($id_modalidad == "4") {
+        //   CobPersonaRegular::cargarBdRegularOtrasPoblaciones($bc_carga);
+        // }
+        CobPersonaRegular::cargarBdComite($bc_carga);
+        
         $this->flash->success("La carga fue realizada exitosamente.");
 
         return $this->response->redirect("bc_carga_cobertura/");

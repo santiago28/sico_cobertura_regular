@@ -99,4 +99,80 @@ class CobPersonaRegular extends \Phalcon\Mvc\Model
     $db->query("INSERT IGNORE INTO cob_persona_regular_otras_poblaciones (id_modalidad, numeroContrato, modalidad, entidad, establecimientoEducativo, grado2019, grupo2019, grado2020, nivel2020, numDocumento, nombreCompleto, legalizaMatricula, confirmeGrado, confirmeNumDocumento, fechaMatricula, numeroFolio, confirmeSedeLegalizaMatricula,valRepit, valIdRepitModalidad) SELECT id_modalidad, numeroContrato, modalidad, entidad, establecimientoEducativo, grado2019, grupo2019, grado2020, nivel2020, numDocumento, nombreCompleto, legalizaMatricula, confirmeGrado, confirmeNumDocumento, fechaMatricula, numeroFolio, confirmeSedeLegalizaMatricula,valRepit, valIdRepitModalidad FROM $tabla_mat WHERE $tabla_mat.confirmeNumDocumento NOT IN (SELECT confirmeNumDocumento FROM cob_persona_regular_otras_poblaciones WHERE numeroContrato = $tabla_mat.numeroContrato)");
     return TRUE;
   }
+
+  //carga db comite  
+
+  public function cargarBdComite($carga){
+    $db = $this->getDI()->getDb();
+    $config = $this->getDI()->getConfig();
+    $timestamp = new DateTime();
+    $tabla_mat = "m" . $timestamp->getTimestamp();
+    $archivo_mat = $config->application->basePath . "public/files/bc_bd/" . $carga->nombreMat;
+    $db->query("CREATE TEMPORARY TABLE $tabla_mat 
+    (
+      id_oferente INT,
+      id_contrato BIGINT(20),
+      numDocumento VARCHAR(100), 
+      nombreCompleto VARCHAR(200), 
+      id_sede INT,
+      jornada varchar(50),
+      grado varchar(10),
+      grupo varchar(50), 
+      matriculadoSimat varchar(5), 
+      retirado VARCHAR(5), 
+      ingreso VARCHAR(50)) CHARACTER SET utf8 COLLATE utf8_bin");
+    $db->query("LOAD DATA INFILE '$archivo_mat' IGNORE INTO TABLE $tabla_mat FIELDS TERMINATED BY ';' LINES TERMINATED BY '\n' IGNORE 1 LINES 
+    (
+      @ID_OFERENTE,
+      @CONTRATO, 
+      @DOCUMENTO, 
+      @NOMBRE_COMPLETO, 
+      @ID_SEDE, 
+      @JORNADA,
+      @GRADO, 
+      @GRUPO, 
+      @MATRICULADO_SIMAT, 
+      @RETIRADO, 
+      @INGRESO 
+      ) SET 
+          id_oferente = @ID_OFERENTE, 
+          id_contrato = @CONTRATO, 
+          numDocumento = @DOCUMENTO, 
+          nombreCompleto = @NOMBRE_COMPLETO, 
+          id_sede = @ID_SEDE, 
+          jornada = @JORNADA, 
+          grado = @GRADO, 
+          grupo = @GRUPO, 
+          matriculadoSimat = @MATRICULADO_SIMAT, 
+          retirado = @RETIRADO,
+          ingreso = @INGRESO");
+
+    $db->query("INSERT IGNORE INTO cob_oferente_persona 
+    (
+      id_oferente,
+      id_contrato,
+      numDocumento, 
+      nombreCompleto, 
+      id_sede,
+      jornada,
+      grado,
+      grupo, 
+      matriculadoSimat, 
+      retirado, 
+      ingreso
+      ) SELECT 
+          id_oferente,
+          id_contrato,
+          numDocumento, 
+          nombreCompleto, 
+          id_sede,
+          jornada,
+          grado,
+          grupo, 
+          matriculadoSimat, 
+          retirado, 
+          ingreso 
+      FROM $tabla_mat WHERE $tabla_mat.numDocumento NOT IN (SELECT numDocumento FROM cob_oferente_persona WHERE id_contrato = $tabla_mat.id_contrato)");
+    return TRUE;
+  }
 }
