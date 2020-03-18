@@ -62,7 +62,7 @@ th     { background:#eee; }
         <th>Documento</th>
         <th style="width: 150px;">Nombre</th>
         <th style="width: 150px;">Sede</th>
-        <th>Jornada</th>
+        <th >Jornada</th>
         <th>Grados</th>
         <th>Grupo</th>
         <th style="width: 90px;">¿Está matriculado en el SIMAT?</th>
@@ -166,6 +166,7 @@ setTimeout(function(){
       theme : "bootstrap",
 
       widthFixed: true,
+      headers: { 3: { sorter: false, filter:false} , 4: { sorter: false, filter:false}, 5: { sorter: false, filter:false}, 6: { sorter: false, filter:false}, 7: { sorter: false, filter:false}, 8: { sorter: false, filter:false}}  ,
 
       headerTemplate : '{content} {icon}', // new in v2.7. Needed to add the bootstrap icon!
 
@@ -179,7 +180,7 @@ setTimeout(function(){
         zebra : ["even", "odd"],
 
         // reset filters button
-        filter_reset : ".reset"
+        filter_reset : ".reset",
 
         // set the uitheme widget to use the bootstrap theme class names
         // this is no longer required, if theme is set
@@ -190,4 +191,6 @@ setTimeout(function(){
 
   });
 }, 1000);
+
+
 </script>
