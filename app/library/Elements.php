@@ -131,6 +131,10 @@ class Elements extends Component
 	);
 
 	private $_headerMenuOferente = array(
+		'ibc_archivo_digital' => array(
+			'caption' => 'Archivo Digital',
+			'action' => 'index'
+		),
 		// 'ibc_mensaje' => array(
 		// 	'caption' => 'Ubicación Sedes',
 		// 	'action' => 'anuncios'
