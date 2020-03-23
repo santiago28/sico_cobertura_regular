@@ -113,6 +113,12 @@ class CobActaconteoDatos extends \Phalcon\Mvc\Model
 
     /**
      *
+     * @var string
+     */
+    public $urlEvidenciaAtencion;
+
+    /**
+     *
      * @var integer
      */
     public $gruposVisitados;

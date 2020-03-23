@@ -112,6 +112,7 @@ class CobActaconteoController extends ControllerBase
 				$this->tag->setDefault("estadoVisita", $acta->CobActaconteoDatos->estadoVisita);
 				$this->tag->setDefault("numeroEncuentos", $acta->CobActaconteoDatos->numeroEncuentos);
 				$this->tag->setDefault("gestionTelefonica", $acta->CobActaconteoDatos->gestionTelefonica);
+				$this->view->urlEvidenciaAtencion = $acta->CobActaconteoDatos->urlEvidenciaAtencion;
 				if($acta->id_modalidad == 5){
 					$this->tag->setDefault("encuentroSede", $acta->CobActaconteoDatos->encuentroSede);
 					$this->tag->setDefault("nombreSede", $acta->CobActaconteoDatos->nombreSede);
@@ -163,6 +164,7 @@ class CobActaconteoController extends ControllerBase
 		$dato->mosaicoDigital = $this->request->getPost("mosaicoDigital");
 		$dato->observacionEncargado = $this->request->getPost("observacionEncargado");
 		$dato->observacionUsuario = $this->request->getPost("observacionUsuario");
+		$dato->urlEvidenciaAtencion = $this->request->getPost("urlEvidenciaAtencion");
 		//Si es Entorno Comunitario Itinerante se guarda Estado de la Visita
 		if($acta->id_modalidad == 12){
 			$dato->estadoVisita = $this->request->getPost("estadoVisita");
