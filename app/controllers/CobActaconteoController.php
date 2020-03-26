@@ -908,4 +908,69 @@ class CobActaconteoController extends ControllerBase
 		$this->flash->success("La carga de acta fue eliminada exitosamente");
 		return $this->response->redirect("cob_actaconteo/");
 	}
+
+	public function reportebeneficiarioAction(){
+		
+	}
+
+	public function consultar_beneficiarioAction(){
+		if ($this->request->isGet()) {
+			
+			$db = $this->getDI()->getDb();
+			$config = $this->getDI()->getConfig();
+	
+				$numDocumento = $_GET['valor_busqueda'];
+				$beneficiarios = $db->query(
+					 "SELECT id_oferente_persona,numDocumento, nombreCompleto,jornada, grado,grupo, sede_nombre, cob_oferente_persona.id_contrato as contrato, bc_modalidad.nombre as modalidad FROM cob_oferente_persona 
+					  jOIN bc_sede_contrato on bc_sede_contrato.id_sede =  cob_oferente_persona.id_sede
+					  jOIN bc_modalidad on bc_modalidad.id_modalidad =  bc_sede_contrato.id_modalidad
+					  WHERE (numDocumento = '$numDocumento' or nombreCompleto LIKE '%$numDocumento%') and retirado = 2
+					  order by cob_oferente_persona.id_sede");
+				$beneficiarios->setFetchMode(Phalcon\Db::FETCH_OBJ);
+
+
+				$this->view->beneficiarios =$beneficiarios->fetchAll();
+				$this->view->valor_busqueda =$numDocumento;
+			}
+	}
+
+	public function datos_beneficiarioAction($id_oferente_persona){
+		if ($this->request->isGet()) {
+			
+			$db = $this->getDI()->getDb();
+			$config = $this->getDI()->getConfig();
+		
+				$oferente_persona= CobOferentePersona::findFirstByid_oferente_persona($id_oferente_persona);
+				$sede= BcSedeContrato::findFirstByid_sede($oferente_persona->id_sede);
+				$facturas=$db->query(
+					"SELECT 
+					    sede_nombre,
+						certificacionRecorridos,
+						case month(fecha) 
+								WHEN 1 THEN 'Enero'
+								WHEN 2 THEN  'Febrero'
+								WHEN 3 THEN 'Marzo' 
+								WHEN 4 THEN 'Abril' 
+								WHEN 5 THEN 'Mayo'
+								WHEN 6 THEN 'Junio'
+								WHEN 7 THEN 'Julio'
+								WHEN 8 THEN 'Agosto'
+								WHEN 9 THEN 'Septiembre'
+								WHEN 10 THEN 'Octubre'
+								WHEN 11 THEN 'Noviembre'
+								WHEN 12 THEN 'Diciembre'
+								END as fecha,
+						 bc_sede_contrato.id_contrato as id_contrato,
+						 bc_sede_contrato.oferente_nombre as oferente_nombre
+					 FROM  cob_actaconteo_persona_facturacion
+					 jOIN cob_periodo on cob_periodo.id_periodo =  cob_actaconteo_persona_facturacion.id_periodo
+					 jOIN bc_sede_contrato on bc_sede_contrato.id_sede =  cob_actaconteo_persona_facturacion.id_sede
+					 WHERE numDocumento = '$oferente_persona->numDocumento'");
+
+				$facturas->setFetchMode(Phalcon\Db::FETCH_OBJ);
+				$this->view->oferente_persona =$oferente_persona;
+				$this->view->sede =$sede;
+				$this->view->facturas =$facturas->fetchAll();
+			}
+	}
 }

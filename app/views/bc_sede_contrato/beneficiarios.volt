@@ -49,8 +49,22 @@ table  { border-collapse: collapse; width: 100%; }
 th, td { padding: 8px 16px; }
 th     { background:#eee; }
 </style>
-<div class="tableFixHead">
 
+<br>
+<br>
+<div class="form-group">
+  <span><b>Contrato: </b> {{id_contrato}}</span>
+  <span style="margin-left: 2%;"><b>Total Cupos Matriculados: </b> {{total_beneficiarios}}</span>
+  <span style="margin-left: 2%;"><b>Total Beneficiarios Activos: </b>{{beneficiarios_activos}}</span>
+  <span style="margin-left: 2%;"><b>Total Beneficiarios Retirados:</b> {{beneficiarios_retirado}}</span>
+  <span style="margin-left: 2%;"><b>Total Beneficiarios Contrato:</b> {{cuposTotal}}</span>
+  <span ><b>Modalidad:</b> {{modalidad[0].nombre}}</span>
+  
+</div>
+<h4> </h4>
+<h4> </h4>
+<h4></h4>
+<div class="tableFixHead">
 
   {{ form("bc_sede_contrato/guardarbeneficiarios/"~id_contrato, "method":"post", "parsley-validate" : "", "id" : "beneficiarios_form") }}
   {{ hidden_field("id_contrato", "value": id_contrato) }}

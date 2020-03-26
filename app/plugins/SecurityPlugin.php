@@ -236,6 +236,15 @@ class SecurityPlugin extends Plugin
       ),
       'eliminar' => array(
         'nivelPermiso' => '1'
+      ),
+      'reportebeneficiario' => array(
+        'nivelPermiso' => '1'
+      ),
+      'consultar_beneficiario' => array(
+        'nivelPermiso' => '1'
+      ),
+      'datos_beneficiario' => array(
+        'nivelPermiso' => '1'
       )
 
     ),'cob_actamuestreo' => array(

@@ -92,16 +92,47 @@ class BcSedeContratoController extends ControllerBase
   {
     if (isset($this->usuario)) {
 
+      //count de esta consulta
       $beneficiarios = CobOferentePersona::find([
         'id_contrato = '. $this->usuario,
         'order' => 'nombreCompleto asc']);
-        // var_dump($beneficiarios);
+
+        $beneficiarios_retirado = CobOferentePersona::find([
+          'id_contrato = '. $this->usuario.' and retirado = 1']);
+
+          $beneficiarios_activos = CobOferentePersona::find([
+            'id_contrato = '. $this->usuario.' and retirado = 2']);
+
+            $db = $this->getDI()->getDb();
+		      	$config = $this->getDI()->getConfig();
+            $beneficiarios_contrato = $db->query(
+               "SELECT cuposTotal, id_modalidad FROM  cob_periodo_contratosedecupos 
+                jOIN bc_sede_contrato on bc_sede_contrato.id_sede_contrato = cob_periodo_contratosedecupos.id_sede_contrato
+                WHERE bc_sede_contrato.id_contrato = $this->usuario 
+                order by id_periodo desc  
+                limit 0,1");
+            $beneficiarios_contrato->setFetchMode(Phalcon\Db::FETCH_OBJ);
+    
+            foreach ($beneficiarios_contrato->fetchAll() as $key => $value) {
+              $cuposTotal=$value->cuposTotal;
+              $id_modalidad=$value->id_modalidad;
+            }
+          
         $sedes = BcSedeContrato::find(['id_contrato = '. $this->usuario, 'order' => 'oferente_nombre asc']);
+        $modalidad = BcModalidad::find(['id_modalidad = '. $id_modalidad]);
+
+       $prueba = $modalidad->id_modalidad;
         $sedes_array = array();
         foreach ($sedes as $row) {
           $sedes_array[$row->id_sede] = $row->sede_nombre;
         }
+
         $this->view->beneficiarios = $beneficiarios;
+        $this->view->total_beneficiarios = count($beneficiarios);
+        $this->view->beneficiarios_activos = count($beneficiarios_activos);
+        $this->view->beneficiarios_retirado = count($beneficiarios_retirado);
+        $this->view->cuposTotal =$cuposTotal;
+        $this->view->modalidad =  $modalidad ;
         $this->view->sedes = $sedes_array;
         $this->view->id_contrato = $this->usuario;
         $this->view->jornada = $this->elements->getSelect("jornada");
