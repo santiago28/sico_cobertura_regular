@@ -108,29 +108,33 @@ class Elements extends Component
 
 	);
 	private $_headerMenu = array(
-		'ibc_mensaje' => array(
-			'caption' => 'Ubicación Sedes',
-			'action' => 'anuncios'
-		),
+		// 'ibc_mensaje' => array(
+		// 	'caption' => 'Ubicación Sedes',
+		// 	'action' => 'anuncios'
+		// ),
 		'cob_periodo' => array(
 			'caption' => 'Periodos',
 			'action' => 'index'
 		),
-		'cob_verificacion' => array(
-			'caption' => 'Verificaciones',
-			'action' => 'index'
-		),
-		'bc_permiso' => array(
-			'caption' => 'Permisos',
-			'action' => 'index'
-		),
-		'bc_hcb' => array(
-			'caption' => 'Cronograma Itinerante',
-			'action' => 'index'
-		)
+		// 'cob_verificacion' => array(
+		// 	'caption' => 'Verificaciones',
+		// 	'action' => 'index'
+		// ),
+		// 'bc_permiso' => array(
+		// 	'caption' => 'Permisos',
+		// 	'action' => 'index'
+		// ),
+		// 'bc_hcb' => array(
+		// 	'caption' => 'Cronograma Itinerante',
+		// 	'action' => 'index'
+		// )
 	);
 
 	private $_headerMenuOferente = array(
+		'ibc_archivo_digital' => array(
+			'caption' => 'Archivo Digital',
+			'action' => 'index'
+		),
 		// 'ibc_mensaje' => array(
 		// 	'caption' => 'Ubicación Sedes',
 		// 	'action' => 'anuncios'
@@ -162,10 +166,10 @@ class Elements extends Component
 );
 
 private $_headerMenuBCReportes = array(
-	'ibc_mensaje' => array(
-		'caption' => 'Ubicación Sedes',
-		'action' => 'anuncios'
-	),
+	// 'ibc_mensaje' => array(
+	// 	'caption' => 'Ubicación Sedes',
+	// 	'action' => 'anuncios'
+	// ),
 	'ibc_archivo_digital' => array(
 		'caption' => 'Archivo Digital',
 		'action' => 'index'
@@ -177,21 +181,21 @@ private $_headerMenuBCReportes = array(
 );
 
 private $_headerMenuPermisosBC = array(
-	'ibc_mensaje' => array(
-		'caption' => 'Ubicación Sedes',
-		'action' => 'anuncios'
-	),
-	'bc_permiso' => array(
-		'caption' => 'Permisos',
-		'action' => 'index'
-	)
+	// 'ibc_mensaje' => array(
+	// 	'caption' => 'Ubicación Sedes',
+	// 	'action' => 'anuncios'
+	// ),
+	// 'bc_permiso' => array(
+	// 	'caption' => 'Permisos',
+	// 	'action' => 'index'
+	// )
 );
 
 private $_headerMenuComponente = array(
-	'ibc_mensaje' => array(
-		'caption' => 'Ubicación Sedes',
-		'action' => 'anuncios'
-	)
+	// 'ibc_mensaje' => array(
+	// 	'caption' => 'Ubicación Sedes',
+	// 	'action' => 'anuncios'
+	// )
 );
 
 private $_tabs = array(
@@ -403,6 +407,14 @@ public function getMenu()
 			$menu_usuario .= '</div>';
 		}
 
+		echo '<div class="header-menu-principal">';
+			echo '<div>';
+			echo '<img id="avatarprincipal" src="" />';
+			echo '<br />';
+			echo '<b>Nombre:&ensp;</b><span id="username">'.explode(" ", $user['nombre'])[0].'</span>';
+			echo '</div>';
+			echo '</div>';
+			echo '<div class="body-menu-principal">';
 		foreach ($menu as $controller => $option) {
 			if ($controller == "bc_reporte" && $user['nivel'] <= 2) {
 				// if ($controllerName == $controller) {
@@ -455,6 +467,7 @@ public function getMenu()
 			}
 		}
 		echo $menu_usuario;
+		echo '</div>';
 		// echo '<div class="item-menu">';
 		// echo '<i class="material-icons"></i>';
 		// echo '<span>'.$this->tag->linkTo("ibc_usuario/editarperfil", "Editar Perfil").'</span>';

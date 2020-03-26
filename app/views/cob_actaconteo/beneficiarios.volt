@@ -69,12 +69,14 @@
           {{ text_field("fecha_excusa[]", "type" : "date", "class" : "form-control tipo-fecha excusa", "placeholder" : "Fecha: dd/mm/aaaa", "parsley-type" : "dateIso", "data-date-format" : "dd/mm/yyyy", "value" : fecha_excusa) }}
           {{ text_field("profesional[]", "placeholder" : "Profesional", "class" : "form-control excusa", "value" : beneficiario.CobActaconteoPersonaExcusa.profesional) }}
           {{ text_field("telefono[]", "placeholder" : "Teléfono", "class" : "form-control excusa", "parsley-type" : "number", "value" : beneficiario.CobActaconteoPersonaExcusa.telefono) }}
+          <?php if($beneficiario->asistencia == 2){ ?>
           <input class="fileupload filestyle" data-input="false" data-badge="false" type="file" name="excusa[]" multiple>
           <div id="progress" class="progress" style="margin: 0 !important;">
             <div class="progress-bar progress-bar-success"></div>
           </div>
           <p><a class="captura" target="_blank" href="/sico_cobertura_regular/files/excusas/{{ beneficiario.CobActaconteoPersonaExcusa.urlExcusa }}">{% if beneficiario.CobActaconteoPersonaExcusa.urlExcusa %}Clic para ver{% endif %}</a></p>
           <input type='hidden' class='urlExcusa' name='urlExcusa[]' value='{{  beneficiario.CobActaconteoPersonaExcusa.urlExcusa }}'>
+          <?php } ?>
         <?php } else { ?>
           <input type="hidden" class="excusa" disabled="disabled" name="id_actaconteo_persona2[]" value="{{ beneficiario.id_actaconteo_persona }}">
           {{ text_field("motivo[]", "placeholder" : "Motivo", "class" : "form-control hidden excusa", "disabled" : "disabled") }}

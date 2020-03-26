@@ -1,6 +1,6 @@
 
 {{ content() }}
-<h1>Nueva Carga General</h1>
+<h1>Nueva Carga Comité</h1>
 {{ link_to("bc_carga_cobertura/", '<i class="glyphicon glyphicon-chevron-left"></i> Regresar', "class": "btn btn-primary menu-tab") }}
 {{ form("bc_carga_cobertura/crear", "method":"post", "class":"form-container form-horizontal", "parsley-validate" : "", "enctype" : "multipart/form-data") }}
 <div class="form-group">
