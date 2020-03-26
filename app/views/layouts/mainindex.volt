@@ -30,16 +30,16 @@
   <i class="material-icons icono-menu">&#xE5D2;</i>
   <div class="sobre-menu-principal"></div>
   <div class="menu-principal">
-    <div class="header-menu-principal">
+    {# <div class="header-menu-principal">
       <div>
         <img id="avatarprincipal" src="" />
         <br />
-        {# <b>Nombre:&ensp;</b><span id="username">Pruebas</span> #}
+        <b>Nombre:&ensp;</b><span id="username"></span>
       </div>
     </div>
-    <div class="body-menu-principal">
+    <div class="body-menu-principal"> #}
       {{ elements.getMenu() }}
-    </div>
+    {# </div> #}
     <div class="footer-menu-principal">
       <div></div>
       {# <div>{{ link_to("/2020/interventoria/principal.php", '<i class="material-icons">&#xE8AC;</i>') }}</div> #}

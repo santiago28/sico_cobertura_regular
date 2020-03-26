@@ -407,6 +407,14 @@ public function getMenu()
 			$menu_usuario .= '</div>';
 		}
 
+		echo '<div class="header-menu-principal">';
+			echo '<div>';
+			echo '<img id="avatarprincipal" src="" />';
+			echo '<br />';
+			echo '<b>Nombre:&ensp;</b><span id="username">'.explode(" ", $user['nombre'])[0].'</span>';
+			echo '</div>';
+			echo '</div>';
+			echo '<div class="body-menu-principal">';
 		foreach ($menu as $controller => $option) {
 			if ($controller == "bc_reporte" && $user['nivel'] <= 2) {
 				// if ($controllerName == $controller) {
@@ -459,6 +467,7 @@ public function getMenu()
 			}
 		}
 		echo $menu_usuario;
+		echo '</div>';
 		// echo '<div class="item-menu">';
 		// echo '<i class="material-icons"></i>';
 		// echo '<span>'.$this->tag->linkTo("ibc_usuario/editarperfil", "Editar Perfil").'</span>';
