@@ -36,6 +36,15 @@
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 <a href='#duplicar_fecha' class='btn btn-primary' data-toggle="modal" style="margin-bottom: 5px;">Duplicar fecha por grupos</a>
+
+<div style="margin-top: 3%;">
+  <div class="form-group">
+    <label>Texto para replicar excusa</label>
+    <textarea id="texto_excusa_replicar" class="form-control" placeholder="Motivo, fecha: dd/mm/aaaa, profesional, teléfono" style="width: 40%;"></textarea>
+  </div>
+</div>
+
+
 {{ form("cob_actaconteo/guardarbeneficiarios/"~id_actaconteo, "method":"post", "parsley-validate" : "", "id" : "beneficiarios_form") }}
 {{ hidden_field("periodo_tipo", "value": periodo_tipo) }}
 <table class="table table-bordered table-hover" id="{{ id_actaconteo }}">
@@ -47,74 +56,76 @@
       <th>Grupo</th>
       <th>Asistencia</th>
       <th>Excusa</th>
-      {% if acta.id_modalidad == 3 or acta.id_modalidad == 5 or acta.id_modalidad == 7 %}<th><span class='fecha_visita_header'>Fecha Visita</th>{% endif %}
-      </tr>
-    </thead>
-    <tbody>
-      {% if(periodo_tipo != 2) %}
-      {% for beneficiario in beneficiarios %}
-      {% set nombre = {beneficiario.primerNombre, beneficiario.segundoNombre, beneficiario.primerApellido, beneficiario.segundoApellido} %}
-      <?php $fecha = $this->conversiones->fecha(2, $beneficiario->fechaInterventoria); ?>
-      <tr<?php echo $beneficiario->getAsistenciaDetail(); ?>>
-      <td>{{ loop.index }}</td>
-      <td>{{ beneficiario.numDocumento }}</td>
-      <td>{{ nombre|join(' ') }}</td>
-      <td><div class='hide id_grupo'>{{ beneficiario.id_grupo }}</div>{{ beneficiario.grupo }}</td>
-      <td><input type="hidden" name="id_actaconteo_persona[]" value="{{ beneficiario.id_actaconteo_persona }}">{{ select("asistencia[]", asistencia, "value" : beneficiario.asistencia, "class" : "form-control asistencia required") }}</td>
-      <td>
-        <?php if($beneficiario->asistencia == 2 || $beneficiario->asistencia == 5){ ?>
-          <?php $fecha_excusa = $this->conversiones->fecha(2, $beneficiario->CobActaconteoPersonaExcusa->fecha); ?>
-          <input type="hidden" class="excusa" name="id_actaconteo_persona2[]" value="{{ beneficiario.id_actaconteo_persona }}">
-          {{ text_field("motivo[]", "placeholder" : "Motivo", "class" : "form-control excusa", "value" : beneficiario.CobActaconteoPersonaExcusa.motivo) }}
-          {{ text_field("fecha_excusa[]", "type" : "date", "class" : "form-control tipo-fecha excusa", "placeholder" : "Fecha: dd/mm/aaaa", "parsley-type" : "dateIso", "data-date-format" : "dd/mm/yyyy", "value" : fecha_excusa) }}
-          {{ text_field("profesional[]", "placeholder" : "Profesional", "class" : "form-control excusa", "value" : beneficiario.CobActaconteoPersonaExcusa.profesional) }}
-          {{ text_field("telefono[]", "placeholder" : "Teléfono", "class" : "form-control excusa", "parsley-type" : "number", "value" : beneficiario.CobActaconteoPersonaExcusa.telefono) }}
-          <?php if($beneficiario->asistencia == 2){ ?>
-          <input class="fileupload filestyle" data-input="false" data-badge="false" type="file" name="excusa[]" multiple>
-          <div id="progress" class="progress" style="margin: 0 !important;">
-            <div class="progress-bar progress-bar-success"></div>
-          </div>
-          <p><a class="captura" target="_blank" href="/sico_cobertura_regular/files/excusas/{{ beneficiario.CobActaconteoPersonaExcusa.urlExcusa }}">{% if beneficiario.CobActaconteoPersonaExcusa.urlExcusa %}Clic para ver{% endif %}</a></p>
-          <input type='hidden' class='urlExcusa' name='urlExcusa[]' value='{{  beneficiario.CobActaconteoPersonaExcusa.urlExcusa }}'>
-          <?php } ?>
-        <?php } else { ?>
-          <input type="hidden" class="excusa" disabled="disabled" name="id_actaconteo_persona2[]" value="{{ beneficiario.id_actaconteo_persona }}">
-          {{ text_field("motivo[]", "placeholder" : "Motivo", "class" : "form-control hidden excusa", "disabled" : "disabled") }}
-          {{ text_field("fecha_excusa[]", "type" : "date", "class" : "form-control tipo-fecha hidden excusa", "placeholder" : "Fecha: dd/mm/aaaa", "parsley-type" : "dateIso", "data-date-format" : "dd/mm/yyyy", "disabled" : "disabled") }}
-          {{ text_field("profesional[]", "placeholder" : "Profesional", "class" : "form-control hidden excusa", "disabled" : "disabled") }}
-          {{ text_field("telefono[]", "placeholder" : "Teléfono", "class" : "form-control hidden excusa", "parsley-type" : "number", "disabled" : "disabled") }}
-          <input class="fileupload filestyle excusa" data-input="false" data-badge="false" type="file" name="excusa[]" multiple>
-          <div id="progress" class="progress excusa" style="margin: 0 !important;">
-            <div class="progress-bar progress-bar-success"></div>
-          </div>
-        <?php } ?>
-      </td>
-      <td>{{ text_field("fecha[]", "type" : "date", "class" : "form-control tipo-fecha fecha", "placeholder" : "dd/mm/aaaa", "parsley-type" : "dateIso", "data-date-format" : "dd/mm/yyyy", "value" : fecha) }}</td>
+      {# {% if acta.id_modalidad == 3 or acta.id_modalidad == 5 or acta.id_modalidad == 7 %}<th><span class='fecha_visita_header'>Fecha Visita</th>{% endif %} #}
     </tr>
-    {% endfor %}
-    {% else %}
+  </thead>
+  <tbody>
+    {% if(periodo_tipo != 2) %}
     {% for beneficiario in beneficiarios %}
     {% set nombre = {beneficiario.primerNombre, beneficiario.segundoNombre, beneficiario.primerApellido, beneficiario.segundoApellido} %}
     <?php $fecha = $this->conversiones->fecha(2, $beneficiario->fechaInterventoria); ?>
-    <tr<?php echo $beneficiario->getAsistenciaDetail2(); ?>>
+    <tr<?php echo $beneficiario->getAsistenciaDetail(); ?>>
     <td>{{ loop.index }}</td>
     <td>{{ beneficiario.numDocumento }}</td>
     <td>{{ nombre|join(' ') }}</td>
     <td><div class='hide id_grupo'>{{ beneficiario.id_grupo }}</div>{{ beneficiario.grupo }}</td>
-    <td><input type="hidden" name="id_actaconteo_persona[]" value="{{ beneficiario.id_actaconteo_persona }}">{{ select("asistencia[]", asistenciaEC, "value" : beneficiario.asistencia, "class" : "form-control asistencia required") }}</td>
+    <td><input type="hidden" name="id_actaconteo_persona[]" value="{{ beneficiario.id_actaconteo_persona }}">{{ select("asistencia[]", asistencia, "value" : beneficiario.asistencia, "class" : "form-control asistencia required") }}</td>
     <td>
       <?php if($beneficiario->asistencia == 2 || $beneficiario->asistencia == 5){ ?>
-        <input type="hidden" class="excusa" disabled="disabled" name="id_actaconteo_persona2[]" value="{{ beneficiario.id_actaconteo_persona }}">
-        {{ text_field("motivo[]", "placeholder" : "Gestión Telefónica", "class" : "form-control hidden excusa", "disabled" : "disabled") }}
-        {{ text_field("fecha_excusa[]", "type" : "date", "class" : "form-control tipo-fecha hidden excusa", "placeholder" : "Fecha: dd/mm/aaaa", "parsley-type" : "dateIso", "data-date-format" : "dd/mm/yyyy", "disabled" : "disabled") }}
-        {{ text_field("profesional[]", "placeholder" : "Acudiente", "class" : "form-control hidden excusa", "disabled" : "disabled") }}
-        {{ text_field("telefono[]", "placeholder" : "Teléfono", "class" : "form-control hidden excusa", "parsley-type" : "number", "disabled" : "disabled") }}
-      <?php } ?>
-    </td>
-    <td>{{ text_field("fecha[]", "type" : "date", "class" : "form-control tipo-fecha fecha", "placeholder" : "dd/mm/aaaa", "parsley-type" : "dateIso", "data-date-format" : "dd/mm/yyyy", "value" : fecha) }}</td>
-  </tr>
-  {% endfor %}
-  {% endif %}
+        <?php $fecha_excusa = $this->conversiones->fecha(2, $beneficiario->CobActaconteoPersonaExcusa->fecha); ?>
+        <input type="hidden" class="excusa" name="id_actaconteo_persona2[]" value="{{ beneficiario.id_actaconteo_persona }}">
+        {{ text_area("motivo[]", "placeholder" : "Motivo, fecha: dd/mm/aaaa, profesional, teléfono", "class" : "form-control excusa texto_excusa", "value" : beneficiario.CobActaconteoPersonaExcusa.motivo) }}
+        {# {{ text_field("fecha_excusa[]", "type" : "date", "class" : "form-control tipo-fecha excusa", "placeholder" : "Fecha: dd/mm/aaaa", "parsley-type" : "dateIso", "data-date-format" : "dd/mm/yyyy", "value" : fecha_excusa) }}
+        {{ text_field("profesional[]", "placeholder" : "Profesional", "class" : "form-control excusa", "value" : beneficiario.CobActaconteoPersonaExcusa.profesional) }}
+        {{ text_field("telefono[]", "placeholder" : "Teléfono", "class" : "form-control excusa", "parsley-type" : "number", "value" : beneficiario.CobActaconteoPersonaExcusa.telefono) }} #}
+        {# <?php if($beneficiario->asistencia == 2){ ?>
+        <input class="fileupload filestyle" data-input="false" data-badge="false" type="file" name="excusa[]" multiple>
+        <div id="progress" class="progress" style="margin: 0 !important;">
+        <div class="progress-bar progress-bar-success"></div>
+      </div>
+      <p><a class="captura" target="_blank" href="/sico_cobertura_regular/files/excusas/{{ beneficiario.CobActaconteoPersonaExcusa.urlExcusa }}">{% if beneficiario.CobActaconteoPersonaExcusa.urlExcusa %}Clic para ver{% endif %}</a></p>
+      <input type='hidden' class='urlExcusa' name='urlExcusa[]' value='{{  beneficiario.CobActaconteoPersonaExcusa.urlExcusa }}'>
+    <?php } ?> #}
+  <?php } else { ?>
+    <input type="hidden" class="excusa" disabled="disabled" name="id_actaconteo_persona2[]" value="{{ beneficiario.id_actaconteo_persona }}">
+    {{ text_area("motivo[]", "placeholder" : "Motivo, fecha: dd/mm/aaaa, profesional, teléfono", "disabled" : "disabled", "class" : "form-control hidden excusa texto_excusa") }}
+    <!--<input type="hidden" class="excusa" disabled="disabled" name="id_actaconteo_persona2[]" value="{{ beneficiario.id_actaconteo_persona }}">
+    {{ text_field("motivo[]", "placeholder" : "Motivo", "class" : "form-control hidden excusa", "disabled" : "disabled") }}
+    {# {{ text_field("fecha_excusa[]", "type" : "date", "class" : "form-control tipo-fecha hidden excusa", "placeholder" : "Fecha: dd/mm/aaaa", "parsley-type" : "dateIso", "data-date-format" : "dd/mm/yyyy", "disabled" : "disabled") }} #}
+    {{ text_field("profesional[]", "placeholder" : "Profesional", "class" : "form-control hidden excusa", "disabled" : "disabled") }}
+    {{ text_field("telefono[]", "placeholder" : "Teléfono", "class" : "form-control hidden excusa", "parsley-type" : "number", "disabled" : "disabled") }}
+    <input class="fileupload filestyle excusa" data-input="false" data-badge="false" type="file" name="excusa[]" multiple>
+    <div id="progress" class="progress excusa" style="margin: 0 !important;">
+    <div class="progress-bar progress-bar-success"></div>
+  </div>-->
+<?php } ?>
+</td>
+{# <td>{{ text_field("fecha[]", "type" : "date", "class" : "form-control tipo-fecha fecha", "placeholder" : "dd/mm/aaaa", "parsley-type" : "dateIso", "data-date-format" : "dd/mm/yyyy", "value" : fecha) }}</td> #}
+</tr>
+{% endfor %}
+{% else %}
+{% for beneficiario in beneficiarios %}
+{% set nombre = {beneficiario.primerNombre, beneficiario.segundoNombre, beneficiario.primerApellido, beneficiario.segundoApellido} %}
+<?php $fecha = $this->conversiones->fecha(2, $beneficiario->fechaInterventoria); ?>
+<tr<?php echo $beneficiario->getAsistenciaDetail2(); ?>>
+<td>{{ loop.index }}</td>
+<td>{{ beneficiario.numDocumento }}</td>
+<td>{{ nombre|join(' ') }}</td>
+<td><div class='hide id_grupo'>{{ beneficiario.id_grupo }}</div>{{ beneficiario.grupo }}</td>
+<td><input type="hidden" name="id_actaconteo_persona[]" value="{{ beneficiario.id_actaconteo_persona }}">{{ select("asistencia[]", asistenciaEC, "value" : beneficiario.asistencia, "class" : "form-control asistencia required") }}</td>
+<td>
+  <?php if($beneficiario->asistencia == 2 || $beneficiario->asistencia == 5){ ?>
+    <input type="hidden" class="excusa" disabled="disabled" name="id_actaconteo_persona2[]" value="{{ beneficiario.id_actaconteo_persona }}">
+    {{ text_field("motivo[]", "placeholder" : "Gestión Telefónica", "class" : "form-control hidden excusa", "disabled" : "disabled") }}
+    {{ text_field("fecha_excusa[]", "type" : "date", "class" : "form-control tipo-fecha hidden excusa", "placeholder" : "Fecha: dd/mm/aaaa", "parsley-type" : "dateIso", "data-date-format" : "dd/mm/yyyy", "disabled" : "disabled") }}
+    {{ text_field("profesional[]", "placeholder" : "Acudiente", "class" : "form-control hidden excusa", "disabled" : "disabled") }}
+    {{ text_field("telefono[]", "placeholder" : "Teléfono", "class" : "form-control hidden excusa", "parsley-type" : "number", "disabled" : "disabled") }}
+  <?php } ?>
+</td>
+<td>{{ text_field("fecha[]", "type" : "date", "class" : "form-control tipo-fecha fecha", "placeholder" : "dd/mm/aaaa", "parsley-type" : "dateIso", "data-date-format" : "dd/mm/yyyy", "value" : fecha) }}</td>
+</tr>
+{% endfor %}
+{% endif %}
 </tbody>
 </table>
 {{ submit_button("Guardar", "class" : "btn btn-default pull-right") }}

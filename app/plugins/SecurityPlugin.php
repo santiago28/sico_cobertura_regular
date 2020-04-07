@@ -600,7 +600,8 @@ class SecurityPlugin extends Plugin
       return TRUE;
     } else if($controlador !== "session" && $controlador !== "index") {
       $this->session->set("last_url", str_replace('/sico_cobertura_regular/', '', $_SERVER["REQUEST_URI"]));
-      return $this->response->redirect('session/index');
+      $url_return = "http://".$_SERVER['SERVER_NAME'].':10001/2020/interventoria/principal.php';
+      return $this->response->redirect($url_return);
     } else {
       return TRUE;
     }

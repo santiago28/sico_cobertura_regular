@@ -225,7 +225,7 @@ class CobActaconteoController extends ControllerBase
 			}
 			return $this->response->redirect("cob_actaconteo/datos/$id_actaconteo");
 		}
-		$fechas = $this->request->getPost("fecha_excusa");
+		$fechas = $this->request->getPost("motivo");
 		if($fechas){
 			$fechas = $this->conversiones->array_fechas(1, $fechas);
 			$modalidades = array();
@@ -235,12 +235,14 @@ class CobActaconteoController extends ControllerBase
 			$elementos = array( // Nota se utilizo la misma tabla para almacenar los datos de gestión y acudiente
 				'id_actaconteo_persona' => $this->request->getPost("id_actaconteo_persona2"),
 				'motivo' => $this->request->getPost("motivo"), // Gestión Telefónica para la modalidad entorno familiar
-				'fecha' => $fechas,
-				'profesional' => $this->request->getPost("profesional"), // Acudiente para la modalidad entorno familiar
-				'telefono' => $this->request->getPost("telefono"),
-				'urlExcusa' => $this->request->getPost("urlExcusa"),
+				// 'fecha' => $fechas,
+				// 'profesional' => $this->request->getPost("profesional"), // Acudiente para la modalidad entorno familiar
+				// 'telefono' => $this->request->getPost("telefono"),
+				// 'urlExcusa' => $this->request->getPost("urlExcusa"),
 				'id_modalidad' => $modalidades // Se guarda la modalidad para que a la hora de verificar en base de datos se sepa la excusa a que modalida pertenece
 			);
+
+			// var_dump($elementos);
 
 			$sql = $this->conversiones->multipleinsert("cob_actaconteo_persona_excusa", $elementos);
 			// var_dump($sql);
@@ -509,7 +511,14 @@ class CobActaconteoController extends ControllerBase
 					}
 					if(in_array($upload->gettype(), $tipos)){
 						$nombre = $id_actaconteo.date("ymdHis").".".$upload->getextension();
+						$tamano_archivo=$upload->getsize();
+						$peso_mb=100;
+						$tamano_maximo = $peso_mb*1024*1024;
 						$path = "files/excusas/".$nombre;
+						if ($tamano_archivo>$tamano_maximo) {
+							echo "Peso";
+							exit;
+						}
 						($upload->moveTo($path)) ? $isUploaded = true : $isUploaded = false;
 					} else {
 						echo "Tipo";
@@ -912,18 +921,18 @@ class CobActaconteoController extends ControllerBase
 	}
 
 	public function reportebeneficiarioAction(){
-		
+
 	}
 
 	public function consultar_beneficiarioAction(){
 		if ($this->request->isGet()) {
-			
+
 			$db = $this->getDI()->getDb();
 			$config = $this->getDI()->getConfig();
-	
+
 				$numDocumento = $_GET['valor_busqueda'];
 				$beneficiarios = $db->query(
-					 "SELECT id_oferente_persona,numDocumento, nombreCompleto,jornada, grado,grupo, sede_nombre, cob_oferente_persona.id_contrato as contrato, bc_modalidad.nombre as modalidad FROM cob_oferente_persona 
+					 "SELECT id_oferente_persona,numDocumento, nombreCompleto,jornada, grado,grupo, sede_nombre, cob_oferente_persona.id_contrato as contrato, bc_modalidad.nombre as modalidad FROM cob_oferente_persona
 					  jOIN bc_sede_contrato on bc_sede_contrato.id_sede =  cob_oferente_persona.id_sede
 					  jOIN bc_modalidad on bc_modalidad.id_modalidad =  bc_sede_contrato.id_modalidad
 					  WHERE (numDocumento = '$numDocumento' or nombreCompleto LIKE '%$numDocumento%') and retirado = 2
@@ -938,21 +947,21 @@ class CobActaconteoController extends ControllerBase
 
 	public function datos_beneficiarioAction($id_oferente_persona){
 		if ($this->request->isGet()) {
-			
+
 			$db = $this->getDI()->getDb();
 			$config = $this->getDI()->getConfig();
-		
+
 				$oferente_persona= CobOferentePersona::findFirstByid_oferente_persona($id_oferente_persona);
 				$sede= BcSedeContrato::findFirstByid_sede($oferente_persona->id_sede);
 				$facturas=$db->query(
-					"SELECT 
+					"SELECT
 					    sede_nombre,
 						certificacionRecorridos,
-						case month(fecha) 
+						case month(fecha)
 								WHEN 1 THEN 'Enero'
 								WHEN 2 THEN  'Febrero'
-								WHEN 3 THEN 'Marzo' 
-								WHEN 4 THEN 'Abril' 
+								WHEN 3 THEN 'Marzo'
+								WHEN 4 THEN 'Abril'
 								WHEN 5 THEN 'Mayo'
 								WHEN 6 THEN 'Junio'
 								WHEN 7 THEN 'Julio'

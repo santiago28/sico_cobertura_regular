@@ -8,6 +8,9 @@ $(document).ready(function () {
 			$(this).parent().parent().find(".excusa").removeClass("hidden");
 			$(this).parent().parent().find(".excusa").removeAttr("disabled");
 			$(this).parent().parent().find(".excusa").addClass("required");
+			// setTimeout(function(){
+
+		// },500);
 		} else {
 			$(this).parent().parent().find(".excusa").addClass("hidden");
 			$(this).parent().parent().find(".excusa").attr("disabled", "disabled");
@@ -28,6 +31,8 @@ $('.asistencia').change(function() {
 		$(this).parent().parent().find(".excusa").removeClass("hidden");
 		$(this).parent().parent().find(".excusa").removeAttr("disabled");
 		$(this).parent().parent().find(".excusa").addClass("required");
+		//Esta linea es para duplicar el texto de campo "Texto para replicar excusa"
+		$(this).parent().parent().find(".texto_excusa").val($("#texto_excusa_replicar").val());
 	} else {
 		$(this).parent().parent().find(".excusa").addClass("hidden");
 		$(this).parent().parent().find(".excusa").attr("disabled", "disabled");

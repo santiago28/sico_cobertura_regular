@@ -95,13 +95,14 @@ class SessionController extends ControllerBase
   public function restartAction($id_usuario)
   {
     $usuario = IbcUsuario::findFirstByid_usuario($id_usuario);
+    $url_return = "http://".$_SERVER['SERVER_NAME'].':10001/2020/interventoria/principal.php';
     if ($usuario) {
       $this->_registerSession($usuario);
       return $this->response->redirect('ibc_mensaje/anuncios');
     } else {
-      return $this->response->redirect('session/index');
+      return $this->response->redirect($url_return);
     }
-    return $this->response->redirect('session/index');
+    return $this->response->redirect($url_return);
   }
 
   /**
@@ -111,8 +112,9 @@ class SessionController extends ControllerBase
   */
   public function endAction()
   {
+    $url_return = "http://".$_SERVER['SERVER_NAME'].':10001/2020/interventoria/principal.php';
     $this->session->remove('auth');
     $this->flash->success('¡Hasta pronto!');
-    return $this->response->redirect('session/index');
+    return $this->response->redirect($url_return);
   }
 }

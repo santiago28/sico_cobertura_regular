@@ -383,11 +383,13 @@ public function getMenu()
 			$menu = $this->_headerMenu;
 			if($user['nivel'] <= 1){
 				$menu ['bc_carga'] = array ('caption' => 'Cargas', 'action' => 'index');
+				$menu ['bc_carga_cobertura'] = array ('caption' => 'Comité', 'action' => 'nuevo');
 			}
 			if($user['nivel'] <= 2){
 				$menu ['cob_ajuste'] = array ('caption' => 'Ajustes', 'action' => 'index');
 				$menu ['bc_reporte'] = array ('caption' => 'Reportes', 'action' => '');
-				$menu ['ibc_usuario'] = array ('caption' => 'Usuarios', 'action' => 'index');
+				$menu ['cob_actaconteo'] = array ('caption' => 'Reporte Beneficiario', 'action' => 'reportebeneficiario');
+				// $menu ['ibc_usuario'] = array ('caption' => 'Usuarios', 'action' => 'index');
 			}
 			$menu_usuario .= '<div class="item-menu-titulo"><span>Info</span></div>';
 
