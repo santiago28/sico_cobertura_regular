@@ -386,7 +386,7 @@ public function getMenu()
 				$menu ['bc_carga_cobertura'] = array ('caption' => 'Comité', 'action' => 'nuevo');
 			}
 			if($user['nivel'] <= 2){
-				$menu ['cob_ajuste'] = array ('caption' => 'Ajustes', 'action' => 'index');
+				// $menu ['cob_ajuste'] = array ('caption' => 'Ajustes', 'action' => 'index');
 				$menu ['bc_reporte'] = array ('caption' => 'Reportes', 'action' => '');
 				$menu ['cob_actaconteo'] = array ('caption' => 'Reporte Beneficiario', 'action' => 'reportebeneficiario');
 				// $menu ['ibc_usuario'] = array ('caption' => 'Usuarios', 'action' => 'index');
