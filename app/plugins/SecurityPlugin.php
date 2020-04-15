@@ -303,6 +303,9 @@ class SecurityPlugin extends Plugin
     'ibc_archivo_digital' => array(
       'index' => array(
         'nivelPermiso' => '4'
+      ),
+      'cargaprestador' => array(
+        'nivelPermiso' => '4'
       )
     ),
     'ibc_instrumentos' => array(

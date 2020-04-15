@@ -386,7 +386,7 @@ public function getMenu()
 				$menu ['bc_carga_cobertura'] = array ('caption' => 'Comité', 'action' => 'nuevo');
 			}
 			if($user['nivel'] <= 2){
-				// $menu ['cob_ajuste'] = array ('caption' => 'Ajustes', 'action' => 'index');
+				$menu ['cob_ajuste'] = array ('caption' => 'Ajustes', 'action' => 'index');
 				$menu ['bc_reporte'] = array ('caption' => 'Reportes', 'action' => '');
 				$menu ['cob_actaconteo'] = array ('caption' => 'Reporte Beneficiario', 'action' => 'reportebeneficiario');
 				// $menu ['ibc_usuario'] = array ('caption' => 'Usuarios', 'action' => 'index');
@@ -460,6 +460,11 @@ public function getMenu()
 				echo '<div class="item-menu">';
 				echo '<i class="material-icons"></i>';
 				echo '<span>'.$this->tag->linkTo("ibc_archivo_digital/index/2020", "2020").'</span>';
+				echo '</div>';
+
+				echo '<div class="item-menu">';
+				echo '<i class="material-icons"></i>';
+				echo '<span>'.$this->tag->linkTo("ibc_archivo_digital/cargaprestador/20201", "Evidencias").'</span>';
 				echo '</div>';
 			}else{
 				echo '<div class="item-menu">';
