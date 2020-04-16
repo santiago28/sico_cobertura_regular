@@ -466,6 +466,7 @@ class CobAjusteController extends ControllerBase
     	$ajuste->datetime = date('Y-m-d H:i:s');
     	$ajuste->observacion = $this->request->getPost("observacion");
     	$ajuste->radicado = $this->request->getPost("radicado");
+			$ajuste->urlEvidenciaAtencion = $this->request->getPost("urlEvidenciaAtencion");
     	$ajuste->id_usuario = $this->user['id_usuario'];
     	if (!$ajuste->save()) {
     		foreach ($ajuste->getMessages() as $message) {
@@ -542,5 +543,45 @@ class CobAjusteController extends ControllerBase
     	}
 
     }
+
+		public function subirexcusaAction($id_actaconteo_persona_facturacion) {
+			$this->view->disable();
+			$tipos = array("image/png", "image/jpeg", "image/jpg", "image/bmp", "image/gif", "application/pdf");
+			if ($this->request->isPost()) {
+				if ($this->request->hasFiles() == true) {
+					$uploads = $this->request->getUploadedFiles();
+					$isUploaded = false;
+					foreach($uploads as $upload){
+						if(!$upload->getName()){
+							continue;
+						}
+						if(in_array($upload->gettype(), $tipos)){
+							$nombre = $id_actaconteo_persona_facturacion.date("ymdHis").".".$upload->getextension();
+							$tamano_archivo=$upload->getsize();
+							$peso_mb=100;
+							$tamano_maximo = $peso_mb*1024*1024;
+							$path = "files/excusas/".$nombre;
+							if ($tamano_archivo>$tamano_maximo) {
+								echo "Peso";
+								exit;
+							}
+							($upload->moveTo($path)) ? $isUploaded = true : $isUploaded = false;
+						} else {
+							echo "Tipo";
+							exit;
+						}
+					}
+					if($isUploaded){
+						chmod($path, 0777);
+						echo $nombre;
+
+					} else {
+						echo "Error";
+					}
+				}else {
+					return "Error";
+				}
+			}
+		}
 
 }
