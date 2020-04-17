@@ -39,6 +39,7 @@
             <th>Nombre<input autocomplete='off' class='filter form-control input-sm' name='nombre' data-col='nombre'/></th>
             <th>Certificar<input autocomplete='off' class='filter form-control input-sm' name='certificar' data-col='certificar'/></th>
             <th>Observacion<input autocomplete='off' class='filter form-control input-sm' name='observacion' data-col='observacion'/></th>
+            <th>Evidencia Atención<input autocomplete='off' class='filter form-control input-sm' name='observacion' data-col='evidencia'/></th>
             <th>Fecha<input autocomplete='off' class='filter form-control input-sm' name='fecha' data-col='fecha'/></th>
             <th>Usuario<input autocomplete='off' class='filter form-control input-sm' name='usuario' data-col='usuario'/></th>
          </tr>
@@ -59,6 +60,7 @@
         <td>{{ nombre|join(' ') }}</td>
         <td>{{ cob_ajuste.getCertificarDetail() }}</td>
         <td>{{ cob_ajuste.observacion }}</td>
+        <td><a class="captura" target="_blank" href="/sico_cobertura_regular/files/excusas/{{ cob_ajuste.urlEvidenciaAtencion }}">{% if cob_ajuste.urlEvidenciaAtencion %}Clic para ver{% endif %}</a></td>
         <td>{{ cob_ajuste.datetime }}</td>
         <td>{{ cob_ajuste.IbcUsuario.usuario }}</td>
         </tr>

@@ -301,10 +301,16 @@ class SecurityPlugin extends Plugin
         'nivelPermiso' => '1'
       ),'reportebeneficiarioscontrato' => array(
         'nivelPermiso' => '4'
+      ),'subirexcusa' => array(
+        'nivelPermiso' => '2'
       )
+
     ),
     'ibc_archivo_digital' => array(
       'index' => array(
+        'nivelPermiso' => '4'
+      ),
+      'cargaprestador' => array(
         'nivelPermiso' => '4'
       )
     ),

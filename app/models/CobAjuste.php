@@ -7,13 +7,13 @@ class CobAjuste extends \Phalcon\Mvc\Model
 	 * @var integer
 	 */
 	public $id_ajuste;
-	
+
 	/**
 	 *
 	 * @var integer
 	 */
 	public $id_ajuste_reportado;
-	
+
 	/**
 	 *
 	 * @var integer
@@ -25,7 +25,7 @@ class CobAjuste extends \Phalcon\Mvc\Model
      * @var integer
      */
     public $id_actaconteo_persona_facturacion;
-    
+
     /**
      *
      * @var integer
@@ -38,18 +38,24 @@ class CobAjuste extends \Phalcon\Mvc\Model
      */
     public $observacion;
 
+		/**
+		 *
+		 * @var string
+		 */
+		public $urlEvidenciaAtencion;
+
     /**
      *
      * @var string
      */
     public $datetime;
-    
+
     /**
      *
      * @var integer
      */
     public $id_usuario;
-    
+
     //Virtual Foreign Key para poder acceder a la fecha de corte del acta
     public function initialize()
     {
@@ -69,7 +75,7 @@ class CobAjuste extends \Phalcon\Mvc\Model
     			'reusable' => true
     	));
     }
-    
+
     /**
      * Returns a human representation of 'certificar'
      *
@@ -86,7 +92,7 @@ class CobAjuste extends \Phalcon\Mvc\Model
 //     	} else if($this->certificar == 4) {
 //     		return 'No afectar';
 //     	}
-    	
+
     	if ($this->certificar == 0) {
     		return 'PENDIENTE DE CERTIFICACIÓN';
     	} else if($this->certificar == 4) {
@@ -96,18 +102,18 @@ class CobAjuste extends \Phalcon\Mvc\Model
     	} else if($this->certificar == 5) {
     		return 'NO AFECTAR';
     	}
-    	
+
     }
-    
+
     public function getAsistenciaFinalFacturacion()
-    {    	 
+    {
     	if($this->certificar == 4) {
     		return 10;
     	} else if($this->certificar == 3) {
     		return 11;
     	}
     }
-        
+
     /**
      * Returns a select
      */
@@ -115,7 +121,7 @@ class CobAjuste extends \Phalcon\Mvc\Model
     {
     	return array("4" => "Certificar Atención del periodo por ajuste", "3" => "Descontar Atención del periodo por ajuste", "5" => "No afectar");
     }
-    
+
     /**
      * Total Ajuste Sede
      *
@@ -128,7 +134,7 @@ class CobAjuste extends \Phalcon\Mvc\Model
     	$total = $pagos - $descuentos;
     	return array("pagos" => $pagos, "descuentos" => $descuentos, "total" => $total );
     }
-    
+
     /**
      * Total Ajuste Sede
      *
@@ -141,7 +147,7 @@ class CobAjuste extends \Phalcon\Mvc\Model
     	$total = $pagos - $descuentos;
     	return array("pagos" => $pagos, "descuentos" => $descuentos, "total" => $total );
     }
-    
+
     /**
      * Total Ajuste Contrato
      *
@@ -154,7 +160,7 @@ class CobAjuste extends \Phalcon\Mvc\Model
     	$total = $pagos - $descuentos;
     	return array("pagos" => $pagos, "descuentos" => $descuentos, "total" => $total );
     }
-    
+
     /**
      * Total Ajuste Contrato
      *
@@ -167,7 +173,7 @@ class CobAjuste extends \Phalcon\Mvc\Model
     	$total = $pagos - $descuentos;
     	return array("pagos" => $pagos, "descuentos" => $descuentos, "total" => $total );
     }
-    
+
     /**
      * Contar beneficiarios
      *
@@ -224,7 +230,7 @@ class CobAjuste extends \Phalcon\Mvc\Model
     	}
     	return array("menor2" => $menor2, "mayorigual2menor4" => $mayorigual2menor4, "mayorigual4menor6" => $mayorigual4menor6, "mayorigual6" => $mayorigual6);
     }
-    
+
     public function getFecha()
     {
     	if(isset($this->fecha_ajuste_reportado)) {
