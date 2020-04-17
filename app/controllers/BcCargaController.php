@@ -2,6 +2,7 @@
 
 use Phalcon\Mvc\Model\Criteria;
 
+
 class BcCargaController extends ControllerBase
 {
     public function initialize()
@@ -30,7 +31,8 @@ class BcCargaController extends ControllerBase
      */
     public function nuevoAction()
     {
-    	$this->view->meses = $this->elements->getSelect("meses");
+	
+		$this->view->meses = $this->elements->getSelect("meses");
     }
 
     /**
@@ -157,6 +159,7 @@ class BcCargaController extends ControllerBase
 
         $this->flash->success("La carga fue eliminada exitosamente");
         return $this->response->redirect("bc_carga/");
-    }
+	}
+	
 
 }

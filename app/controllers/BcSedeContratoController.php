@@ -147,7 +147,7 @@ class BcSedeContratoController extends ControllerBase
       }
     }
 
-    public function guardarbeneficiariosAction()
+ public function guardarbeneficiariosAction()
     {
 
       // $this->view->disable();

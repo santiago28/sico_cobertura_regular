@@ -32,3 +32,22 @@
   </div>
 </div>
 </form>
+<br>
+
+{{ form("bc_carga_cobertura/beneficiarios", "method":"get", "class":"form-container form-horizontal", "parsley-validate" : "", "enctype" : "multipart/form-data") }}
+  <div class="form-group">
+    <label class="col-sm-2 control-label" for="mes">Contrato</label>
+    <div class="col-sm-10">
+     <select id="id_contrato" name="id_contrato" class="form-control">
+        {% for info in sedes_contrato %}
+            <option value="{{ info.id_contrato }}">{{ info.id_contrato }} - {{ info.oferente_nombre }}</option>
+            {% endfor  %}
+        </select>
+    </div>
+  </div> 
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      {{ submit_button("Consultar", "class" : "btn btn-default") }}
+    </div>
+  </div>
+</form>

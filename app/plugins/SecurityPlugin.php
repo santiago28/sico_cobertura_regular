@@ -92,6 +92,9 @@ class SecurityPlugin extends Plugin
       'crear' => array(
         'nivelPermiso' => '1'
       ),
+      'beneficiarios' => array(
+        'nivelPermiso' => '1'
+      ),
     ),
     'bc_carga' => array(
       'index' => array(
