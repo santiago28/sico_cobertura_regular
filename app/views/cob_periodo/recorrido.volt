@@ -32,6 +32,7 @@
             <th>No. Contrato</th>
             <th>Prestador</th>
             <th>Sede</th>
+            <th>Jornada</th>
             <th>Modalidad</th>
             <th>Interventor</th>
             <th>Estado</th>
@@ -46,6 +47,7 @@
             <td>{{ acta.id_contrato }}</td>
             <td>{{ acta.oferente_nombre }}</td>
             <td>{{ acta.id_sede }} - {{ acta.sede_nombre }}</td>
+            <td>{{ acta.nombre_jornada }}</td>
             <td>{{ acta.modalidad_nombre }}</td>
             <td>{{ acta.IbcUsuario.usuario }}</td>
             <td>{{ acta.getEstadoDetail() }}</td>

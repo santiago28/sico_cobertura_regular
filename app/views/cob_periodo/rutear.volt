@@ -54,6 +54,7 @@
             <th>Modalidad</th>
             <th>Prestador</th>
             <th>Sede</th>
+						<th>Jornada</th>
             <th>Barrio</th>
             <th>Dirección</th>
             <th>Beneficiarios</th>
@@ -76,7 +77,8 @@
             <td>{{ acta.modalidad_nombre }}</td>
             <td>{{ acta.oferente_nombre }}</td>
             <td>{{ acta.id_sede }} - {{ acta.sede_nombre }}</td>
-            <td>{{ acta.sede_barrio }}</td>
+            <td>{{ acta.nombre_jornada }}</td>
+						<td>{{ acta.sede_barrio }}</td>
             <td>{{ acta.sede_direccion }}</td>
             <td>{{ acta.countBeneficiarios() }}</td>
 

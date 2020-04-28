@@ -1133,7 +1133,7 @@ class CobActaconteo extends \Phalcon\Mvc\Model
 				// 	$mayor_5 = "*";
 				// }
 			}
-			$nombre_completo = array($row->primerNombre, $row->segundoNombre, $row->primerApellido, $row->segundoApellido);
+			$nombre_completo = array($row->primerApellido, $row->segundoApellido, $row->primerNombre, $row->segundoNombre);
 			$nombre_completo = implode(" ", $nombre_completo);
 			$i = ($i<10) ? "0" .$i : $i;
 			$html .="<div class='fila colb'$mayor5><div style='width: 5%;'>$i</div><div style='width: 15%;'>$row->numDocumento</div><div style='width: 30%;'>$mayor_5$nombre_completo</div><div style='width: 30%;'>$row->grupo</div><div style='width: 10%;'>&nbsp;</div>$fecha_lista</div>";
@@ -1162,7 +1162,7 @@ class CobActaconteo extends \Phalcon\Mvc\Model
 				// 	$mayor_5 = "*";
 				// }
 			}
-			$nombre_completo = array($row->primerNombre, $row->segundoNombre, $row->primerApellido, $row->segundoApellido);
+			$nombre_completo = array($row->primerApellido, $row->segundoApellido, $row->primerNombre, $row->segundoNombre);
 			$nombre_completo = implode(" ", $nombre_completo);
 			$i = ($i<10) ? "0" .$i : $i;
 			if($j == 28){

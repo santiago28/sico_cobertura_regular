@@ -500,7 +500,7 @@ class CobActaconteoController extends ControllerBase
 	*/
 	public function subirexcusaAction($id_actaconteo) {
 		$this->view->disable();
-		$tipos = array("image/png", "image/jpeg", "image/jpg", "image/bmp", "image/gif", "application/pdf");
+		$tipos = array("image/png", "image/jpeg", "image/jpg", "image/bmp", "image/gif", "application/pdf", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "application/vnd.ms-excel", "application/vnd.openxmlformatsofficedocument.spreadsheetml.sheet");
 		if ($this->request->isPost()) {
 			if ($this->request->hasFiles() == true) {
 				$uploads = $this->request->getUploadedFiles();
