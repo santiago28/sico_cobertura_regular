@@ -391,6 +391,9 @@ public function getMenu()
 				$menu ['cob_actaconteo'] = array ('caption' => 'Reporte Beneficiario', 'action' => 'reportebeneficiario');
 				// $menu ['ibc_usuario'] = array ('caption' => 'Usuarios', 'action' => 'index');
 			}
+			if ($user['nivel'] <= 3) {
+				$menu ['cob_ajuste'] = array ('caption' => 'Ajustes', 'action' => 'index');
+			}
 			$menu_usuario .= '<div class="item-menu-titulo"><span>Info</span></div>';
 
 			$menu_usuario .= '<div class="item-menu">';
@@ -410,13 +413,13 @@ public function getMenu()
 		}
 
 		echo '<div class="header-menu-principal">';
-			echo '<div>';
-			echo '<img id="avatarprincipal" src="" />';
-			echo '<br />';
-			echo '<b>Nombre:&ensp;</b><span id="username">'.explode(" ", $user['nombre'])[0].'</span>';
-			echo '</div>';
-			echo '</div>';
-			echo '<div class="body-menu-principal">';
+		echo '<div>';
+		echo '<img id="avatarprincipal" src="" />';
+		echo '<br />';
+		echo '<b>Nombre:&ensp;</b><span id="username">'.explode(" ", $user['nombre'])[0].'</span>';
+		echo '</div>';
+		echo '</div>';
+		echo '<div class="body-menu-principal">';
 		foreach ($menu as $controller => $option) {
 			if ($controller == "bc_reporte" && $user['nivel'] <= 2) {
 				// if ($controllerName == $controller) {

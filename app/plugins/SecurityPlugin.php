@@ -274,17 +274,17 @@ class SecurityPlugin extends Plugin
     ),
     'cob_ajuste' => array(
       'index' => array(
-        'nivelPermiso' => '2'
+        'nivelPermiso' => '3'
       ),'noasignados' => array(
-        'nivelPermiso' => '2'
+        'nivelPermiso' => '3'
       ),'periodo' => array(
-        'nivelPermiso' => '2'
+        'nivelPermiso' => '3'
       ),'reporte' => array(
-        'nivelPermiso' => '2'
+        'nivelPermiso' => '3'
       ),'nuevo' => array(
-        'nivelPermiso' => '2'
+        'nivelPermiso' => '3'
       ),'buscar' => array(
-        'nivelPermiso' => '2'
+        'nivelPermiso' => '3'
       ),'asignar' => array(
         'nivelPermiso' => '1'
       ),'asignarperiodo' => array(
@@ -302,7 +302,7 @@ class SecurityPlugin extends Plugin
       ),'reportebeneficiarioscontrato' => array(
         'nivelPermiso' => '4'
       ),'subirexcusa' => array(
-        'nivelPermiso' => '2'
+        'nivelPermiso' => '3'
       )
 
     ),
