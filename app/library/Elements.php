@@ -1015,29 +1015,29 @@ public function getSelect($select)
 												return array();
 												case "jornada":
 												return array(
-													"Mañana" => "Mañana",
-													"Tarde" => "Tarde",
-													"Nocturna" => "Nocturna",
-													"Sabatina" => "Sabatina",
-													"Dominical" => "Dominical",
-													"Completa" => "Completa",
-													'Lunes' => 'Lunes',
-													'Martes' => 'Martes',
-													'Miercoles' => 'Miercoles',
-													'Jueves' => 'Jueves',
-													'Viernes' => 'Viernes',
-													'Vier-Sab-Dom' => 'Vier-Sab-Dom',
-													'Sab-Dom' => 'Sab-Dom',
-													'Mi-Vi Tarde' => 'Mi-Vi Tarde',
-													'Mi-Vi Mañana' => 'Mi-Vi Mañana',
-													'Mi-Vi Noche' => 'Mi-Vi Noche',
-													'Ma-Ju Tarde' => 'Ma-Ju Tarde',
-													'Ma-Ju Mañana' => 'Ma-Ju Mañana',
-													'Ma-Ju Noche' => 'Ma-Ju Noche',
-													'Vi-Sa Tarde' => 'Vi-Sa Tarde',
-													'Vi-Sa Mañana' => 'Vi-Sa Mañana',
-													'Vi-Sa Noche' => 'Vi-Sa Noche',
-													"Otra" => "Otra"
+													"1" => "Mañana",
+													"2" => "Tarde",
+													"3" => "Nocturna",
+													"4" => "Sabatina",
+													"5" => "Dominical",
+													"6" => "Completa",
+													'7' => 'Lunes',
+													'8' => 'Martes',
+													'9' => 'Miercoles',
+													'10' => 'Jueves',
+													'11' => 'Viernes',
+													'12' => 'Vier-Sab-Dom',
+													'13' => 'Sab-Dom',
+													'14' => 'Mi-Vi Tarde',
+													'15' => 'Mi-Vi Mañana',
+													'16' => 'Mi-Vi Noche',
+													'17' => 'Ma-Ju Tarde',
+													'18' => 'Ma-Ju Mañana',
+													'19' => 'Ma-Ju Noche',
+													'20' => 'Vi-Sa Tarde',
+													'21' => 'Vi-Sa Mañana',
+													'22'  => 'Vi-Sa Noche',
+													"23" => "Otra"
 												);
 												break;
 												case "numeroGrados":
@@ -1117,6 +1117,179 @@ public function getSelect($select)
 														'19' => '19',
 														'20' => '20');
 														break;
+														case "tipo_documento":
+															return array(
+																"CC:CÉDULA DE CIUDADANÍA" => "CC:CÉDULA DE CIUDADANÍA",
+																"CCB:CERTIFICADO CABILDO" => "CCB:CERTIFICADO CABILDO",
+																"CE:CÉDULA DE EXTRANJERÍA" => "CE:CÉDULA DE EXTRANJERÍA",
+																"NES:NÚMERO ESTABLECIDO POR LA SECRETARÍA" => "NES:NÚMERO ESTABLECIDO POR LA SECRETARÍA",
+																"NUIP:NÚMERO UNICO DE IDENTIFICACIÓN PERSONAL" => "NUIP:NÚMERO UNICO DE IDENTIFICACIÓN PERSONAL",
+																"PEP:PERMISO ESPECIAL DE PERMANENCIA" => "PEP:PERMISO ESPECIAL DE PERMANENCIA",
+																'RC:REGISTRO CIVIL DE NACIMIENTO' => 'RC:REGISTRO CIVIL DE NACIMIENTO',
+																'TI:TARJETA DE IDENTIDAD' => 'TI:TARJETA DE IDENTIDAD',
+																'TMF: TARJETA DE MOVILIDAD FRONTERIZA' => 'TMF: TARJETA DE MOVILIDAD FRONTERIZA',
+																'VISA' => 'VISA',
+																"OTRO" => "OTRO"
+															);
+															break;
+															case "grados_simat":
+																return array (
+																	'1' => '1',
+																	'2' => '2',
+																	'3' => '3',
+																	'4' => '4',
+																	'5' => '5',
+																	'6' => '6',
+																	'7' => '7',
+																	'8' => '8',
+																	'9' => '9',
+																	'10' => '10',
+																	'11' => '11',
+																	'12' => '12',
+																	'13' => '13',
+																	'14' => '14',
+																	'15' => '15',
+																	'16' => '16',
+																	'17' => '17',
+																	'18' => '18',
+																	'19' => '19',
+																	'20' => '20',
+																	'21' => '21',
+																	'22' => '22',
+																	'23' => '23',
+																	'24' => '24',
+																	'25' => '25',
+																	'26' => '26',
+																	'99' => '99',
+																);
+																	break;
+																	case "grupos_simat":
+																		return array (
+																			'01' => '01',
+																			'02' => '02',
+																			'03' => '03',
+																			'04' => '04',
+																			'05' => '05',
+																			'06' => '06',
+																			'07' => '07',
+																			'08' => '08',
+																			'09' => '09',
+																			'10' => '10',
+																			'11' => '11',
+																			'12' => '12',
+																			'13' => '13',
+																			'14' => '14',
+																			'15' => '15',
+																			'16' => '16',
+																			'17' => '17',
+																			'18' => '18',
+																			'19' => '19',
+																			'20' => '20',
+																			'21' => '21',
+																			'22' => '22',
+																			'23' => '23',
+																			'24' => '24',
+																			'25' => '25',
+																			'26' => '26',
+																		);
+																			break;
+																		case "matricula_simat";
+																			return array(
+																			'SI'=>'SI',
+																			'NO'=>'NO'
+																			);
+																		 break;
+																		 case "estado_simat";
+																			return array(
+																			'MATRICULADO'=>'MATRICULADO',
+																			'NO MATRICULADO'=>'NO MATRICULADO'
+																			);
+																		 break;
+																		 case "jerarquia";
+																		 return array(
+																		 'COMUNA 10'=>'COMUNA 10',
+																		 'MEDELLÍN'=>'MEDELLÍN',
+																		 'NUCLEO 914'=>'NUCLEO 914',
+																		 'NUCLEO 916'=>'NUCLEO 916',
+																		 'NUCLEO 918'=>'NUCLEO 918',
+																		 'NUCLEO 921'=>'NUCLEO 921',
+																		 'NUCLEO 923'=>'NUCLEO 923',
+																		 'NUCLEO 926'=>'NUCLEO 926',
+																		 'NUCLEO 927'=>'NUCLEO 927',
+																		 'NUCLEO 928'=>'NUCLEO 928',
+																		 'NUCLEO 930'=>'NUCLEO 930',
+																		 'NUCLEO 931'=>'NUCLEO 931',
+																		 'NUCLEO 936'=>'NUCLEO 936',
+																		 );
+																	  break;
+																	  case "prestacion_servicio";
+																	  return array(
+																	  'COBERTURA CONTRATADA'=>'COBERTURA CONTRATADA',
+																	  'CONFESIONES RELIGIOSAS'=>'CONFESIONES RELIGIOSAS',
+																	  );
+																	break;
+																	case "calendario";
+																	return array(
+																	'A'=>'A',
+																	'B'=>'B',
+																	'OTRO'=>'OTRO',
+																	);
+																	break;
+																	case "sector";
+																	return array(
+																	'OFICIAL'=>'OFICIAL',
+																	'NO OFICIAL'=>'NO OFICIAL',
+																	);
+																	break;
+																	case "modelo";
+																	return array(
+																	'ACELERACIÓN DEL APRENDIZAJE'=>'ACELERACIÓN DEL APRENDIZAJE',
+																	'CAMINAR EN SECUNDARIA I'=>'CAMINAR EN SECUNDARIA I',
+																	'CAMINAR EN SECUNDARIA II'=>'CAMINAR EN SECUNDARIA II',
+																	'EDUCACIÓN TRADICIONAL'=>'EDUCACIÓN TRADICIONAL',
+																	'PROGRAMA PARA JÓVENES EN EXTRAEDAD Y ADULTOS'=>'PROGRAMA PARA JÓVENES EN EXTRAEDAD Y ADULTOS',
+																	'SAT PRESENCIAL'=>'SAT PRESENCIAL',
+																	);
+																	break;
+																	case "estrato";
+																	return array(
+																	'ESTRATO O'=>'ESTRATO O',
+																	'ESTRATO 1'=>'ESTRATO 1',
+																	'ESTRATO 2'=>'ESTRATO 2',
+																	'ESTRATO 3'=>'ESTRATO 3',
+																	'ESTRATO 4'=>'ESTRATO 4',
+																	'ESTRATO 5'=>'ESTRATO 5',
+																	'ESTRATO 6'=>'ESTRATO 6',
+																	'NO APLICA'=>'NO APLICA',
+																	
+																	);
+																	break;
+																	case "genero";
+																	return array(
+																	'MASCULINO'=>'MASCULINO',
+																	'FEMENINO'=>'FEMENINO',
+																	);
+																	break;
+																	case "apoyo_academico";
+																	return array(
+																	'ATENCIÓN DOMICILIARIA'=>'ATENCIÓN DOMICILIARIA',
+																	'ATENCIÓN EN EL ESTABLECIMIENTO EDUCATIVO'=>'ATENCIÓN EN EL ESTABLECIMIENTO EDUCATIVO',
+																	'ATENCIÓN EN INSTITUCIONES DE APOYO'=>'ATENCIÓN EN INSTITUCIONES DE APOYO',
+																	'AULA HOSPITALARIA'=>'AULA HOSPITALARIA',
+																	'NO APLICA'=>'NO APLICA',
+																	);
+																	break;
+																	case "srpa";
+																	return array(
+																	'NO PRIVADO DE LA LIBERTAD'=>'NO PRIVADO DE LA LIBERTAD',
+																	'PRIVADO DE LA LIBERTAD'=>'PRIVADO DE LA LIBERTAD',
+																	'NO APLICA'=>'NO APLICA',
+																	);
+																	case "zona_sede";
+																	return array(
+																	'URBANA'=>'URBANA',
+																	'RURAL'=>'RURAL',
+																	);
 													}
 												}
 

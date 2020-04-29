@@ -938,7 +938,7 @@ class CobActaconteoController extends ControllerBase
 					  WHERE (numDocumento = '$numDocumento' or nombreCompleto LIKE '%$numDocumento%') and retirado = 2
 					  order by cob_oferente_persona.id_sede");
 				$beneficiarios->setFetchMode(Phalcon\Db::FETCH_OBJ);
-
+				// var_dump($beneficiarios->fetchAll());
 
 				$this->view->beneficiarios =$beneficiarios->fetchAll();
 				$this->view->valor_busqueda =$numDocumento;

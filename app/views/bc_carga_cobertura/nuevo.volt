@@ -21,7 +21,7 @@
   </div>
 </div> -->
 <div class="form-group">
-  <label class="col-sm-2 control-label">Archivo MAT</label>
+  <label class="col-sm-2 control-label">Archivo Comité semanal</label>
   <div class="col-sm-10">
     <input type="file" class="form-control" name="files[]" multiple>
   </div>
@@ -36,13 +36,9 @@
 
 {{ form("bc_carga_cobertura/beneficiarios", "method":"get", "class":"form-container form-horizontal", "parsley-validate" : "", "enctype" : "multipart/form-data") }}
   <div class="form-group">
-    <label class="col-sm-2 control-label" for="mes">Contrato</label>
+    <label class="col-sm-2 control-label" for="mes">Número Contrato o Número documento</label>
     <div class="col-sm-10">
-     <select id="id_contrato" name="id_contrato" class="form-control">
-        {% for info in sedes_contrato %}
-            <option value="{{ info.id_contrato }}">{{ info.id_contrato }} - {{ info.oferente_nombre }}</option>
-            {% endfor  %}
-        </select>
+        {{ text_field("valor_busqueda", "type" : "text", "class" : "form-control", "placeholder" : "Número contrato o Número documento") }}
     </div>
   </div> 
   <div class="form-group">

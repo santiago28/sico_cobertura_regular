@@ -578,6 +578,18 @@ class SecurityPlugin extends Plugin
       'guardarbeneficiarios' => array(
         'nivelPermiso' => '4'
       ),
+      'editar_persona' => array(
+        'nivelPermiso' => '4'
+      ),
+      'guardar_update_beneficiario' => array(
+        'nivelPermiso' => '4'
+      ),
+      'crearBeneficiario' => array(
+      'nivelPermiso' => '4'
+      ),
+      'guardar_beneficiario' => array(
+        'nivelPermiso' => '4'
+      ),
     )
 
   );
