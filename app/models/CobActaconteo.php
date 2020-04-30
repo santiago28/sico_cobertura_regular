@@ -32,6 +32,12 @@ class CobActaconteo extends \Phalcon\Mvc\Model
 	*
 	* @var integer
 	*/
+	public $recorrido_virtual;
+
+	/**
+	*
+	* @var integer
+	*/
 	public $id_sede_contrato;
 
 	/**
@@ -377,7 +383,7 @@ class CobActaconteo extends \Phalcon\Mvc\Model
 				$sql .= ")";
 				$db->query($sql);
 			}
-			$db->query("INSERT IGNORE INTO cob_actaconteo (id_periodo, id_carga, recorrido, id_sede_contrato, id_contrato, id_modalidad, modalidad_nombre, id_sede, sede_nombre, sede_barrio, sede_direccion, sede_telefono, id_oferente, oferente_nombre, id_jornada, nombre_jornada) SELECT $cob_periodo->id_periodo, $carga->id_carga, $recorrido, id_sede_contrato, id_contrato, id_modalidad, modalidad_nombre, id_sede, sede_nombre, sede_barrio, sede_direccion, sede_telefono, id_oferente, oferente_nombre, id_jornada, nombre_jornada FROM $tabla_mat group by id_sede_contrato, id_jornada");
+			$db->query("INSERT IGNORE INTO cob_actaconteo (id_periodo, id_carga, recorrido, recorrido_virtual, id_sede_contrato, id_contrato, id_modalidad, modalidad_nombre, id_sede, sede_nombre, sede_barrio, sede_direccion, sede_telefono, id_oferente, oferente_nombre, id_jornada, nombre_jornada) SELECT $cob_periodo->id_periodo, $carga->id_carga, $recorrido, $recorrido_virtual, id_sede_contrato, id_contrato, id_modalidad, modalidad_nombre, id_sede, sede_nombre, sede_barrio, sede_direccion, sede_telefono, id_oferente, oferente_nombre, id_jornada, nombre_jornada FROM $tabla_mat group by id_sede_contrato, id_jornada");
 			$db->query("REPLACE INTO bc_sede_contrato (id_sede_contrato, id_oferente, oferente_nombre, id_contrato, id_sede, sede_nombre, sede_barrio, sede_direccion, sede_telefono, id_modalidad, modalidad_nombre, estado) SELECT id_sede_contrato, id_oferente, oferente_nombre, id_contrato, id_sede, sede_nombre, sede_barrio, sede_direccion, sede_telefono, id_modalidad, modalidad_nombre, '1' FROM $tabla_mat");
 			$db->query("INSERT IGNORE INTO cob_actaconteo_persona (id_actaconteo, id_periodo, recorrido, id_contrato, id_persona, numDocumento, primerNombre, segundoNombre, primerApellido, segundoApellido, id_jornada, nombre_jornada, id_grupo, grupo, fechaNacimiento) SELECT (SELECT id_actaconteo FROM cob_actaconteo WHERE cob_actaconteo.id_sede_contrato = $tabla_mat.id_sede_contrato AND cob_actaconteo.id_periodo = $cob_periodo->id_periodo AND cob_actaconteo.recorrido = $recorrido and cob_actaconteo.id_jornada = $tabla_mat.id_jornada), $cob_periodo->id_periodo, $recorrido, id_contrato, id_persona, numDocumento, primerNombre, segundoNombre, primerApellido, segundoApellido,id_jornada, nombre_jornada, id_grupo, grupo, fechaNacimiento FROM $tabla_mat");
 			//Si es Itinerante se graban las madres comunitarias
@@ -390,7 +396,7 @@ class CobActaconteo extends \Phalcon\Mvc\Model
 			return TRUE;
 		}
 
-		public function generarActasR1($cob_periodo, $carga, $modalidades, $facturacion) {
+		public function generarActasR1($cob_periodo, $carga, $modalidades, $facturacion, $recorrido_virtual, $recorrido_virtual) {
 			$db = $this->getDI()->getDb();
 			$config = $this->getDI()->getConfig();
 			$timestamp = new DateTime();
@@ -461,7 +467,7 @@ class CobActaconteo extends \Phalcon\Mvc\Model
 		}
 		$db->query("DELETE FROM $tabla_mat WHERE fechaRetiro > 0000-00-00");
 		$db->query("REPLACE INTO bc_sede_contrato (id_sede_contrato, id_oferente, oferente_nombre, id_contrato, id_sede, sede_nombre, sede_barrio, sede_direccion, sede_telefono, id_modalidad, modalidad_nombre, estado) SELECT id_sede_contrato, id_oferente, oferente_nombre, id_contrato, id_sede, sede_nombre, sede_barrio, sede_direccion, sede_telefono, id_modalidad, modalidad_nombre, '1' FROM $tabla_mat");
-		$db->query("INSERT IGNORE INTO cob_actaconteo (id_periodo, id_carga, recorrido, id_sede_contrato, id_contrato, id_modalidad, modalidad_nombre, id_sede, sede_nombre, sede_barrio, sede_direccion, sede_telefono, id_oferente, oferente_nombre, id_jornada, nombre_jornada) SELECT $cob_periodo->id_periodo, $carga->id_carga, '1', id_sede_contrato, id_contrato, id_modalidad, modalidad_nombre, id_sede, sede_nombre, sede_barrio, sede_direccion, sede_telefono, id_oferente, oferente_nombre, id_jornada,nombre_jornada FROM $tabla_mat group by id_sede_contrato, id_jornada");
+		$db->query("INSERT IGNORE INTO cob_actaconteo (id_periodo, id_carga, recorrido, recorrido_virtual, id_sede_contrato, id_contrato, id_modalidad, modalidad_nombre, id_sede, sede_nombre, sede_barrio, sede_direccion, sede_telefono, id_oferente, oferente_nombre, id_jornada, nombre_jornada) SELECT $cob_periodo->id_periodo, $carga->id_carga, '1', $recorrido_virtual,  id_sede_contrato, id_contrato, id_modalidad, modalidad_nombre, id_sede, sede_nombre, sede_barrio, sede_direccion, sede_telefono, id_oferente, oferente_nombre, id_jornada,nombre_jornada FROM $tabla_mat group by id_sede_contrato, id_jornada");
 		$db->query("INSERT IGNORE INTO cob_actaconteo_persona (id_actaconteo, id_periodo, recorrido, id_contrato, id_persona, numDocumento, primerNombre, segundoNombre, primerApellido, segundoApellido, id_jornada, nombre_jornada, id_grupo, grupo, fechaNacimiento) SELECT (SELECT id_actaconteo FROM cob_actaconteo WHERE cob_actaconteo.id_sede_contrato = $tabla_mat.id_sede_contrato AND cob_actaconteo.id_periodo = $cob_periodo->id_periodo AND cob_actaconteo.recorrido = 1 and cob_actaconteo.id_jornada = $tabla_mat.id_jornada), $cob_periodo->id_periodo, 1, id_contrato, id_persona, numDocumento, primerNombre, segundoNombre, primerApellido, segundoApellido, id_jornada, nombre_jornada, id_grupo, grupo, fechaNacimiento FROM $tabla_mat");
 		//Si es Itinerante se graban las madres comunitarias
 		if($cob_periodo->tipo == 4) {
@@ -625,9 +631,17 @@ class CobActaconteo extends \Phalcon\Mvc\Model
 			$nombre_mcb = "MADRE COMUNITARIA: <span style='font-weight: normal; font-size: 8px;'>" . $nombre_mcb . "</span>";
 		}
 		/*if ($acta->recorrido == '1') {*/
+		$titulo_encabezado = "";
+
+		if ($acta->recorrido_virtual == 1) {
+			$titulo_encabezado = "ACTA DE VERIFICACIÓN DE ATENCIÓN DE LOS ESTUDIANTES <br> DEL PROGRAMA DE COBERTURA EDUCATIVA (REGULAR, JOVENES EXTRA EDAD Y ADULTOS)";
+		}else{
+			$titulo_encabezado = "ACTA DE CONTEO PARA VERIFICACIÓN EN SITIO DE LA ATENCIÓN DE LOS ESTUDIANTES<br>DEL PROGRAMA DE COBERTURA EDUCATIVA (REGULAR, JOVENES EXTRA EDAD Y ADULTOS)<br>AUTORIZADOS POR LA SECRETARIA DE EDUCACIÓN DE MEDELLÍN  - <em>(RECORRIDO $acta->recorrido)</em>";
+		}
+
 		$encabezado = "<div class='seccion encabezado'>
 		<img src='/sico_cobertura_regular/public/img/logo_pascual_largo.png' style='width: 18%; margin-top: 2%; margin-left: 2%;' />
-		<div class='fila center'><div style='margin-left:20%; margin-top: -3%;'>ACTA DE CONTEO PARA VERIFICACIÓN EN SITIO DE LA ATENCIÓN DE LOS ESTUDIANTES<br>DEL PROGRAMA DE COBERTURA EDUCATIVA (REGULAR, JOVENES EXTRA EDAD Y ADULTOS)<br>AUTORIZADOS POR LA SECRETARIA DE EDUCACIÓN DE MEDELLÍN  - <em>(RECORRIDO $acta->recorrido)</em></div></div>
+		<div class='fila center'><div style='margin-left:20%; margin-top: -3%;'>$titulo_encabezado</div></div>
 		<img src='/sico_cobertura_regular/public/img/escudo_armas.png' style='width: 10%; margin-top: 2%; margin-left: 65%;' />
 		<div class='fila col3e'>
 		<div>ACTA: <span style='font-weight: normal;'>$acta_id</span></div>
@@ -638,13 +652,16 @@ class CobActaconteo extends \Phalcon\Mvc\Model
 		<div>RUTA: <span style='font-weight: normal; text-transform: uppercase;'>".$acta->IbcUsuario->usuario."</span></div>
 		<div class='col2da'>PRESTADOR: <span style='font-weight: normal;'>".substr($acta->oferente_nombre, 0, 34)."</span></div>
 		<div>SEDE: <span style='font-weight: normal;'>$acta->sede_nombre</span></div>
-		</div>
-		<div class='fila col3e'>
-		<div>TELÉFONO: <span style='font-weight: normal;'>$acta->sede_telefono</span></div>
-		<div class='col2da'>DIRECCIÓN: <span style='font-weight: normal; text-transform: uppercase'>$acta->sede_direccion</span></div>
-		<div>BARRIO/VEREDA: <span style='font-weight: normal;'>$acta->sede_barrio</span></div>
-		</div>
-		<div class='fila col3e'>
+		</div>";
+
+		if ($acta->recorrido_virtual == 0) {
+			$encabezado .= "<div class='fila col3e'>
+			<div>TELÉFONO: <span style='font-weight: normal;'>$acta->sede_telefono</span></div>
+			<div class='col2da'>DIRECCIÓN: <span style='font-weight: normal; text-transform: uppercase'>$acta->sede_direccion</span></div>
+			<div>BARRIO/VEREDA: <span style='font-weight: normal;'>$acta->sede_barrio</span></div>
+			</div>";
+		}
+		$encabezado .=  "<div class='fila col3e'>
 		<div>JORNADA: <span style='font-weight: normal;'>$acta->nombre_jornada</span></div>
 		</div>
 
@@ -694,40 +711,25 @@ class CobActaconteo extends \Phalcon\Mvc\Model
 	<div class='fila'><div>1.6 LLAMADA TELEFÓNICA NO CERTIFICADA</div></div>*/
 
 
-	if($acta->id_modalidad == 5){ // ENTORNO FAMILIAR
-		if ($acta->recorrido == 1) {
-			$totalizacion_asistencia = "<div class='seccion' id='totalizacion_asistencia'>
-			<div class='fila center bold'><div style='border:none; width: 100%'>1. TOTALIZACIÓN DE ASISTENCIA</div></div>
-			<div class='fila'><div>1.1 PRESENTE</div></div>
-			<div class='fila'><div>1.2 AUSENTE CON EXCUSA</div></div>
-			<div class='fila'><div>1.3 AUSENTE SIN EXCUSA</div></div>
-			<div class='fila'><div>1.4 RETIRADO / CANCELADO</div></div>
-			<div class='fila'><div>1.5 AUSENTE CON EVIDENCIA ATENCIÓN</div></div>
-			<div class='fila'><div>TOTALES</div></div>
-			<div class='clear'></div>
-			</div>";
-		}else {
-			$totalizacion_asistencia = "<div class='seccion' id='totalizacion_asistencia'>
-			<div class='fila center bold'><div style='border:none; width: 100%'>1. TOTALIZACIÓN DE ASISTENCIA</div></div>
-			<div class='fila'><div>1.1 PRESENTE</div></div>
-			<div class='fila'><div>1.2 AUSENTE CON EXCUSA</div></div>
-			<div class='fila'><div>1.3 AUSENTE SIN EXCUSA</div></div>
-			<div class='fila'><div>1.4 RETIRADO / CANCELADO</div></div>
-			<div class='fila'><div>1.5 AUSENTE CON EVIDENCIA ATENCIÓN</div></div>
-			<div class='fila'><div>TOTALES</div></div>
-			<div class='clear'></div>
-			</div>";
-		}
+	$asiste1 = $acta->getCobActaconteoPersona(['tipoPersona = 0 AND asistencia = 1']);
+	$asiste2 = $acta->getCobActaconteoPersona(['tipoPersona = 0 AND asistencia = 2']);
+	$asiste3 = $acta->getCobActaconteoPersona(['tipoPersona = 0 AND asistencia = 3']);
+	$asiste4 = $acta->getCobActaconteoPersona(['tipoPersona = 0 AND asistencia = 4']);
+	$asiste5 = $acta->getCobActaconteoPersona(['tipoPersona = 0 AND asistencia = 5']);
+	$asistetotal = $acta->getCobActaconteoPersona(['tipoPersona = 0']);
 
-	}
-	else {
-		$asiste1 = $acta->getCobActaconteoPersona(['tipoPersona = 0 AND asistencia = 1']);
-		$asiste2 = $acta->getCobActaconteoPersona(['tipoPersona = 0 AND asistencia = 2']);
-		$asiste3 = $acta->getCobActaconteoPersona(['tipoPersona = 0 AND asistencia = 3']);
-		$asiste4 = $acta->getCobActaconteoPersona(['tipoPersona = 0 AND asistencia = 4']);
-		$asiste5 = $acta->getCobActaconteoPersona(['tipoPersona = 0 AND asistencia = 5']);
-		$asistetotal = $acta->getCobActaconteoPersona(['tipoPersona = 0']);
-
+	if ($acta->recorrido_virtual == 1) {
+		$totalizacion_asistencia = "<div class='seccion' id='totalizacion_asistencia'>
+		<div class='fila center bold'><div style='border:none; width: 100%'>1. TOTALIZACIÓN DE EVIDENCIAS</div></div>
+		<div class='fila'><div>1.1 PRESENTA EVIDENCIA DE ATENCIÓN VÁLIDA* (Boletín de notas, Consolidado de notas)</div>&nbsp;&nbsp;".count($asiste1)."</div>
+		<div class='fila'><div>1.2 NO PRESENTA EVIDENCIA DE ATENCIÓN VÁLIDA</div>&nbsp;&nbsp;".count($asiste2)."</div>
+		<div class='fila'><div>1.3 NO PRESENTA EVIDENCIA DE ATENCIÓN</div>&nbsp;&nbsp;".count($asiste3)."</div>
+		<div class='fila'><div>1.4 RETIRADO / CANCELADO</div>&nbsp;&nbsp;".count($asiste4)."</div>
+		<div class='fila'><div>TOTALES</div>&nbsp;&nbsp;".count($asistetotal)."</div>
+		<div class='clear'></div>
+		*Estados de evidecias válidos para certificación
+		</div>";
+	}else {
 		$totalizacion_asistencia = "<div class='seccion' id='totalizacion_asistencia'>
 		<div class='fila center bold'><div style='border:none; width: 100%'>1. TOTALIZACIÓN DE ASISTENCIA</div></div>
 		<div class='fila'><div>1.1 PRESENTE*</div>&nbsp;&nbsp;".count($asiste1)."</div>
@@ -740,6 +742,8 @@ class CobActaconteo extends \Phalcon\Mvc\Model
 		*Estados de asistencia válidos para facturación
 		</div>";
 	}
+
+
 	$datos_acta = array();
 	$datos_acta['datos'] = $acta;
 	$html = "";
@@ -751,88 +755,7 @@ class CobActaconteo extends \Phalcon\Mvc\Model
 
 	$html .= "<div id='imprimir'>"; // <acta>
 	//Página Prestador
-	if ($acta->id_modalidad == 5) {
-		if ($acta->recorrido == '1') {
-			$html .= $encabezado;
-			$html .= $totalizacion_asistencia;
-			$html .= "
-			<div class='seccion' id='datos_generales'>
-			<div class='fila center bold'><div style='border:none; width: 100%'>2. DATOS GENERALES</div></div>
-			<div class='fila col3'>
-			<div>2.1 FECHA VISITA:</div>
-			<div>2.2 HORA INICIO VISITA:</div>
-			<div>2.3 HORA FIN VISITA:</div>
-			</div>
-			<div class='fila col2'>
-			<div style='width: 55%;'>2.4 NOMBRE ENCARGADO DEL ENCUENTRO:</div>
-			<div style='width: 40%;'>2.5 NOMBRE TÉCNICO CONTEO:</div>
-			</div>
-			<div class='fila col2'>
-			<div>2.6 CUENTA CON VALLA DE IDENTIFICACIÓN:</div>
-			<div>2.7 CORRECCIÓN DIRECCIÓN:</div>
-			</div>
-			<div class='clear'></div>
-			</div>
-			<div class='seccion' id='observaciones'>
-			<div class='fila center bold'><div style='border:none; width: 100%'>3. OBSERVACIONES AL MOMENTO DE LA VISITA DE CONTEO</div></div>
-			<div class='fila observacion'><div>3.1 OBSERVACIÓN DEL TÉCNICO DE CONTEO:$aiepi</div></div>
-			<div class='fila observacion'><div>3.2 OBSERVACIÓN DEL ENCARGADO DE LA SEDE:</div></div>
-			<div class='clear'></div>
-			</div>";
-			$html .= $pie_pagina;
-
-			$html .= "<div class='paginacion'>PÁGINA DEL PRESTADOR</div>";
-			//Página en blanco para impresión a doble cara
-			// $html .= "<div class='seccion encabezado' style='border: none'></div>";
-		}else {
-			$html .= "<div class='visitapresencial1'>";
-			$html .= $encabezado;
-			$html .= $totalizacion_asistencia;
-			$html .= "
-			<div class='seccion visitapresencial1' id='datos_generales'>
-			<div class='fila center bold'>
-			<div style='border:none; width: 100%'>2. DATOS GENERALES</div>
-			</div>
-			<div class='fila col3'>
-			<div>2.1 FECHA VISITA:</div>
-			<div>2.2 HORA INICIO VISITA:</div>
-			<div>2.3 HORA FIN VISITA:</div>
-			</div>
-			<div class='fila col2'>
-			<div style='width: 55%;'>2.4 NOMBRE ENCARGADO DEL ENCUENTRO:</div>
-			<div style='width: 40%;'>2.5 NOMBRE TÉCNICO CONTEO:</div>
-			</div>
-			<div class='fila col2'>
-			<div>2.6 CUENTA CON VALLA DE IDENTIFICACIÓN:</div>
-			<div>2.7 CORRECCIÓN DIRECCIÓN:</div>
-			</div>
-			<div class='clear'></div>
-			</div>
-			<div class='seccion visitavirtual1' id=''>
-			<div class='fila center bold'>
-			<div style='border:none; width: 100%'>2. DATOS GENERALES</div>
-			</div>
-			<div class='fila col3'>
-			<div style='width: 50%;'>2.1 FECHA VISITA:</div>
-			<div style='width: 50%;'>2.2 NOMBRE TÉCNICO CONTEO:</div>
-			</div>
-			<div class='clear'></div>
-			</div>
-			<div class='seccion' id='observaciones'>
-			<div class='fila center bold'><div style='border:none; width: 100%'>3. OBSERVACIONES AL MOMENTO DE LA VISITA DE CONTEO</div></div>
-			<div class='fila observacion visitapresencial1'><div>3.1 OBSERVACIÓN DEL TÉCNICO DE CONTEO:$aiepi</div></div>
-			<div class='fila observacion visitapresencial1'><div>3.2 OBSERVACIÓN DEL ENCARGADO DE LA SEDE:</div></div>
-			<div class='fila observacion3 visitavirtual1'><div>3.1 OBSERVACIÓN DEL TÉCNICO DE CONTEO:$aiepi</div></div>
-			<div class='clear'></div>
-			</div>";
-			$html .= $pie_pagina;
-
-			$html .= "<div class='paginacion'>PÁGINA DEL PRESTADOR</div>";
-			//Página en blanco para impresión a doble cara
-			$html .= "<div class='seccion encabezado' style='border: none'></div>";
-			$html .="</div>";
-		}
-	}else {
+	if ($acta->recorrido_virtual == 0) {
 		$html .= $encabezado;
 		$html .= $totalizacion_asistencia;
 		if ($acta->CobActaconteoDatos) {
@@ -917,142 +840,75 @@ class CobActaconteo extends \Phalcon\Mvc\Model
 	} else if ($acta->id_modalidad == 12){
 		$aiepi = "<br>SE ACORDÓ PREVIAMENTE VISITA CON LA MADRE COMUNITARIA: <u>SÍ</u> - <u>NO</u><br>SE ENTREGA FORMATO DE PLANILLA DE SEGUIMIENTO PARA VISITA DE PROFESIONALES: <u>SÍ</u> - <u>NO</u><br>SE VERIFICA PLANILLA DE SEGUIMIENTO DE VISITA DE PROFESIONALES: <u>SÍ</u> - <u>NO</u><br>NÚMERO DE ENCUENTROS EVIDENCIADOS AL MOMENTO DE LA VISITA ___";
 	}
+
+
 	$html .= $encabezado;
 	$html .= $totalizacion_asistencia;
 
-	if($acta->id_modalidad == 5){ // ENTORNO FAMILIAR
-		if ($acta->recorrido == 1) {
-			$html .= "
-			<div class='seccion' id='datos_generales'>
-			<div class='fila center bold'><div style='border:none; width: 100%'>2. DATOS GENERALES</div></div>
-			<div class='fila col3'>
-			<div>2.1 FECHA VISITA:</div>
-			<div>2.2 HORA INICIO VISITA:</div>
-			<div>2.3 HORA FIN VISITA:</div>
-			</div>
-			<div class='fila col2'>
-			<div style='width: 55%;'>2.4 NOMBRE ENCARGADO DEL ENCUENTRO:</div>
-			<div style='width: 40%;'>2.5 NOMBRE TÉCNICO CONTEO:</div>
-			</div>
-			<div class='fila col2'>
-			<div>2.6 CUENTA CON VALLA DE IDENTIFICACIÓN:</div>
-			<div>2.7 CORRECCIÓN DIRECCIÓN:</div>
-			</div>
-			<div class='clear'></div>
-			</div>
-			<div class='seccion' id='observaciones'>
-			<div class='fila center bold'><div style='border:none; width: 100%'>3. OBSERVACIONES AL MOMENTO DE LA VISITA DE CONTEO</div></div>
-			<div class='fila observacion'><div>3.1 OBSERVACIÓN DEL TÉCNICO DE CONTEO:$aiepi</div></div>
-			<div class='fila observacion'><div>3.2 OBSERVACIÓN DEL ENCARGADO DE LA SEDE:</div></div>
-			<div class='clear'></div>
-			</div>";
-		}else {
-			$html .= "
-			<div class='seccion visitapresencial1' id='datos_generales'>
-			<div class='fila center bold'>
-			<div style='border:none; width: 100%'>2. DATOS GENERALES</div>
-			</div>
-			<div class='fila col3'>
-			<div>2.1 FECHA VISITA:</div>
-			<div>2.2 HORA INICIO VISITA:</div>
-			<div>2.3 HORA FIN VISITA:</div>
-			</div>
-			<div class='fila col2'>
-			<div style='width: 55%;'>2.4 NOMBRE ENCARGADO DEL ENCUENTRO:</div>
-			<div style='width: 40%;'>2.5 NOMBRE TÉCNICO CONTEO:</div>
-			</div>
-			<div class='fila col2'>
-			<div>2.6 CUENTA CON VALLA DE IDENTIFICACIÓN:</div>
-			<div>2.7 CORRECCIÓN DIRECCIÓN:</div>
-			</div>
-			<div class='clear'></div>
-			</div>
-			<div class='seccion visitavirtual1' id=''>
-			<div class='fila center bold'>
-			<div style='border:none; width: 100%'>2. DATOS GENERALES</div>
-			</div>
-			<div class='fila col3'>
-			<div style='width: 50%;'>2.1 FECHA VISITA:</div>
-			<div style='width: 50%;'>2.2 NOMBRE TÉCNICO CONTEO:</div>
-			</div>
-			<div class='clear'></div>
-			</div>
-			<div class='seccion' id='observaciones'>
-			<div class='fila center bold'><div style='border:none; width: 100%'>3. OBSERVACIONES AL MOMENTO DE LA VISITA DE CONTEO</div></div>
-			<div class='fila observacion visitapresencial1'><div>3.1 OBSERVACIÓN DEL TÉCNICO DE CONTEO:$aiepi</div></div>
-			<div class='fila observacion visitapresencial1'><div>3.2 OBSERVACIÓN DEL ENCARGADO DE LA SEDE:</div></div>
-			<div class='fila observacion3 visitavirtual1'><div>3.1 OBSERVACIÓN DEL TÉCNICO DE CONTEO:$aiepi</div></div>
-			<div class='clear'></div>
-			</div>";
-		}
 
-	}
-	else
-	{
-		if ($acta->CobActaconteoDatos) {
-			$usuario =
-			$html .= "
-			<div class='seccion' id='datos_generales'>
-			<div class='fila center bold'><div style='border:none; width: 100%'>2. DATOS GENERALES</div></div>
-			<div class='fila col3'>
-			<div>2.1 FECHA VISITA: ".$this->conversiones->fecha(2, $acta->CobActaconteoDatos->fecha)."</div>
-			<div>2.2 HORA INICIO VISITA: ".$acta->CobActaconteoDatos->horaInicio."</div>
-			<div>2.3 HORA FIN VISITA: ".$acta->CobActaconteoDatos->horaFin."</div>
-			</div>
-			<div class='fila col2'>
-			<div style='width: 55%;'>2.4 NOMBRE ENCARGADO DE LA SEDE: ".$acta->CobActaconteoDatos->nombreEncargado."</div>
-			<div style='width: 40%;'>2.5 NOMBRE TÉCNICO CONTEO: ".$acta->IbcUsuario->nombre."</div>
-			</div>
-			<div class='fila col2'>
-			<!--<div>2.6 CUENTA CON VALLA DE IDENTIFICACIÓN:</div>
-			<div>2.7 CORRECCIÓN DIRECCIÓN:</div>-->
-			<div>2.6 CORRECCIÓN DIRECCIÓN: ".$acta->CobActaconteoDatos->correccionDireccion."</div>
+	if ($acta->CobActaconteoDatos) {
+		$usuario =
+		$html .= "
+		<div class='seccion' id='datos_generales'>
+		<div class='fila center bold'><div style='border:none; width: 100%'>2. DATOS GENERALES</div></div>
+		<div class='fila col3'>
+		<div>2.1 FECHA VISITA: ".$this->conversiones->fecha(2, $acta->CobActaconteoDatos->fecha)."</div>
+		<div>2.2 HORA INICIO VISITA: ".$acta->CobActaconteoDatos->horaInicio."</div>
+		<div>2.3 HORA FIN VISITA: ".$acta->CobActaconteoDatos->horaFin."</div>
+		</div>
+		<div class='fila col2'>
+		<div style='width: 55%;'>2.4 NOMBRE ENCARGADO DE LA SEDE: ".$acta->CobActaconteoDatos->nombreEncargado."</div>
+		<div style='width: 40%;'>2.5 NOMBRE TÉCNICO CONTEO: ".$acta->IbcUsuario->nombre."</div>
+		</div>
+		<div class='fila col2'>
+		<!--<div>2.6 CUENTA CON VALLA DE IDENTIFICACIÓN:</div>
+		<div>2.7 CORRECCIÓN DIRECCIÓN:</div>-->
+		<div>2.6 CORRECCIÓN DIRECCIÓN: ".$acta->CobActaconteoDatos->correccionDireccion."</div>
 
-			</div>
-			<div class='fila col2'>
-			<!--<div>2.8 CUENTA CON REGISTRO FOTOGRÁFICO FÍSICO:</div>
-			<div>2.9 CUENTA CON REGISTRO FOTOGRÁFICO DIGITAL:</div>-->
-			</div>
-			<div class='clear'></div>
-			</div>
-			<div class='seccion' id='observaciones'>
-			<div class='fila center bold'><div style='border:none; width: 100%'>3. OBSERVACIONES AL MOMENTO DE LA VISITA DE CONTEO</div></div>
-			<div class='fila observacion' style='margin-top:0px;'><div>3.1 OBSERVACIÓN DEL TÉCNICO DE CONTEO: ".$acta->CobActaconteoDatos->observacionUsuario."</div></div>
-			<div class='fila observacion'><div>3.2 OBSERVACIÓN DEL ENCARGADO DE LA SEDE: ".$acta->CobActaconteoDatos->observacionEncargado."</div></div>
-			<div class='clear'></div>
-			</div>";
-		}else{
-			$html .= "
-			<div class='seccion' id='datos_generales'>
-			<div class='fila center bold'><div style='border:none; width: 100%'>2. DATOS GENERALES</div></div>
-			<div class='fila col3'>
-			<div>2.1 FECHA VISITA: </div>
-			<div>2.2 HORA INICIO VISITA:</div>
-			<div>2.3 HORA FIN VISITA:</div>
-			</div>
-			<div class='fila col2'>
-			<div style='width: 55%;'>2.4 NOMBRE ENCARGADO DE LA SEDE:</div>
-			<div style='width: 40%;'>2.5 NOMBRE TÉCNICO CONTEO:</div>
-			</div>
-			<div class='fila col2'>
-			<!--<div>2.6 CUENTA CON VALLA DE IDENTIFICACIÓN:</div>
-			<div>2.7 CORRECCIÓN DIRECCIÓN:</div>-->
-			<div>2.6 CORRECCIÓN DIRECCIÓN:</div>
+		</div>
+		<div class='fila col2'>
+		<!--<div>2.8 CUENTA CON REGISTRO FOTOGRÁFICO FÍSICO:</div>
+		<div>2.9 CUENTA CON REGISTRO FOTOGRÁFICO DIGITAL:</div>-->
+		</div>
+		<div class='clear'></div>
+		</div>
+		<div class='seccion' id='observaciones'>
+		<div class='fila center bold'><div style='border:none; width: 100%'>3. OBSERVACIONES AL MOMENTO DE LA VISITA DE CONTEO</div></div>
+		<div class='fila observacion' style='margin-top:0px;'><div>3.1 OBSERVACIÓN DEL TÉCNICO DE CONTEO: ".$acta->CobActaconteoDatos->observacionUsuario."</div></div>
+		<div class='fila observacion'><div>3.2 OBSERVACIÓN DEL ENCARGADO DE LA SEDE: ".$acta->CobActaconteoDatos->observacionEncargado."</div></div>
+		<div class='clear'></div>
+		</div>";
+	}else{
+		$html .= "
+		<div class='seccion' id='datos_generales'>
+		<div class='fila center bold'><div style='border:none; width: 100%'>2. DATOS GENERALES</div></div>
+		<div class='fila col3'>
+		<div>2.1 FECHA VISITA: </div>
+		<div>2.2 HORA INICIO VISITA:</div>
+		<div>2.3 HORA FIN VISITA:</div>
+		</div>
+		<div class='fila col2'>
+		<div style='width: 55%;'>2.4 NOMBRE ENCARGADO DE LA SEDE:</div>
+		<div style='width: 40%;'>2.5 NOMBRE TÉCNICO CONTEO:</div>
+		</div>
+		<div class='fila col2'>
+		<!--<div>2.6 CUENTA CON VALLA DE IDENTIFICACIÓN:</div>
+		<div>2.7 CORRECCIÓN DIRECCIÓN:</div>-->
+		<div>2.6 CORRECCIÓN DIRECCIÓN:</div>
 
-			</div>
-			<div class='fila col2'>
-			<!--<div>2.8 CUENTA CON REGISTRO FOTOGRÁFICO FÍSICO:</div>
-			<div>2.9 CUENTA CON REGISTRO FOTOGRÁFICO DIGITAL:</div>-->
-			</div>
-			<div class='clear'></div>
-			</div>
-			<div class='seccion' id='observaciones'>
-			<div class='fila center bold'><div style='border:none; width: 100%'>3. OBSERVACIONES AL MOMENTO DE LA VISITA DE CONTEO</div></div>
-			<div class='fila observacion' style='margin-top:0px;'><div>3.1 OBSERVACIÓN DEL TÉCNICO DE CONTEO:$aiepi</div></div>
-			<div class='fila observacion'><div>3.2 OBSERVACIÓN DEL ENCARGADO DE LA SEDE:</div></div>
-			<div class='clear'></div>
-			</div>";
-		}
+		</div>
+		<div class='fila col2'>
+		<!--<div>2.8 CUENTA CON REGISTRO FOTOGRÁFICO FÍSICO:</div>
+		<div>2.9 CUENTA CON REGISTRO FOTOGRÁFICO DIGITAL:</div>-->
+		</div>
+		<div class='clear'></div>
+		</div>
+		<div class='seccion' id='observaciones'>
+		<div class='fila center bold'><div style='border:none; width: 100%'>3. OBSERVACIONES AL MOMENTO DE LA VISITA DE CONTEO</div></div>
+		<div class='fila observacion' style='margin-top:0px;'><div>3.1 OBSERVACIÓN DEL TÉCNICO DE CONTEO:$aiepi</div></div>
+		<div class='fila observacion'><div>3.2 OBSERVACIÓN DEL ENCARGADO DE LA SEDE:</div></div>
+		<div class='clear'></div>
+		</div>";
 	}
 	$html .= $pie_pagina;
 	$p = 1;

@@ -903,8 +903,7 @@ public function getSelect($select)
 				'1' => '1',
 				'2' => '2',
 				'3' => '3',
-				'4' => '4',
-				'5' => '5');
+				'4' => '4');
 				break;
 				case "asistenciaEC": // Asistencia Entorno Comunitario Periodo tipo = 2
 				return array (

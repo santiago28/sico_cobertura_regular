@@ -261,7 +261,8 @@ class CobActaconteoController extends ControllerBase
 		}
 		else
 		{
-			$db->query("DELETE FROM cob_actaconteo_persona_excusa WHERE id_actaconteo_persona IN (SELECT a.id_actaconteo_persona FROM cob_actaconteo_persona as a, cob_actaconteo as b WHERE a.asistencia != 2 AND a.asistencia != 5 AND a.id_actaconteo = b.id_actaconteo AND b.id_modalidad != 5 )");
+			// $db->query("DELETE FROM cob_actaconteo_persona_excusa WHERE id_actaconteo_persona IN (SELECT a.id_actaconteo_persona FROM cob_actaconteo_persona as a, cob_actaconteo as b WHERE a.asistencia != 2 AND a.asistencia != 5 AND a.id_actaconteo = b.id_actaconteo AND b.id_modalidad != 5 )");
+			$db->query("DELETE FROM cob_actaconteo_persona_excusa WHERE id_actaconteo_persona IN (SELECT a.id_actaconteo_persona FROM cob_actaconteo_persona as a, cob_actaconteo as b WHERE a.asistencia != 1 AND a.asistencia != 2 AND a.id_actaconteo = b.id_actaconteo AND b.id_modalidad != 5 )");
 		}
 		$acta->estado = 1;
 		$acta->save();
@@ -383,7 +384,7 @@ class CobActaconteoController extends ControllerBase
 			$this->view->nombre = array();
 			$this->view->acta = $acta;
 			$this->view->beneficiarios = $acta->getCobActaconteoPersona(['tipoPersona = 0','order' => 'id_grupo, primerNombre asc']);
-			$beneficiario_grupos = $acta->getCobActaconteoPersona(['group' => 'id_grupo']);
+			$beneficiario_grupos = $acta->getCobActaconteoPersona(['group' => 'id_grupo, id_jornada']);
 			$grupos = array();
 			foreach($beneficiario_grupos as $row){
 				$grupos[] = array("id_grupo" => $row->id_grupo, "nombre_grupo" => $row->grupo);

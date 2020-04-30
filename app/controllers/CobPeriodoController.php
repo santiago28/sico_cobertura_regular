@@ -469,6 +469,7 @@ class CobPeriodoController extends ControllerBase
         }
         $id_carga = $this->request->getPost("carga");
         $carga = BcCarga::findFirstByid_carga($id_carga);
+				$recorrido_virtual = $this->request->getPost("recorrido_virtual");
         if (!$carga) {
         	$this->flash->error("La carga no existe");
         	return $this->response->redirect("cob_periodo/nuevorecorrido1/$id_periodo");
@@ -487,7 +488,7 @@ class CobPeriodoController extends ControllerBase
 				// var_dump($config->application->basePath);
           $facturacion = $this->request->getPost("facturacion");
           $modalidades = implode(",", $this->request->getPost("modalidad"));
-          $actas = CobActaconteo::generarActasR1($cob_periodo, $carga, $modalidades, $facturacion);
+          $actas = CobActaconteo::generarActasR1($cob_periodo, $carga, $modalidades, $facturacion, $recorrido_virtual);
           if($actas){
           	$this->flash->success("Se generaron exitosamente las actas");
           } else {
@@ -511,6 +512,7 @@ class CobPeriodoController extends ControllerBase
     	}
     	$id_carga = $this->request->getPost("carga");
       $carga = BcCarga::findFirstByid_carga($id_carga);
+			$recorrido_virtual = $this->request->getPost("recorrido_virtual");
     	if (!$carga) {
     		$this->flash->error("La carga no existe");
     		return $this->response->redirect("cob_periodo/nuevorecorrido/$id_periodo");
@@ -533,7 +535,7 @@ class CobPeriodoController extends ControllerBase
       			"id_periodo = $id_periodo",
       			"group" => "recorrido"
       	));
-      	$actas = CobActaconteo::generarActasRcarga($cob_periodo, $carga, $facturacion, count($recorridos));
+      	$actas = CobActaconteo::generarActasRcarga($cob_periodo, $carga, $facturacion, count($recorridos), $recorrido_virtual);
       	if($actas){
       		$this->flash->success("Se generaron exitosamente las actas");
       	} else {

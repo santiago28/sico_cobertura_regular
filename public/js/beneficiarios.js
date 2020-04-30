@@ -4,13 +4,14 @@ $(document).ready(function () {
 		var asistencia = $(this).val();
 		var periodo_tipo = $('#periodo_tipo').val();
 
-		if( asistencia == 2 || asistencia == 5 ) {
+		// if( asistencia == 2 || asistencia == 5 ) {
+		if( asistencia == 1 || asistencia == 2) {
 			$(this).parent().parent().find(".excusa").removeClass("hidden");
 			$(this).parent().parent().find(".excusa").removeAttr("disabled");
 			$(this).parent().parent().find(".excusa").addClass("required");
 			// setTimeout(function(){
 
-		// },500);
+			// },500);
 		} else {
 			$(this).parent().parent().find(".excusa").addClass("hidden");
 			$(this).parent().parent().find(".excusa").attr("disabled", "disabled");
@@ -27,18 +28,33 @@ if($(".fecha_visita_header").html() == null){
 $('.asistencia').change(function() {
 	var asistencia = $(this).val();
 	var periodo_tipo = $('#periodo_tipo').val();
-	if( asistencia == 2 || asistencia == 5 ) {
+	// if( asistencia == 2 || asistencia == 5 ) {
+	if( asistencia == 1 || asistencia == 2) {
 		$(this).parent().parent().find(".excusa").removeClass("hidden");
 		$(this).parent().parent().find(".excusa").removeAttr("disabled");
 		$(this).parent().parent().find(".excusa").addClass("required");
 		//Esta linea es para duplicar el texto de campo "Texto para replicar excusa"
-		$(this).parent().parent().find(".texto_excusa").val($("#texto_excusa_replicar").val());
+		// $(this).parent().parent().find(".texto_excusa").val($("#texto_excusa_replicar").val());
 	} else {
 		$(this).parent().parent().find(".excusa").addClass("hidden");
 		$(this).parent().parent().find(".excusa").attr("disabled", "disabled");
 		$(this).parent().parent().find(".excusa").removeClass("required");
 	}
 });
+
+$("#Replicar_Excusa").click(function(){
+	$('.asistencia').each(function() {
+		var asistencia = $(this).val();
+		if (asistencia == 1) {
+			$(this).parent().parent().find(".excusa").removeClass("hidden");
+			$(this).parent().parent().find(".excusa").removeAttr("disabled");
+			$(this).parent().parent().find(".excusa").addClass("required");
+			//Esta linea es para duplicar el texto de campo "Texto para replicar excusa"
+			$(this).parent().parent().find(".texto_excusa").val($("#texto_excusa_replicar").val());
+		}
+	});
+});
+
 $("#boton_duplicar").click(function() {
 	var fecha = $(".fecha_duplicar").val();
 	$('.modal-body input:checkbox:checked').each(function(){

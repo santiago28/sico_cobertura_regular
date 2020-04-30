@@ -22,7 +22,7 @@
     <div class="form-group">
         <label class="col-sm-2 control-label" for="numDocumento">* Número de documento</label>
         <div class="col-sm-10">
-               {{ text_field("numDocumento", "class" : "form-control required", "parsley-type" : "number") }}
+               {{ text_field("numDocumento", "class" : "form-control required") }}
         </div>
     </div>
 <div class="form-group">

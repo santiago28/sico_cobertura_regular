@@ -42,6 +42,9 @@
     <label>Texto para replicar excusa</label>
     <textarea id="texto_excusa_replicar" class="form-control" placeholder="Motivo, fecha: dd/mm/aaaa, profesional, teléfono" style="width: 40%;"></textarea>
   </div>
+  <div class="form-group">
+    <button type="button" class="btn btn-primary" id="Replicar_Excusa">Replicar</button>
+  </div>
 </div>
 
 
@@ -68,10 +71,11 @@
     <td>{{ loop.index }}</td>
     <td>{{ beneficiario.numDocumento }}</td>
     <td>{{ nombre|join(' ') }}</td>
-    <td><div class='hide id_grupo'>{{ beneficiario.id_grupo }}</div>{{ beneficiario.grupo }}</td>
+    <td><div class='hide id_grupo'>{{ beneficiario.id_grupo }}</div>{{ beneficiario.grupo }} - {{beneficiario.nombre_jornada}}</td>
     <td><input type="hidden" name="id_actaconteo_persona[]" value="{{ beneficiario.id_actaconteo_persona }}">{{ select("asistencia[]", asistencia, "value" : beneficiario.asistencia, "class" : "form-control asistencia required") }}</td>
     <td>
-      <?php if($beneficiario->asistencia == 2 || $beneficiario->asistencia == 5){ ?>
+      {# <?php if($beneficiario->asistencia == 2 || $beneficiario->asistencia == 5){ ?> #}
+      <?php if($beneficiario->asistencia == 1 || $beneficiario->asistencia == 2){ ?>
         <?php $fecha_excusa = $this->conversiones->fecha(2, $beneficiario->CobActaconteoPersonaExcusa->fecha); ?>
         <input type="hidden" class="excusa" name="id_actaconteo_persona2[]" value="{{ beneficiario.id_actaconteo_persona }}">
         {{ text_area("motivo[]", "placeholder" : "Motivo, fecha: dd/mm/aaaa, profesional, teléfono", "class" : "form-control excusa texto_excusa", "value" : beneficiario.CobActaconteoPersonaExcusa.motivo) }}
@@ -114,7 +118,8 @@
 <td><div class='hide id_grupo'>{{ beneficiario.id_grupo }}</div>{{ beneficiario.grupo }}</td>
 <td><input type="hidden" name="id_actaconteo_persona[]" value="{{ beneficiario.id_actaconteo_persona }}">{{ select("asistencia[]", asistenciaEC, "value" : beneficiario.asistencia, "class" : "form-control asistencia required") }}</td>
 <td>
-  <?php if($beneficiario->asistencia == 2 || $beneficiario->asistencia == 5){ ?>
+  {# <?php if($beneficiario->asistencia == 2 || $beneficiario->asistencia == 5){ ?> #}
+  <?php if($beneficiario->asistencia == 1 || $beneficiario->asistencia == 2){ ?>
     <input type="hidden" class="excusa" disabled="disabled" name="id_actaconteo_persona2[]" value="{{ beneficiario.id_actaconteo_persona }}">
     {{ text_field("motivo[]", "placeholder" : "Gestión Telefónica", "class" : "form-control hidden excusa", "disabled" : "disabled") }}
     {{ text_field("fecha_excusa[]", "type" : "date", "class" : "form-control tipo-fecha hidden excusa", "placeholder" : "Fecha: dd/mm/aaaa", "parsley-type" : "dateIso", "data-date-format" : "dd/mm/yyyy", "disabled" : "disabled") }}
