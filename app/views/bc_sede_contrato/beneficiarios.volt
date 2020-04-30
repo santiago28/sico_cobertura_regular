@@ -48,67 +48,122 @@
 table  { border-collapse: collapse; width: 100%; }
 th, td { padding: 8px 16px; }
 th     { background:#eee; }
+
+.loader,
+.loader:before,
+.loader:after {
+  background:#d9edf7;
+  -webkit-animation: load1 1s infinite ease-in-out;
+  animation: load1 1s infinite ease-in-out;
+  width: 1em;
+  height: 4em;
+}
+.loader:before,
+.loader:after {
+  position: absolute;
+  top: 0;
+  content: '';
+}
+.loader:before {
+  left: -1.5em;
+}
+.loader {
+  text-indent: -9999em;
+  margin: 2% auto;
+  position: relative;
+  font-size: 11px;
+  -webkit-animation-delay: 0.16s;
+  animation-delay: 0.16s;
+}
+.loader:after {
+  left: 1.5em;
+  -webkit-animation-delay: 0.32s;
+  animation-delay: 0.32s;
+}
+@-webkit-keyframes load1 {
+  0%,
+  80%,
+  100% {
+    box-shadow: 0 0 #FFF;
+    height: 4em;
+  }
+  40% {
+    box-shadow: 0 -2em #ffffff;
+    height: 5em;
+  }
+}
+@keyframes load1 {
+  0%,
+  80%,
+  100% {
+    box-shadow: 0 0 #FFF;
+    height: 4em;
+  }
+  40% {
+    box-shadow: 0 -2em #ffffff;
+    height: 5em;
+  }
+}
 </style>
 
 <br>
 <br>
-<div class="form-group">
-  <span><b>Contrato: </b> {{id_contrato}}</span>
-  <span style="margin-left: 2%;"><b>Total Cupos Matriculados: </b> {{total_beneficiarios}}</span>
-  <span style="margin-left: 2%;"><b>Total Beneficiarios Activos: </b>{{beneficiarios_activos}}</span>
-  <span style="margin-left: 2%;"><b>Total Beneficiarios Retirados:</b> {{beneficiarios_retirado}}</span>
-  <span style="margin-left: 2%;"><b>Total Beneficiarios Contrato:</b> {{cuposTotal}}</span>
-  <span ><b>Modalidad:</b> {{modalidad[0].nombre}}</span>
-  
+
+<div class="form-group" >
+  <h4 align="center" style="margin:2%;"><span><b>{{oferente}}</b></span></h4>
+  <h5 align="center" style="margin:2%;"><span><b>CONTRATO: {{id_contrato}} MODALIDAD:</b> {{modalidad[0].nombre}}</span></h5>
+  <div class="alert alert-info" role="alert" style="justify-content: center; text-align:center;">
+    <span><b>Total Cupos Matriculados: </b> {{total_beneficiarios}}</span>
+    <span style="margin-left: 2%;"><b>Total Beneficiarios Activos: </b>{{beneficiarios_activos}}</span>
+    <span style="margin-left: 2%;"><b>Total Beneficiarios Retirados:</b> {{beneficiarios_retirado}}</span>
+    <span style="margin-left: 2%;"><b>Cobertura:</b> {{porcentaje_cobertura}}%</span>
+    <span style="margin-left: 2%;"><b>Total Beneficiarios Contrato:</b> {{cuposTotal}}</span>
+  </div>
+  <button class="btn btn-success" id="ExportarExcel">EXPORTAR REGISTROS</button>
+  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+    Crear Beneficiario
+  </button>
+  <div id="contenedo">
+    <div class="loader" id="loader"></div>
+    <h6 align="center"><b>Cargando información en la tabla, un momento por favor</b></h6>
+  </div>
 </div>
 <h4> </h4>
 <h4> </h4>
 <h4></h4>
 <div class="tableFixHead">
 
-  {{ form("bc_sede_contrato/guardarbeneficiarios/"~id_contrato, "method":"post", "parsley-validate" : "", "id" : "beneficiarios_form") }}
-  {{ hidden_field("id_contrato", "value": id_contrato) }}
-
   <table class="table table-bordered table-hover" id="tabla_beneficiarios">
     <thead>
       <tr>
-        <th>#</th>
+        <th>Editar</th>
         <th>Documento</th>
-        <th style="width: 150px;">Nombre</th>
-        <th style="width: 150px;">Sede</th>
-        <th >Jornada</th>
-        <th>Grados</th>
+        <th>Nombres</th>
+        <th>C. Dane</th>
+        <th>Sede Simat</th>
+        <th>Sede</th>
+        <th>Jornada</th>
+        <th>Grado</th>
         <th>Grupo</th>
-        <th style="width: 90px;">¿Está matriculado en el SIMAT?</th>
-        <th style="width: 90px;">¿Está retirado?</th>
-        <th style="width: 90px;">Ingreso</th>
+        <th>Matriculado Simat</th>
+        <th>Comité</th>
       </tr>
     </thead>
     <tbody>
       {% for beneficiario in beneficiarios %}
-      <tr <?php echo $beneficiario->getAsistenciaDetail(); ?>>
-        <td>{{ loop.index }}</td>
-        <td><input type="hidden" name="id_oferente_persona[]" value="{{ beneficiario.id_oferente_persona }}">{{ beneficiario.numDocumento }}</td>
-        <td>{{ beneficiario.nombreCompleto }}</td>
-        <td>{{ select("id_sede[]", sedes, "value" : beneficiario.id_sede, "class" : "form-control") }}
-        </td>
-        <td>
-          {# {{beneficiario.BcSedeContrato.sede_nombre}} #}
-          {{ select("jornada[]", jornada, "value" : beneficiario.jornada, "class" : "form-control") }}
-        </td>
-        <td>
-          {{ select("grado[]", grados, "value" : beneficiario.grado, "class" : "form-control") }}
-        </td>
-        <td>
-          {{ select("grupo[]", grupos, "value" : beneficiario.grupo, "class" : "form-control") }}
-        </td>
-        <td>
-          {{ select("matriculadoSimat[]", sino, "value" : beneficiario.matriculadoSimat, "class" : "form-control") }}
-        </td>
-        <td>
-          {{ select("retirado[]", sino, "value" : beneficiario.retirado, "class" : "form-control") }}
-        </td>
+      <tr >
+        <td>{{ link_to("bc_sede_contrato/editar_persona/?id_persona="~beneficiario.id_oferente_persona,  "Editar", "class": "btn btn-default") }}</td>
+        <td>{{ beneficiario.documento }}</td>
+        <td>{{ beneficiario.apellido1 }} {{ beneficiario.apellido2 }} {{ beneficiario.nombre1 }} {{ beneficiario.nombre2 }}</td>
+        <td>{{ beneficiario.codigo_dane }}</td>
+        <td>{{ beneficiario.sede_simat }}</td>
+        <td>{{ beneficiario.nombre_sede }}</td>
+        <td>{{ beneficiario.nombre_jornada }}</td>
+        <td>{{ beneficiario.grado_cod_simat }}</td>
+        <td>{{ beneficiario.grupo_simat }}</td>
+        <td>{{ beneficiario.matricula_simat }}</td>
         <td>{{ beneficiario.ingreso }}</td>
+       
       </tr>
       {% endfor %}
     </tbody>
@@ -116,8 +171,7 @@ th     { background:#eee; }
 </div>
 <div style="justify-content: center; text-align:center;">
   <br>
-  <button class="btn btn-primary" onclick="document.getElementById('beneficiarios_form').submit()">GUARDAR CAMBIOS</button>
-  <button class="btn btn-success" id="ExportarExcel">EXPORTAR REGISTROS</button>
+  <!-- <button class="btn btn-primary" onclick="document.getElementById('beneficiarios_form').submit()">GUARDAR CAMBIOS</button> -->
 </div>
 {# <div class="boton-abrir" id="guardarbeneficiarios" onclick="document.getElementById('beneficiarios_form').submit()">
   <a class="material-icons" title="Guardar Beneficiarios"   style="color:white; text-decoration:none;">save</a>
@@ -127,23 +181,60 @@ th     { background:#eee; }
 </div> #}
 </form>
 
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Consultar Beneficiario Comité</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        {{ form("bc_sede_contrato/crearBeneficiario/", "method":"post", "parsley-validate" : "", "id" : "beneficiarios_form") }}
+          <div class="form-group">
+            <label for="inputPassword4">Documento</label>
+            <input type="text" class="form-control" name="documento" placeholder="Documento" required>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-primary">Consultar</button>
+          </div>
+       </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <script>
 
+
+window.onload = function() {
+  //funciones a ejecutar
+  setTimeout(function(){
+    document.getElementById("contenedo").style.display = "none";
+  }, 2000);
+};
 setTimeout(function(){
   $("#ExportarExcel").click(function(){
     var Export = [];
     {% for beneficiario in beneficiarios %}
-    var matriculado = "{{beneficiario.matriculadoSimat}}";
-    var retirado = "{{beneficiario.retirado}}";
     Export.push({
-      "Documento": "{{beneficiario.numDocumento}}",
-      "Nombre": "{{beneficiario.nombreCompleto}}",
-      "Sede": "{{beneficiario.BcSedeContrato.sede_nombre}}",
-      "Jornada": "{{beneficiario.jornada}}",
-      "Grado": "{{beneficiario.grado}}",
-      "Grupo": "{{beneficiario.grupo}}",
-      "Matriculado al SIMAT": matriculado=="1"?"SI":"NO",
-      "Retirado": retirado=="1"?"SI":"NO",
+      "Documento": "{{beneficiario.documento}}",
+      "Apellidos": "{{beneficiario.apellido1}}  {{beneficiario.apellido2}} ",
+      "Nombres": "{{beneficiario.nombre1}}  {{beneficiario.nombre2}}",
+      "Codigo_dane": "{{beneficiario.codigo_dane}}",
+      "Sede_simat": "{{beneficiario.sede_simat}}",
+      "Sede": "{{beneficiario.nombre_sede}}",
+      "Jornada": "{{beneficiario.nombre_jornada}}",
+      "Grado": "{{beneficiario.grado_cod_simat}}",
+      "Grupo": "{{beneficiario.grupo_simat}}",
+      "Grado": "{{beneficiario.matricula_simat}}",
+      "Acta_Ingreso": "{{beneficiario.ingreso}}",
     });
     {% endfor %}
     alasql('SELECT * INTO XLSX("Reporte.xlsx",{headers:true}) FROM ?', [Export]);
@@ -180,7 +271,7 @@ setTimeout(function(){
       theme : "bootstrap",
 
       widthFixed: true,
-      headers: { 3: { sorter: false, filter:false} , 4: { sorter: false, filter:false}, 5: { sorter: false, filter:false}, 6: { sorter: false, filter:false}, 7: { sorter: false, filter:false}, 8: { sorter: false, filter:false}}  ,
+      headers: { 0: { sorter: false, filter:false}}  ,
 
       headerTemplate : '{content} {icon}', // new in v2.7. Needed to add the bootstrap icon!
 

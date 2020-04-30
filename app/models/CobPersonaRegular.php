@@ -110,69 +110,74 @@ class CobPersonaRegular extends \Phalcon\Mvc\Model
     $archivo_mat = $config->application->basePath . "public/files/bc_bd/" . $carga->nombreMat;
     $db->query("CREATE TEMPORARY TABLE $tabla_mat 
     (
-      id_oferente INT,
-      id_contrato BIGINT(20),
-      numDocumento VARCHAR(100), 
-      nombreCompleto VARCHAR(200), 
-      id_sede INT,
-      jornada varchar(50),
-      grado varchar(10),
-      grupo varchar(50), 
-      matriculadoSimat varchar(5), 
-      retirado VARCHAR(5), 
-      ingreso VARCHAR(50)) CHARACTER SET utf8 COLLATE utf8_bin");
+      nucleo VARCHAR(100),
+      id_contrato VARCHAR(50),
+      operador VARCHAR(150),
+      sede_atencion VARCHAR(200), 
+      documento_identidad VARCHAR(20), 
+      primer_nombre VARCHAR(60),
+      segundo_nombre varchar(60),
+      primer_apellido varchar(50),
+      segundo_apellido varchar(50), 
+      ciclo varchar(50), 
+      respuesta_comite VARCHAR(100), 
+      proviene VARCHAR(100)) CHARACTER SET utf8 COLLATE utf8_bin");
     $db->query("LOAD DATA INFILE '$archivo_mat' IGNORE INTO TABLE $tabla_mat FIELDS TERMINATED BY ';' LINES TERMINATED BY '\n' IGNORE 1 LINES 
-    (
-      @ID_OFERENTE,
-      @CONTRATO, 
-      @DOCUMENTO, 
-      @NOMBRE_COMPLETO, 
-      @ID_SEDE, 
-      @JORNADA,
-      @GRADO, 
-      @GRUPO, 
-      @MATRICULADO_SIMAT, 
-      @RETIRADO, 
-      @INGRESO 
+    (      
+        @NUCLEO,
+        @CONTRATO,
+        @OPERADOR, 
+        @SEDE_ATENCION, 
+        @DOCUMENTO_IDENTIDAD, 
+        @PRIMER_NOMBRE, 
+        @SEGUNDO_NOMBRE,
+        @PRIMER_APELLIDO, 
+        @SEGUNDO_APELLIDO, 
+        @CICLO, 
+        @RESPUESTA_COMITE, 
+        @PROVIENE
       ) SET 
-          id_oferente = @ID_OFERENTE, 
+          nucleo = @NUCLEO, 
           id_contrato = @CONTRATO, 
-          numDocumento = @DOCUMENTO, 
-          nombreCompleto = @NOMBRE_COMPLETO, 
-          id_sede = @ID_SEDE, 
-          jornada = @JORNADA, 
-          grado = @GRADO, 
-          grupo = @GRUPO, 
-          matriculadoSimat = @MATRICULADO_SIMAT, 
-          retirado = @RETIRADO,
-          ingreso = @INGRESO");
+          operador = @OPERADOR, 
+          sede_atencion = @SEDE_ATENCION, 
+          documento_identidad = @DOCUMENTO_IDENTIDAD, 
+          primer_nombre = @PRIMER_NOMBRE, 
+          segundo_nombre = @SEGUNDO_NOMBRE, 
+          primer_apellido = @PRIMER_APELLIDO, 
+          segundo_apellido = @SEGUNDO_APELLIDO, 
+          ciclo = @CICLO, 
+          respuesta_comite = @RESPUESTA_COMITE,
+          proviene = @PROVIENE");
 
-    $db->query("INSERT IGNORE INTO cob_oferente_persona 
+    $db->query("INSERT IGNORE INTO cob_comite_persona 
     (
-      id_oferente,
+      nucleo,
       id_contrato,
-      numDocumento, 
-      nombreCompleto, 
-      id_sede,
-      jornada,
-      grado,
-      grupo, 
-      matriculadoSimat, 
-      retirado, 
-      ingreso
+      operador,
+      sede_atencion, 
+      documento_identidad, 
+      primer_nombre,
+      segundo_nombre,
+      primer_apellido,
+      segundo_apellido, 
+      ciclo, 
+      respuesta_comite, 
+      proviene
       ) SELECT 
-          id_oferente,
+          nucleo,
           id_contrato,
-          numDocumento, 
-          nombreCompleto, 
-          id_sede,
-          jornada,
-          grado,
-          grupo, 
-          matriculadoSimat, 
-          retirado, 
-          ingreso 
-      FROM $tabla_mat WHERE $tabla_mat.numDocumento NOT IN (SELECT numDocumento FROM cob_oferente_persona WHERE id_contrato = $tabla_mat.id_contrato)");
+          operador,
+          sede_atencion, 
+          documento_identidad, 
+          primer_nombre,
+          segundo_nombre,
+          primer_apellido,
+          segundo_apellido,
+          ciclo, 
+          respuesta_comite, 
+          proviene
+      FROM $tabla_mat WHERE $tabla_mat.documento_identidad NOT IN (SELECT documento_identidad FROM cob_comite_persona WHERE id_contrato = $tabla_mat.id_contrato)");
     return TRUE;
   }
 }
