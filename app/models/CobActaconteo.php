@@ -617,11 +617,11 @@ class CobActaconteo extends \Phalcon\Mvc\Model
 		}
 		$db = $this->getDI()->getDb();
 		$config = $this->getDI()->getConfig();
-		$cupos_sede = $db->query("SELECT cuposTotal FROM cob_periodo_contratosedecupos WHERE id_periodo = '$acta->id_periodo' AND id_sede_contrato = '$acta->id_sede_contrato'");
+		$cupos_sede = $db->query("SELECT cuposSostenibilidad FROM cob_periodo_contratosedecupos WHERE id_periodo = '$acta->id_periodo' AND id_sede_contrato = '$acta->id_sede_contrato'");
 		$cupos_sede->setFetchMode(Phalcon\Db::FETCH_OBJ);
 		$cuposTotal = 0;
 		foreach($cupos_sede->fetchAll() as $key => $row){
-			$cuposTotal = $row->cuposTotal;
+			$cuposTotal = $row->cuposSostenibilidad;
 		}
 		$acta_id = "ACO-03-". date("Y") . sprintf('%05d', $acta->id_actaconteo);
 		$nombre_mcb = "";
@@ -659,12 +659,16 @@ class CobActaconteo extends \Phalcon\Mvc\Model
 			<div>TELÉFONO: <span style='font-weight: normal;'>$acta->sede_telefono</span></div>
 			<div class='col2da'>DIRECCIÓN: <span style='font-weight: normal; text-transform: uppercase'>$acta->sede_direccion</span></div>
 			<div>BARRIO/VEREDA: <span style='font-weight: normal;'>$acta->sede_barrio</span></div>
-			</div>";
+			</div>
+			<div class='fila col3e'>
+			<div>JORNADA: <span style='font-weight: normal;'>$acta->nombre_jornada</span></div>
+			</div>
+			";
 		}
-		$encabezado .=  "<div class='fila col3e'>
-		<div>JORNADA: <span style='font-weight: normal;'>$acta->nombre_jornada</span></div>
+		$encabezado .=  "
+		<div class='fila col3e'>
+		<div>CUPOS CONTRATADOS: <span style='font-weight: normal;'>$cuposTotal</span></div>
 		</div>
-
 		<div class='clear'></div>
 		</div>";
 		/*}else {
@@ -727,7 +731,7 @@ class CobActaconteo extends \Phalcon\Mvc\Model
 		<div class='fila'><div>1.4 RETIRADO / CANCELADO</div>&nbsp;&nbsp;".count($asiste4)."</div>
 		<div class='fila'><div>TOTALES</div>&nbsp;&nbsp;".count($asistetotal)."</div>
 		<div class='clear'></div>
-		*Estados de evidecias válidos para certificación
+		*Estados de evidencias válidos para certificación
 		</div>";
 	}else {
 		$totalizacion_asistencia = "<div class='seccion' id='totalizacion_asistencia'>
@@ -748,10 +752,10 @@ class CobActaconteo extends \Phalcon\Mvc\Model
 	$datos_acta['datos'] = $acta;
 	$html = "";
 
-	$html .= "<div class='form-group pull-right col-md-2' style='margin-top:-3.5%' id='botones_visitas'>
-	<button class='btn btn-primary noPrint visita' value='1' style='float: left;'>En Campo</button>
-	<button class='btn btn-primary noPrint visita' value='2' style='float: right;'>Virtual</button>
-	</div>";
+	// $html .= "<div class='form-group pull-right col-md-2' style='margin-top:-3.5%' id='botones_visitas'>
+	// <button class='btn btn-primary noPrint visita' value='1' style='float: left;'>En Campo</button>
+	// <button class='btn btn-primary noPrint visita' value='2' style='float: right;'>Virtual</button>
+	// </div>";
 
 	$html .= "<div id='imprimir'>"; // <acta>
 	//Página Prestador
@@ -846,69 +850,125 @@ class CobActaconteo extends \Phalcon\Mvc\Model
 	$html .= $totalizacion_asistencia;
 
 
-	if ($acta->CobActaconteoDatos) {
-		$usuario =
-		$html .= "
-		<div class='seccion' id='datos_generales'>
-		<div class='fila center bold'><div style='border:none; width: 100%'>2. DATOS GENERALES</div></div>
-		<div class='fila col3'>
-		<div>2.1 FECHA VISITA: ".$this->conversiones->fecha(2, $acta->CobActaconteoDatos->fecha)."</div>
-		<div>2.2 HORA INICIO VISITA: ".$acta->CobActaconteoDatos->horaInicio."</div>
-		<div>2.3 HORA FIN VISITA: ".$acta->CobActaconteoDatos->horaFin."</div>
-		</div>
-		<div class='fila col2'>
-		<div style='width: 55%;'>2.4 NOMBRE ENCARGADO DE LA SEDE: ".$acta->CobActaconteoDatos->nombreEncargado."</div>
-		<div style='width: 40%;'>2.5 NOMBRE TÉCNICO CONTEO: ".$acta->IbcUsuario->nombre."</div>
-		</div>
-		<div class='fila col2'>
-		<!--<div>2.6 CUENTA CON VALLA DE IDENTIFICACIÓN:</div>
-		<div>2.7 CORRECCIÓN DIRECCIÓN:</div>-->
-		<div>2.6 CORRECCIÓN DIRECCIÓN: ".$acta->CobActaconteoDatos->correccionDireccion."</div>
+	if ($acta->recorrido_virtual == 1) {
+		if ($acta->CobActaconteoDatos) {
+			$usuario =
+			$html .= "
+			<div class='seccion' id='datos_generales'>
+			<div class='fila center bold'><div style='border:none; width: 100%'>2. DATOS GENERALES</div></div>
+			<div class='fila col2'>
+			<div>2.1 FECHA VERIFICACIÓN DE LA EVIDENCIA: ".$this->conversiones->fecha(2, $acta->CobActaconteoDatos->fecha)."</div>
+			<div style='width: 40%;'>2.5 NOMBRE TÉCNICO CONTEO: ".$acta->IbcUsuario->nombre."</div>
+			</div>
+			<div class='fila col2'>
+			<!--<div>2.8 CUENTA CON REGISTRO FOTOGRÁFICO FÍSICO:</div>
+			<div>2.9 CUENTA CON REGISTRO FOTOGRÁFICO DIGITAL:</div>-->
+			</div>
+			<div class='clear'></div>
+			</div>
+			<div class='seccion' id='observaciones'>
+			<div class='fila center bold'><div style='border:none; width: 100%'>3. 3. OBSERVACIONES AL MOMENTO DE LA VERIFICACIÓN DE EVIDENCIAS</div></div>
+			<div class='fila observacion' style='margin-top:0px; height: 250px !important; font-size: 10px !important;'><div>3.1 OBSERVACIÓN DEL TÉCNICO DE CONTEO: <br><br>Tras la declaratoria de “Emergencia Sanitaria” en todo el territorio colombiano por parte del Ministerio de Salud y Protección Social, según Resolución 385
+			del 12 de marzo de 2020 y de calamidad pública por Decreto Municipal 373 del 16 de marzo de 2020, la interventoría a través de medios no presenciales
+			realizará la verificación de evidencias de atención a los estudiantes. Adicional a lo anterior, mediante Decreto 457 del 22 de marzo de 2020, el Gobierno
+			Nacional ordenó el aislamiento preventivo obligatorio de todas las personas habitantes de la República de Colombia, entre el 25 de marzo y el 11 de mayo
+			de 2020, con algunas excepciones. Con fundamento en lo anterior, el equipo de interventoría realiza labores de verificación, haciendo uso de herramientas
+			de las TIC`s, que permitan en forma remota la certificación de los estudiantes en el período de abril.<br><br>".$acta->CobActaconteoDatos->observacionUsuario."</div></div>
+			<div class='fila observacion' style='height: 160px !important'><div>3.2 OBSERVACIONES DEL CONTRATISTA: ".$acta->CobActaconteoDatos->observacionEncargado."</div></div>
+			<div class='clear'></div>
+			</div>";
+		}else{
+			$html .= "
+			<div class='seccion' id='datos_generales'>
+			<div class='fila center bold'><div style='border:none; width: 100%'>2. DATOS GENERALES</div></div>
+			<div class='fila col2'>
+			<div>2.1 FECHA VISITA: </div>
+			<div style='width: 40%;'>2.2 NOMBRE TÉCNICO CONTEO:</div>
+			</div>
 
-		</div>
-		<div class='fila col2'>
-		<!--<div>2.8 CUENTA CON REGISTRO FOTOGRÁFICO FÍSICO:</div>
-		<div>2.9 CUENTA CON REGISTRO FOTOGRÁFICO DIGITAL:</div>-->
-		</div>
-		<div class='clear'></div>
-		</div>
-		<div class='seccion' id='observaciones'>
-		<div class='fila center bold'><div style='border:none; width: 100%'>3. OBSERVACIONES AL MOMENTO DE LA VISITA DE CONTEO</div></div>
-		<div class='fila observacion' style='margin-top:0px;'><div>3.1 OBSERVACIÓN DEL TÉCNICO DE CONTEO: ".$acta->CobActaconteoDatos->observacionUsuario."</div></div>
-		<div class='fila observacion'><div>3.2 OBSERVACIÓN DEL ENCARGADO DE LA SEDE: ".$acta->CobActaconteoDatos->observacionEncargado."</div></div>
-		<div class='clear'></div>
-		</div>";
+			<div class='fila col2'>
+			<!--<div>2.8 CUENTA CON REGISTRO FOTOGRÁFICO FÍSICO:</div>
+			<div>2.9 CUENTA CON REGISTRO FOTOGRÁFICO DIGITAL:</div>-->
+			</div>
+			<div class='clear'></div>
+			</div>
+			<div class='seccion' id='observaciones'>
+			<div class='fila center bold'><div style='border:none; width: 100%'>3. 3. OBSERVACIONES AL MOMENTO DE LA VERIFICACIÓN DE EVIDENCIAS</div></div>
+			<div class='fila observacion' style='margin-top:0px;'><div>3.1 OBSERVACIÓN DEL TÉCNICO DE CONTEO:<br><br>Tras la declaratoria de “Emergencia Sanitaria” en todo el territorio colombiano por parte del Ministerio de Salud y Protección Social, según Resolución 385
+			del 12 de marzo de 2020 y de calamidad pública por Decreto Municipal 373 del 16 de marzo de 2020, la interventoría a través de medios no presenciales
+			realizará la verificación de evidencias de atención a los estudiantes. Adicional a lo anterior, mediante Decreto 457 del 22 de marzo de 2020, el Gobierno
+			Nacional ordenó el aislamiento preventivo obligatorio de todas las personas habitantes de la República de Colombia, entre el 25 de marzo y el 11 de mayo
+			de 2020, con algunas excepciones. Con fundamento en lo anterior, el equipo de interventoría realiza labores de verificación, haciendo uso de herramientas
+			de las TIC`s, que permitan en forma remota la certificación de los estudiantes en el período de abril.</div></div>
+			<div class='fila observacion'><div>3.2 OBSERVACIONES DEL CONTRATISTA:</div></div>
+			<div class='clear'></div>
+			</div>";
+		}
 	}else{
-		$html .= "
-		<div class='seccion' id='datos_generales'>
-		<div class='fila center bold'><div style='border:none; width: 100%'>2. DATOS GENERALES</div></div>
-		<div class='fila col3'>
-		<div>2.1 FECHA VISITA: </div>
-		<div>2.2 HORA INICIO VISITA:</div>
-		<div>2.3 HORA FIN VISITA:</div>
-		</div>
-		<div class='fila col2'>
-		<div style='width: 55%;'>2.4 NOMBRE ENCARGADO DE LA SEDE:</div>
-		<div style='width: 40%;'>2.5 NOMBRE TÉCNICO CONTEO:</div>
-		</div>
-		<div class='fila col2'>
-		<!--<div>2.6 CUENTA CON VALLA DE IDENTIFICACIÓN:</div>
-		<div>2.7 CORRECCIÓN DIRECCIÓN:</div>-->
-		<div>2.6 CORRECCIÓN DIRECCIÓN:</div>
+		if ($acta->CobActaconteoDatos) {
+			$usuario =
+			$html .= "
+			<div class='seccion' id='datos_generales'>
+			<div class='fila center bold'><div style='border:none; width: 100%'>2. DATOS GENERALES</div></div>
+			<div class='fila col3'>
+			<div>2.1 FECHA VISITA: ".$this->conversiones->fecha(2, $acta->CobActaconteoDatos->fecha)."</div>
+			<div>2.2 HORA INICIO VISITA: ".$acta->CobActaconteoDatos->horaInicio."</div>
+			<div>2.3 HORA FIN VISITA: ".$acta->CobActaconteoDatos->horaFin."</div>
+			</div>
+			<div class='fila col2'>
+			<div style='width: 55%;'>2.4 NOMBRE ENCARGADO DE LA SEDE: ".$acta->CobActaconteoDatos->nombreEncargado."</div>
+			<div style='width: 40%;'>2.5 NOMBRE TÉCNICO CONTEO: ".$acta->IbcUsuario->nombre."</div>
+			</div>
+			<div class='fila col2'>
+			<!--<div>2.6 CUENTA CON VALLA DE IDENTIFICACIÓN:</div>
+			<div>2.7 CORRECCIÓN DIRECCIÓN:</div>-->
+			<div>2.6 CORRECCIÓN DIRECCIÓN: ".$acta->CobActaconteoDatos->correccionDireccion."</div>
 
-		</div>
-		<div class='fila col2'>
-		<!--<div>2.8 CUENTA CON REGISTRO FOTOGRÁFICO FÍSICO:</div>
-		<div>2.9 CUENTA CON REGISTRO FOTOGRÁFICO DIGITAL:</div>-->
-		</div>
-		<div class='clear'></div>
-		</div>
-		<div class='seccion' id='observaciones'>
-		<div class='fila center bold'><div style='border:none; width: 100%'>3. OBSERVACIONES AL MOMENTO DE LA VISITA DE CONTEO</div></div>
-		<div class='fila observacion' style='margin-top:0px;'><div>3.1 OBSERVACIÓN DEL TÉCNICO DE CONTEO:$aiepi</div></div>
-		<div class='fila observacion'><div>3.2 OBSERVACIÓN DEL ENCARGADO DE LA SEDE:</div></div>
-		<div class='clear'></div>
-		</div>";
+			</div>
+			<div class='fila col2'>
+			<!--<div>2.8 CUENTA CON REGISTRO FOTOGRÁFICO FÍSICO:</div>
+			<div>2.9 CUENTA CON REGISTRO FOTOGRÁFICO DIGITAL:</div>-->
+			</div>
+			<div class='clear'></div>
+			</div>
+			<div class='seccion' id='observaciones'>
+			<div class='fila center bold'><div style='border:none; width: 100%'>3. OBSERVACIONES AL MOMENTO DE LA VISITA DE CONTEO</div></div>
+			<div class='fila observacion' style='margin-top:0px;'><div>3.1 OBSERVACIÓN DEL TÉCNICO DE CONTEO: ".$acta->CobActaconteoDatos->observacionUsuario."</div></div>
+			<div class='fila observacion'><div>3.2 OBSERVACIÓN DEL ENCARGADO DE LA SEDE: ".$acta->CobActaconteoDatos->observacionEncargado."</div></div>
+			<div class='clear'></div>
+			</div>";
+		}else{
+			$html .= "
+			<div class='seccion' id='datos_generales'>
+			<div class='fila center bold'><div style='border:none; width: 100%'>2. DATOS GENERALES</div></div>
+			<div class='fila col3'>
+			<div>2.1 FECHA VISITA: </div>
+			<div>2.2 HORA INICIO VISITA:</div>
+			<div>2.3 HORA FIN VISITA:</div>
+			</div>
+			<div class='fila col2'>
+			<div style='width: 55%;'>2.4 NOMBRE ENCARGADO DE LA SEDE:</div>
+			<div style='width: 40%;'>2.5 NOMBRE TÉCNICO CONTEO:</div>
+			</div>
+			<div class='fila col2'>
+			<!--<div>2.6 CUENTA CON VALLA DE IDENTIFICACIÓN:</div>
+			<div>2.7 CORRECCIÓN DIRECCIÓN:</div>-->
+			<div>2.6 CORRECCIÓN DIRECCIÓN:</div>
+
+			</div>
+			<div class='fila col2'>
+			<!--<div>2.8 CUENTA CON REGISTRO FOTOGRÁFICO FÍSICO:</div>
+			<div>2.9 CUENTA CON REGISTRO FOTOGRÁFICO DIGITAL:</div>-->
+			</div>
+			<div class='clear'></div>
+			</div>
+			<div class='seccion' id='observaciones'>
+			<div class='fila center bold'><div style='border:none; width: 100%'>3. OBSERVACIONES AL MOMENTO DE LA VISITA DE CONTEO</div></div>
+			<div class='fila observacion' style='margin-top:0px;'><div>3.1 OBSERVACIÓN DEL TÉCNICO DE CONTEO:$aiepi</div></div>
+			<div class='fila observacion'><div>3.2 OBSERVACIÓN DEL ENCARGADO DE LA SEDE:</div></div>
+			<div class='clear'></div>
+			</div>";
+		}
 	}
 	$html .= $pie_pagina;
 	$p = 1;
@@ -972,12 +1032,12 @@ class CobActaconteo extends \Phalcon\Mvc\Model
 	{
 		$encabezado_beneficiarios = "<div class='seccion visitapresencial' id='listado_beneficiarios'>
 		<div class='fila center bold'><div style='border:none; width: 100%'>4. LISTADO DE BENEFICIARIOS</div></div>
-		<div class='fila colb'><div style='width: 5%;'>#</div><div style='width: 15%;'>4.1 DOCUMENTO</div><div style='width: 30%'>4.2 NOMBRE COMPLETO</div><div style='width: 30%'>4.3 GRADO / GRUPO / JORNADA</div><div style='width: 10%'>4.4 ASISTENCIA</div>$fecha_encabezado</div>";
+		<div class='fila colb'><div style='width: 5%;'>#</div><div style='width: 15%;'>4.1 DOCUMENTO</div><div style='width: 30%'>4.2 NOMBRE COMPLETO</div><div style='width: 30%'>4.3 GRADO / GRUPO</div><div style='width: 10%'>4.4 VERIFICACIÓN</div>$fecha_encabezado</div>";
 	}
 	$html .= $encabezado;
 	$html .= $encabezado_beneficiarios;
 	if($acta->id_modalidad == 12){
-		foreach($acta->getCobActaconteoPersona(["tipoPersona = 0", 'order' => 'id_grupo, primerNombre asc']) as $row){
+		foreach($acta->getCobActaconteoPersona(["tipoPersona = 0", 'order' => 'id_grupo, id_jornada, primerApellido asc']) as $row){
 			$mayor5 = "";
 			$mayor_5 = "";
 			if($row->fechaNacimiento){
@@ -992,7 +1052,7 @@ class CobActaconteo extends \Phalcon\Mvc\Model
 			$nombre_completo = array($row->primerApellido, $row->segundoApellido, $row->primerNombre, $row->segundoNombre);
 			$nombre_completo = implode(" ", $nombre_completo);
 			$i = ($i<10) ? "0" .$i : $i;
-			$html .="<div class='fila colb'$mayor5><div style='width: 5%;'>$i</div><div style='width: 15%;'>$row->numDocumento</div><div style='width: 30%;'>$mayor_5$nombre_completo</div><div style='width: 30%;'>$row->grupo</div><div style='width: 10%;'>&nbsp;</div>$fecha_lista</div>";
+			$html .="<div class='fila colb'$mayor5><div style='width: 5%;'>$i</div><div style='width: 15%;'>$row->numDocumento</div><div style='width: 30%;'>$mayor_5$nombre_completo</div><div style='width: 30%;'>$row->grupo / $row->nombre_jornada</div><div style='width: 10%;'>&nbsp;</div>$fecha_lista</div>";
 			$i++;
 			$j++;
 		}
@@ -1006,7 +1066,7 @@ class CobActaconteo extends \Phalcon\Mvc\Model
 		$html .= "<div class='clear'></div></div>" . $pie_pagina;
 		$html .= "<div class='paginacion'>PÁGINA $p</div>";
 	} else {
-		foreach($acta->getCobActaconteoPersona(["tipoPersona = 0", 'order' => 'id_grupo, primerNombre asc']) as $row){
+		foreach($acta->getCobActaconteoPersona(["tipoPersona = 0", 'order' => 'id_grupo, id_jornada, primerApellido asc']) as $row){
 			$mayor5 = "";
 			$mayor_5 = "";
 			if($row->fechaNacimiento){
@@ -1032,7 +1092,7 @@ class CobActaconteo extends \Phalcon\Mvc\Model
 			if($acta->id_modalidad == 5){ // ENTORNO FAMILIAR
 
 				if ($acta->recorrido == '1') {
-					$html .="<div class='fila colb'$mayor5><div style='width: 5%;'>$i</div><div style='width: 15%;'>$row->numDocumento</div><div style='width: 30%;'>$mayor_5$nombre_completo</div><div style='width: 10%;'>$row->grupo&nbsp;</div><div style='width: 10%;'>&nbsp;</div><div style='width: 10%;'>&nbsp;</div><div style='width: 10%;'>&nbsp;</div><div style='width: 10%;'>&nbsp;</div>$fecha_lista</div>";
+					$html .="<div class='fila colb'$mayor5><div style='width: 5%;'>$i</div><div style='width: 15%;'>$row->numDocumento</div><div style='width: 30%;'>$mayor_5$nombre_completo</div><div style='width: 10%;'>$row->grupo / $row->nombre_jornada&nbsp;</div><div style='width: 10%;'>&nbsp;</div><div style='width: 10%;'>&nbsp;</div><div style='width: 10%;'>&nbsp;</div><div style='width: 10%;'>&nbsp;</div>$fecha_lista</div>";
 				}else {
 					$query = $this->modelsManager->createQuery("SELECT *
 						FROM CobActaconteoPersonaExcusa
@@ -1051,7 +1111,7 @@ class CobActaconteo extends \Phalcon\Mvc\Model
 						<div style='width: 5%; min-height: 100%; height: auto;' class='clearfix'>$i</div>
 						<div style='width: 15%; min-height: 100%; height: auto;' class='clearfix'>$row->numDocumento</div>
 						<div style='width: 30%; min-height: 100%; height: auto;' class='clearfix'>$mayor_5$nombre_completo</div>
-						<div style='width: 10%; min-height: 100%; height: auto;' class='clearfix'>$row->grupo&nbsp;</div>
+						<div style='width: 10%; min-height: 100%; height: auto;' class='clearfix'>$row->grupo / $row->nombre_jornada&nbsp;</div>
 						<div style='width: 10%; min-height: 100%; height: auto;' class='clearfix'>$row->asistencia&nbsp;</div>
 						<div style='width: 10%; min-height: 100%; height: auto;' class='clearfix'>$excusa&nbsp;</div>
 						<div style='width: 10%; min-height: 100%; height: auto;' class='clearfix'>$row->fechaInterventoria&nbsp;</div>
@@ -1078,7 +1138,7 @@ class CobActaconteo extends \Phalcon\Mvc\Model
 					<div style='width: 5%;'>$i</div>
 					<div style='width: 15%;'>$row->numDocumento</div>
 					<div style='width: 30%;'>$mayor_5$nombre_completo</div>
-					<div style='width: 30%;'>$row->grupo&nbsp;</div>
+					<div style='width: 30%;'>$row->grupo / $row->nombre_jornada&nbsp;</div>
 					<div style='width: 10%;'>$row->asistencia</div>
 					$fecha_lista</div>";
 				}
@@ -1212,7 +1272,7 @@ class CobActaconteo extends \Phalcon\Mvc\Model
 						}
 					}
 				}else {
-					$('#botones_visitas').css('display','none');
+					//$('#botones_visitas').css('display','none');
 				}
 			});
 			setTimeout(function(){

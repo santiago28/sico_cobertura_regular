@@ -383,8 +383,8 @@ class CobActaconteoController extends ControllerBase
 			->addJs('js/beneficiarios.js');
 			$this->view->nombre = array();
 			$this->view->acta = $acta;
-			$this->view->beneficiarios = $acta->getCobActaconteoPersona(['tipoPersona = 0','order' => 'id_grupo, primerNombre asc']);
-			$beneficiario_grupos = $acta->getCobActaconteoPersona(['group' => 'id_grupo, id_jornada']);
+			$this->view->beneficiarios = $acta->getCobActaconteoPersona(['tipoPersona = 0','order' => 'id_grupo, id_jornada, primerApellido asc']);
+			$beneficiario_grupos = $acta->getCobActaconteoPersona(['group' => 'id_grupo']);
 			$grupos = array();
 			foreach($beneficiario_grupos as $row){
 				$grupos[] = array("id_grupo" => $row->id_grupo, "nombre_grupo" => $row->grupo);

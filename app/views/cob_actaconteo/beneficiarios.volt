@@ -35,7 +35,7 @@
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
-<a href='#duplicar_fecha' class='btn btn-primary' data-toggle="modal" style="margin-bottom: 5px;">Duplicar fecha por grupos</a>
+{# <a href='#duplicar_fecha' class='btn btn-primary' data-toggle="modal" style="margin-bottom: 5px;">Duplicar fecha por grupos</a> #}
 
 <div style="margin-top: 3%;">
   <div class="form-group">
@@ -65,7 +65,7 @@
   <tbody>
     {% if(periodo_tipo != 2) %}
     {% for beneficiario in beneficiarios %}
-    {% set nombre = {beneficiario.primerNombre, beneficiario.segundoNombre, beneficiario.primerApellido, beneficiario.segundoApellido} %}
+    {% set nombre = {beneficiario.primerApellido, beneficiario.segundoApellido, beneficiario.primerNombre, beneficiario.segundoNombre} %}
     <?php $fecha = $this->conversiones->fecha(2, $beneficiario->fechaInterventoria); ?>
     <tr<?php echo $beneficiario->getAsistenciaDetail(); ?>>
     <td>{{ loop.index }}</td>
@@ -109,7 +109,7 @@
 {% endfor %}
 {% else %}
 {% for beneficiario in beneficiarios %}
-{% set nombre = {beneficiario.primerNombre, beneficiario.segundoNombre, beneficiario.primerApellido, beneficiario.segundoApellido} %}
+{% set nombre = {beneficiario.primerApellido, beneficiario.segundoApellido, beneficiario.primerNombre, beneficiario.segundoNombre} %}
 <?php $fecha = $this->conversiones->fecha(2, $beneficiario->fechaInterventoria); ?>
 <tr<?php echo $beneficiario->getAsistenciaDetail2(); ?>>
 <td>{{ loop.index }}</td>

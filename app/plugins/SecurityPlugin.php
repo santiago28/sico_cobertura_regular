@@ -334,6 +334,15 @@ class SecurityPlugin extends Plugin
       )
     ),
     'bc_reporte' => array(
+      'oferente_periodos_consolidado' => array(
+        'nivelPermiso' => '4'
+      ),
+      'beneficiarios_periodofacturacion' => array(
+        'nivelPermiso' => '2'
+      ),
+      'beneficiarios_periodofacturacion_consolidado' => array(
+        'nivelPermiso' => '2'
+      ),
       'cob_contratos' => array(
         'nivelPermiso' => '1'
       ),
@@ -350,6 +359,9 @@ class SecurityPlugin extends Plugin
         'nivelPermiso' => '4'
       ),
       'beneficiarios_contratoparcial' => array(
+        'nivelPermiso' => '4'
+      ),
+      'beneficiarios_contrato_periodo' => array(
         'nivelPermiso' => '4'
       ),
       'beneficiarios_contratofinal' => array(
@@ -585,7 +597,7 @@ class SecurityPlugin extends Plugin
         'nivelPermiso' => '4'
       ),
       'crearBeneficiario' => array(
-      'nivelPermiso' => '4'
+        'nivelPermiso' => '4'
       ),
       'guardar_beneficiario' => array(
         'nivelPermiso' => '4'

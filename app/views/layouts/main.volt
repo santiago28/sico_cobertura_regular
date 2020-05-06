@@ -48,8 +48,8 @@
   </div>
 </div>
 <div class="container">
-  <br><br><br>
-  <br>
+  <br class="no-imprimir"><br class="no-imprimir"><br class="no-imprimir">
+  <br class="no-imprimir">
     {{ flash.output() }}
     {{ content() }}
     {{ javascript_include('js/jquery/jquery.min.js') }}
