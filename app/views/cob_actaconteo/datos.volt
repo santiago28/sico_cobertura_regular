@@ -4,25 +4,25 @@
 	<tbody>
 		{% if(periodo_tipo != 2) %} <!-- Daniel Gallo 02/03/2017 -->
 		<tr>
-			<td>1. TOTAL DE BENEFICIARIOS QUE EFECTIVAMENTE ASISTIERON</td>
+			<td>1. PRESENTA EVIDENCIA DE ATENCIÓN VÁLIDA* (Boletín de notas, Consolidado de notas)</td>
 			<td>{{ asiste1 }}</td>
 		</tr>
 		<tr>
-			<td>2. TOTAL DE BENEFICIARIOS AUSENTES CON EXCUSA VALIDA</td>
+			<td>2. NO PRESENTA EVIDENCIA DE ATENCIÓN VÁLIDA</td>
 			<td>{{ asiste2 }}</td>
 		</tr>
 		<tr>
-			<td>3. TOTAL DE BENEFICIARIOS AUSENTES SIN EXCUSA</td>
+			<td>3. NO PRESENTA EVIDENCIA DE ATENCIÓN</td>
 			<td>{{ asiste3 }}</td>
 		</tr>
 		<tr>
-			<td>4. TOTAL DE BENEFICIARIOS RETIRADOS</td>
+			<td>4. RETIRADO / CANCELADO</td>
 			<td>{{ asiste4 }}</td>
 		</tr>
-		<tr>
+		{# <tr>
 			<td>5. TOTAL DE BENEFICIARIOS CON EVIDENCIA DE ATENCIÓN</td>
 			<td>{{ asiste5 }}</td>
-		</tr>
+		</tr> #}
 		<tr>
 			<td><strong>TOTAL LISTADO DE BENEFICIARIOS</strong></td>
 			<td>{{ asistetotal }}</td>
@@ -84,12 +84,12 @@
 	</div>
 </div>
 {% if(periodo_tipo != 2) %}
-<div class="form-group">
+{# <div class="form-group">
 	<label class="col-sm-2 control-label" for="nombreEncargado">* Nombre Encargado de la Sede</label>
 	<div class="col-sm-10">
 		{{ text_field("nombreEncargado", "class" : "form-control required") }}
 	</div>
-</div>
+</div> #}
 {% else %}
 {{ hidden_field("nombreEncargado", "value": "N/A") }}
 <div class="form-group">
@@ -136,12 +136,12 @@
 {{ select("vallaClasificacion", valla_sede, "class" : "form-control required") }}
 </div>
 </div> #}
-<div class="form-group">
+{# <div class="form-group">
 	<label class="col-sm-2 control-label" for="correccionDireccion">Corrección Dirección Sede</label>
 	<div class="col-sm-10">
 		{{ text_field("correccionDireccion", "class" : "form-control") }}
 	</div>
-</div>
+</div> #}
 {% if(periodo_tipo != 2) %}
 {# <div class="form-group">
 <label class="col-sm-2 control-label" for="mosaicoFisico">* Cuenta con Registro Fotográfico Físico</label>
@@ -162,12 +162,12 @@
 		{{ text_area("observacionUsuario", "rows" : "4", "class" : "form-control") }}
 	</div>
 </div>
-<div class="form-group">
+{# <div class="form-group">
 	<label class="col-sm-2 control-label" for="observacionEncargado">Observación Encargado Sede</label>
 	<div class="col-sm-10">
 		{{ text_area("observacionEncargado", "rows" : "4", "class" : "form-control") }}
 	</div>
-</div>
+</div> #}
 <div class="form-group">
 	<label class="col-sm-2 control-label" for="cargarDocumento">Evidencia de Atención</label>
 	<div class="col-sm-10">

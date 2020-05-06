@@ -135,6 +135,10 @@ class Elements extends Component
 			'caption' => 'Archivo Digital',
 			'action' => 'index'
 		),
+		'bc_reporte' => array(
+		'caption' => 'Reportes',
+		'action' => 'oferente_contratos'
+		),
 		// 'ibc_mensaje' => array(
 		// 	'caption' => 'Ubicación Sedes',
 		// 	'action' => 'anuncios'
@@ -147,10 +151,7 @@ class Elements extends Component
 	'caption' => 'Instrumentos',
 	'action' => 'index'
 ),
-'bc_reporte' => array(
-'caption' => 'Reportes',
-'action' => 'oferente_contratos'
-),
+
 'bc_permiso' => array(
 'caption' => 'Permisos',
 'action' => 'index'
@@ -903,8 +904,7 @@ public function getSelect($select)
 				'1' => '1',
 				'2' => '2',
 				'3' => '3',
-				'4' => '4',
-				'5' => '5');
+				'4' => '4');
 				break;
 				case "asistenciaEC": // Asistencia Entorno Comunitario Periodo tipo = 2
 				return array (
@@ -1266,7 +1266,7 @@ public function getSelect($select)
 																	'ESTRATO 5'=>'ESTRATO 5',
 																	'ESTRATO 6'=>'ESTRATO 6',
 																	'NO APLICA'=>'NO APLICA',
-																	
+
 																	);
 																	break;
 																	case "genero";

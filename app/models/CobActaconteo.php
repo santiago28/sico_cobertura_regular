@@ -32,6 +32,12 @@ class CobActaconteo extends \Phalcon\Mvc\Model
 	*
 	* @var integer
 	*/
+	public $recorrido_virtual;
+
+	/**
+	*
+	* @var integer
+	*/
 	public $id_sede_contrato;
 
 	/**
@@ -377,7 +383,7 @@ class CobActaconteo extends \Phalcon\Mvc\Model
 				$sql .= ")";
 				$db->query($sql);
 			}
-			$db->query("INSERT IGNORE INTO cob_actaconteo (id_periodo, id_carga, recorrido, id_sede_contrato, id_contrato, id_modalidad, modalidad_nombre, id_sede, sede_nombre, sede_barrio, sede_direccion, sede_telefono, id_oferente, oferente_nombre, id_jornada, nombre_jornada) SELECT $cob_periodo->id_periodo, $carga->id_carga, $recorrido, id_sede_contrato, id_contrato, id_modalidad, modalidad_nombre, id_sede, sede_nombre, sede_barrio, sede_direccion, sede_telefono, id_oferente, oferente_nombre, id_jornada, nombre_jornada FROM $tabla_mat group by id_sede_contrato, id_jornada");
+			$db->query("INSERT IGNORE INTO cob_actaconteo (id_periodo, id_carga, recorrido, recorrido_virtual, id_sede_contrato, id_contrato, id_modalidad, modalidad_nombre, id_sede, sede_nombre, sede_barrio, sede_direccion, sede_telefono, id_oferente, oferente_nombre, id_jornada, nombre_jornada) SELECT $cob_periodo->id_periodo, $carga->id_carga, $recorrido, $recorrido_virtual, id_sede_contrato, id_contrato, id_modalidad, modalidad_nombre, id_sede, sede_nombre, sede_barrio, sede_direccion, sede_telefono, id_oferente, oferente_nombre, id_jornada, nombre_jornada FROM $tabla_mat group by id_sede_contrato, id_jornada");
 			$db->query("REPLACE INTO bc_sede_contrato (id_sede_contrato, id_oferente, oferente_nombre, id_contrato, id_sede, sede_nombre, sede_barrio, sede_direccion, sede_telefono, id_modalidad, modalidad_nombre, estado) SELECT id_sede_contrato, id_oferente, oferente_nombre, id_contrato, id_sede, sede_nombre, sede_barrio, sede_direccion, sede_telefono, id_modalidad, modalidad_nombre, '1' FROM $tabla_mat");
 			$db->query("INSERT IGNORE INTO cob_actaconteo_persona (id_actaconteo, id_periodo, recorrido, id_contrato, id_persona, numDocumento, primerNombre, segundoNombre, primerApellido, segundoApellido, id_jornada, nombre_jornada, id_grupo, grupo, fechaNacimiento) SELECT (SELECT id_actaconteo FROM cob_actaconteo WHERE cob_actaconteo.id_sede_contrato = $tabla_mat.id_sede_contrato AND cob_actaconteo.id_periodo = $cob_periodo->id_periodo AND cob_actaconteo.recorrido = $recorrido and cob_actaconteo.id_jornada = $tabla_mat.id_jornada), $cob_periodo->id_periodo, $recorrido, id_contrato, id_persona, numDocumento, primerNombre, segundoNombre, primerApellido, segundoApellido,id_jornada, nombre_jornada, id_grupo, grupo, fechaNacimiento FROM $tabla_mat");
 			//Si es Itinerante se graban las madres comunitarias
@@ -390,7 +396,7 @@ class CobActaconteo extends \Phalcon\Mvc\Model
 			return TRUE;
 		}
 
-		public function generarActasR1($cob_periodo, $carga, $modalidades, $facturacion) {
+		public function generarActasR1($cob_periodo, $carga, $modalidades, $facturacion, $recorrido_virtual, $recorrido_virtual) {
 			$db = $this->getDI()->getDb();
 			$config = $this->getDI()->getConfig();
 			$timestamp = new DateTime();
@@ -461,7 +467,7 @@ class CobActaconteo extends \Phalcon\Mvc\Model
 		}
 		$db->query("DELETE FROM $tabla_mat WHERE fechaRetiro > 0000-00-00");
 		$db->query("REPLACE INTO bc_sede_contrato (id_sede_contrato, id_oferente, oferente_nombre, id_contrato, id_sede, sede_nombre, sede_barrio, sede_direccion, sede_telefono, id_modalidad, modalidad_nombre, estado) SELECT id_sede_contrato, id_oferente, oferente_nombre, id_contrato, id_sede, sede_nombre, sede_barrio, sede_direccion, sede_telefono, id_modalidad, modalidad_nombre, '1' FROM $tabla_mat");
-		$db->query("INSERT IGNORE INTO cob_actaconteo (id_periodo, id_carga, recorrido, id_sede_contrato, id_contrato, id_modalidad, modalidad_nombre, id_sede, sede_nombre, sede_barrio, sede_direccion, sede_telefono, id_oferente, oferente_nombre, id_jornada, nombre_jornada) SELECT $cob_periodo->id_periodo, $carga->id_carga, '1', id_sede_contrato, id_contrato, id_modalidad, modalidad_nombre, id_sede, sede_nombre, sede_barrio, sede_direccion, sede_telefono, id_oferente, oferente_nombre, id_jornada,nombre_jornada FROM $tabla_mat group by id_sede_contrato, id_jornada");
+		$db->query("INSERT IGNORE INTO cob_actaconteo (id_periodo, id_carga, recorrido, recorrido_virtual, id_sede_contrato, id_contrato, id_modalidad, modalidad_nombre, id_sede, sede_nombre, sede_barrio, sede_direccion, sede_telefono, id_oferente, oferente_nombre, id_jornada, nombre_jornada) SELECT $cob_periodo->id_periodo, $carga->id_carga, '1', $recorrido_virtual,  id_sede_contrato, id_contrato, id_modalidad, modalidad_nombre, id_sede, sede_nombre, sede_barrio, sede_direccion, sede_telefono, id_oferente, oferente_nombre, id_jornada,nombre_jornada FROM $tabla_mat group by id_sede_contrato, id_jornada");
 		$db->query("INSERT IGNORE INTO cob_actaconteo_persona (id_actaconteo, id_periodo, recorrido, id_contrato, id_persona, numDocumento, primerNombre, segundoNombre, primerApellido, segundoApellido, id_jornada, nombre_jornada, id_grupo, grupo, fechaNacimiento) SELECT (SELECT id_actaconteo FROM cob_actaconteo WHERE cob_actaconteo.id_sede_contrato = $tabla_mat.id_sede_contrato AND cob_actaconteo.id_periodo = $cob_periodo->id_periodo AND cob_actaconteo.recorrido = 1 and cob_actaconteo.id_jornada = $tabla_mat.id_jornada), $cob_periodo->id_periodo, 1, id_contrato, id_persona, numDocumento, primerNombre, segundoNombre, primerApellido, segundoApellido, id_jornada, nombre_jornada, id_grupo, grupo, fechaNacimiento FROM $tabla_mat");
 		//Si es Itinerante se graban las madres comunitarias
 		if($cob_periodo->tipo == 4) {
@@ -611,11 +617,11 @@ class CobActaconteo extends \Phalcon\Mvc\Model
 		}
 		$db = $this->getDI()->getDb();
 		$config = $this->getDI()->getConfig();
-		$cupos_sede = $db->query("SELECT cuposTotal FROM cob_periodo_contratosedecupos WHERE id_periodo = '$acta->id_periodo' AND id_sede_contrato = '$acta->id_sede_contrato'");
+		$cupos_sede = $db->query("SELECT cuposSostenibilidad FROM cob_periodo_contratosedecupos WHERE id_periodo = '$acta->id_periodo' AND id_sede_contrato = '$acta->id_sede_contrato'");
 		$cupos_sede->setFetchMode(Phalcon\Db::FETCH_OBJ);
 		$cuposTotal = 0;
 		foreach($cupos_sede->fetchAll() as $key => $row){
-			$cuposTotal = $row->cuposTotal;
+			$cuposTotal = $row->cuposSostenibilidad;
 		}
 		$acta_id = "ACO-03-". date("Y") . sprintf('%05d', $acta->id_actaconteo);
 		$nombre_mcb = "";
@@ -625,9 +631,17 @@ class CobActaconteo extends \Phalcon\Mvc\Model
 			$nombre_mcb = "MADRE COMUNITARIA: <span style='font-weight: normal; font-size: 8px;'>" . $nombre_mcb . "</span>";
 		}
 		/*if ($acta->recorrido == '1') {*/
+		$titulo_encabezado = "";
+
+		if ($acta->recorrido_virtual == 1) {
+			$titulo_encabezado = "ACTA DE VERIFICACIÓN DE ATENCIÓN DE LOS ESTUDIANTES <br> DEL PROGRAMA DE COBERTURA EDUCATIVA (REGULAR, JOVENES EXTRA EDAD Y ADULTOS)";
+		}else{
+			$titulo_encabezado = "ACTA DE CONTEO PARA VERIFICACIÓN EN SITIO DE LA ATENCIÓN DE LOS ESTUDIANTES<br>DEL PROGRAMA DE COBERTURA EDUCATIVA (REGULAR, JOVENES EXTRA EDAD Y ADULTOS)<br>AUTORIZADOS POR LA SECRETARIA DE EDUCACIÓN DE MEDELLÍN  - <em>(RECORRIDO $acta->recorrido)</em>";
+		}
+
 		$encabezado = "<div class='seccion encabezado'>
 		<img src='/sico_cobertura_regular/public/img/logo_pascual_largo.png' style='width: 18%; margin-top: 2%; margin-left: 2%;' />
-		<div class='fila center'><div style='margin-left:20%; margin-top: -3%;'>ACTA DE CONTEO PARA VERIFICACIÓN EN SITIO DE LA ATENCIÓN DE LOS ESTUDIANTES<br>DEL PROGRAMA DE COBERTURA EDUCATIVA (REGULAR, JOVENES EXTRA EDAD Y ADULTOS)<br>AUTORIZADOS POR LA SECRETARIA DE EDUCACIÓN DE MEDELLÍN  - <em>(RECORRIDO $acta->recorrido)</em></div></div>
+		<div class='fila center'><div style='margin-left:20%; margin-top: -3%;'>$titulo_encabezado</div></div>
 		<img src='/sico_cobertura_regular/public/img/escudo_armas.png' style='width: 10%; margin-top: 2%; margin-left: 65%;' />
 		<div class='fila col3e'>
 		<div>ACTA: <span style='font-weight: normal;'>$acta_id</span></div>
@@ -638,16 +652,23 @@ class CobActaconteo extends \Phalcon\Mvc\Model
 		<div>RUTA: <span style='font-weight: normal; text-transform: uppercase;'>".$acta->IbcUsuario->usuario."</span></div>
 		<div class='col2da'>PRESTADOR: <span style='font-weight: normal;'>".substr($acta->oferente_nombre, 0, 34)."</span></div>
 		<div>SEDE: <span style='font-weight: normal;'>$acta->sede_nombre</span></div>
-		</div>
-		<div class='fila col3e'>
-		<div>TELÉFONO: <span style='font-weight: normal;'>$acta->sede_telefono</span></div>
-		<div class='col2da'>DIRECCIÓN: <span style='font-weight: normal; text-transform: uppercase'>$acta->sede_direccion</span></div>
-		<div>BARRIO/VEREDA: <span style='font-weight: normal;'>$acta->sede_barrio</span></div>
-		</div>
-		<div class='fila col3e'>
-		<div>JORNADA: <span style='font-weight: normal;'>$acta->nombre_jornada</span></div>
-		</div>
+		</div>";
 
+		if ($acta->recorrido_virtual == 0) {
+			$encabezado .= "<div class='fila col3e'>
+			<div>TELÉFONO: <span style='font-weight: normal;'>$acta->sede_telefono</span></div>
+			<div class='col2da'>DIRECCIÓN: <span style='font-weight: normal; text-transform: uppercase'>$acta->sede_direccion</span></div>
+			<div>BARRIO/VEREDA: <span style='font-weight: normal;'>$acta->sede_barrio</span></div>
+			</div>
+			<div class='fila col3e'>
+			<div>JORNADA: <span style='font-weight: normal;'>$acta->nombre_jornada</span></div>
+			</div>
+			";
+		}
+		$encabezado .=  "
+		<div class='fila col3e'>
+		<div>CUPOS CONTRATADOS: <span style='font-weight: normal;'>$cuposTotal</span></div>
+		</div>
 		<div class='clear'></div>
 		</div>";
 		/*}else {
@@ -694,40 +715,25 @@ class CobActaconteo extends \Phalcon\Mvc\Model
 	<div class='fila'><div>1.6 LLAMADA TELEFÓNICA NO CERTIFICADA</div></div>*/
 
 
-	if($acta->id_modalidad == 5){ // ENTORNO FAMILIAR
-		if ($acta->recorrido == 1) {
-			$totalizacion_asistencia = "<div class='seccion' id='totalizacion_asistencia'>
-			<div class='fila center bold'><div style='border:none; width: 100%'>1. TOTALIZACIÓN DE ASISTENCIA</div></div>
-			<div class='fila'><div>1.1 PRESENTE</div></div>
-			<div class='fila'><div>1.2 AUSENTE CON EXCUSA</div></div>
-			<div class='fila'><div>1.3 AUSENTE SIN EXCUSA</div></div>
-			<div class='fila'><div>1.4 RETIRADO / CANCELADO</div></div>
-			<div class='fila'><div>1.5 AUSENTE CON EVIDENCIA ATENCIÓN</div></div>
-			<div class='fila'><div>TOTALES</div></div>
-			<div class='clear'></div>
-			</div>";
-		}else {
-			$totalizacion_asistencia = "<div class='seccion' id='totalizacion_asistencia'>
-			<div class='fila center bold'><div style='border:none; width: 100%'>1. TOTALIZACIÓN DE ASISTENCIA</div></div>
-			<div class='fila'><div>1.1 PRESENTE</div></div>
-			<div class='fila'><div>1.2 AUSENTE CON EXCUSA</div></div>
-			<div class='fila'><div>1.3 AUSENTE SIN EXCUSA</div></div>
-			<div class='fila'><div>1.4 RETIRADO / CANCELADO</div></div>
-			<div class='fila'><div>1.5 AUSENTE CON EVIDENCIA ATENCIÓN</div></div>
-			<div class='fila'><div>TOTALES</div></div>
-			<div class='clear'></div>
-			</div>";
-		}
+	$asiste1 = $acta->getCobActaconteoPersona(['tipoPersona = 0 AND asistencia = 1']);
+	$asiste2 = $acta->getCobActaconteoPersona(['tipoPersona = 0 AND asistencia = 2']);
+	$asiste3 = $acta->getCobActaconteoPersona(['tipoPersona = 0 AND asistencia = 3']);
+	$asiste4 = $acta->getCobActaconteoPersona(['tipoPersona = 0 AND asistencia = 4']);
+	$asiste5 = $acta->getCobActaconteoPersona(['tipoPersona = 0 AND asistencia = 5']);
+	$asistetotal = $acta->getCobActaconteoPersona(['tipoPersona = 0']);
 
-	}
-	else {
-		$asiste1 = $acta->getCobActaconteoPersona(['tipoPersona = 0 AND asistencia = 1']);
-		$asiste2 = $acta->getCobActaconteoPersona(['tipoPersona = 0 AND asistencia = 2']);
-		$asiste3 = $acta->getCobActaconteoPersona(['tipoPersona = 0 AND asistencia = 3']);
-		$asiste4 = $acta->getCobActaconteoPersona(['tipoPersona = 0 AND asistencia = 4']);
-		$asiste5 = $acta->getCobActaconteoPersona(['tipoPersona = 0 AND asistencia = 5']);
-		$asistetotal = $acta->getCobActaconteoPersona(['tipoPersona = 0']);
-
+	if ($acta->recorrido_virtual == 1) {
+		$totalizacion_asistencia = "<div class='seccion' id='totalizacion_asistencia'>
+		<div class='fila center bold'><div style='border:none; width: 100%'>1. TOTALIZACIÓN DE EVIDENCIAS</div></div>
+		<div class='fila'><div>1.1 PRESENTA EVIDENCIA DE ATENCIÓN VÁLIDA* (Boletín de notas, Consolidado de notas)</div>&nbsp;&nbsp;".count($asiste1)."</div>
+		<div class='fila'><div>1.2 NO PRESENTA EVIDENCIA DE ATENCIÓN VÁLIDA</div>&nbsp;&nbsp;".count($asiste2)."</div>
+		<div class='fila'><div>1.3 NO PRESENTA EVIDENCIA DE ATENCIÓN</div>&nbsp;&nbsp;".count($asiste3)."</div>
+		<div class='fila'><div>1.4 RETIRADO / CANCELADO</div>&nbsp;&nbsp;".count($asiste4)."</div>
+		<div class='fila'><div>TOTALES</div>&nbsp;&nbsp;".count($asistetotal)."</div>
+		<div class='clear'></div>
+		*Estados de evidencias válidos para certificación
+		</div>";
+	}else {
 		$totalizacion_asistencia = "<div class='seccion' id='totalizacion_asistencia'>
 		<div class='fila center bold'><div style='border:none; width: 100%'>1. TOTALIZACIÓN DE ASISTENCIA</div></div>
 		<div class='fila'><div>1.1 PRESENTE*</div>&nbsp;&nbsp;".count($asiste1)."</div>
@@ -740,99 +746,20 @@ class CobActaconteo extends \Phalcon\Mvc\Model
 		*Estados de asistencia válidos para facturación
 		</div>";
 	}
+
+
 	$datos_acta = array();
 	$datos_acta['datos'] = $acta;
 	$html = "";
 
-	$html .= "<div class='form-group pull-right col-md-2' style='margin-top:-3.5%' id='botones_visitas'>
-	<button class='btn btn-primary noPrint visita' value='1' style='float: left;'>En Campo</button>
-	<button class='btn btn-primary noPrint visita' value='2' style='float: right;'>Virtual</button>
-	</div>";
+	// $html .= "<div class='form-group pull-right col-md-2' style='margin-top:-3.5%' id='botones_visitas'>
+	// <button class='btn btn-primary noPrint visita' value='1' style='float: left;'>En Campo</button>
+	// <button class='btn btn-primary noPrint visita' value='2' style='float: right;'>Virtual</button>
+	// </div>";
 
 	$html .= "<div id='imprimir'>"; // <acta>
 	//Página Prestador
-	if ($acta->id_modalidad == 5) {
-		if ($acta->recorrido == '1') {
-			$html .= $encabezado;
-			$html .= $totalizacion_asistencia;
-			$html .= "
-			<div class='seccion' id='datos_generales'>
-			<div class='fila center bold'><div style='border:none; width: 100%'>2. DATOS GENERALES</div></div>
-			<div class='fila col3'>
-			<div>2.1 FECHA VISITA:</div>
-			<div>2.2 HORA INICIO VISITA:</div>
-			<div>2.3 HORA FIN VISITA:</div>
-			</div>
-			<div class='fila col2'>
-			<div style='width: 55%;'>2.4 NOMBRE ENCARGADO DEL ENCUENTRO:</div>
-			<div style='width: 40%;'>2.5 NOMBRE TÉCNICO CONTEO:</div>
-			</div>
-			<div class='fila col2'>
-			<div>2.6 CUENTA CON VALLA DE IDENTIFICACIÓN:</div>
-			<div>2.7 CORRECCIÓN DIRECCIÓN:</div>
-			</div>
-			<div class='clear'></div>
-			</div>
-			<div class='seccion' id='observaciones'>
-			<div class='fila center bold'><div style='border:none; width: 100%'>3. OBSERVACIONES AL MOMENTO DE LA VISITA DE CONTEO</div></div>
-			<div class='fila observacion'><div>3.1 OBSERVACIÓN DEL TÉCNICO DE CONTEO:$aiepi</div></div>
-			<div class='fila observacion'><div>3.2 OBSERVACIÓN DEL ENCARGADO DE LA SEDE:</div></div>
-			<div class='clear'></div>
-			</div>";
-			$html .= $pie_pagina;
-
-			$html .= "<div class='paginacion'>PÁGINA DEL PRESTADOR</div>";
-			//Página en blanco para impresión a doble cara
-			// $html .= "<div class='seccion encabezado' style='border: none'></div>";
-		}else {
-			$html .= "<div class='visitapresencial1'>";
-			$html .= $encabezado;
-			$html .= $totalizacion_asistencia;
-			$html .= "
-			<div class='seccion visitapresencial1' id='datos_generales'>
-			<div class='fila center bold'>
-			<div style='border:none; width: 100%'>2. DATOS GENERALES</div>
-			</div>
-			<div class='fila col3'>
-			<div>2.1 FECHA VISITA:</div>
-			<div>2.2 HORA INICIO VISITA:</div>
-			<div>2.3 HORA FIN VISITA:</div>
-			</div>
-			<div class='fila col2'>
-			<div style='width: 55%;'>2.4 NOMBRE ENCARGADO DEL ENCUENTRO:</div>
-			<div style='width: 40%;'>2.5 NOMBRE TÉCNICO CONTEO:</div>
-			</div>
-			<div class='fila col2'>
-			<div>2.6 CUENTA CON VALLA DE IDENTIFICACIÓN:</div>
-			<div>2.7 CORRECCIÓN DIRECCIÓN:</div>
-			</div>
-			<div class='clear'></div>
-			</div>
-			<div class='seccion visitavirtual1' id=''>
-			<div class='fila center bold'>
-			<div style='border:none; width: 100%'>2. DATOS GENERALES</div>
-			</div>
-			<div class='fila col3'>
-			<div style='width: 50%;'>2.1 FECHA VISITA:</div>
-			<div style='width: 50%;'>2.2 NOMBRE TÉCNICO CONTEO:</div>
-			</div>
-			<div class='clear'></div>
-			</div>
-			<div class='seccion' id='observaciones'>
-			<div class='fila center bold'><div style='border:none; width: 100%'>3. OBSERVACIONES AL MOMENTO DE LA VISITA DE CONTEO</div></div>
-			<div class='fila observacion visitapresencial1'><div>3.1 OBSERVACIÓN DEL TÉCNICO DE CONTEO:$aiepi</div></div>
-			<div class='fila observacion visitapresencial1'><div>3.2 OBSERVACIÓN DEL ENCARGADO DE LA SEDE:</div></div>
-			<div class='fila observacion3 visitavirtual1'><div>3.1 OBSERVACIÓN DEL TÉCNICO DE CONTEO:$aiepi</div></div>
-			<div class='clear'></div>
-			</div>";
-			$html .= $pie_pagina;
-
-			$html .= "<div class='paginacion'>PÁGINA DEL PRESTADOR</div>";
-			//Página en blanco para impresión a doble cara
-			$html .= "<div class='seccion encabezado' style='border: none'></div>";
-			$html .="</div>";
-		}
-	}else {
+	if ($acta->recorrido_virtual == 0) {
 		$html .= $encabezado;
 		$html .= $totalizacion_asistencia;
 		if ($acta->CobActaconteoDatos) {
@@ -917,78 +844,67 @@ class CobActaconteo extends \Phalcon\Mvc\Model
 	} else if ($acta->id_modalidad == 12){
 		$aiepi = "<br>SE ACORDÓ PREVIAMENTE VISITA CON LA MADRE COMUNITARIA: <u>SÍ</u> - <u>NO</u><br>SE ENTREGA FORMATO DE PLANILLA DE SEGUIMIENTO PARA VISITA DE PROFESIONALES: <u>SÍ</u> - <u>NO</u><br>SE VERIFICA PLANILLA DE SEGUIMIENTO DE VISITA DE PROFESIONALES: <u>SÍ</u> - <u>NO</u><br>NÚMERO DE ENCUENTROS EVIDENCIADOS AL MOMENTO DE LA VISITA ___";
 	}
+
+
 	$html .= $encabezado;
 	$html .= $totalizacion_asistencia;
 
-	if($acta->id_modalidad == 5){ // ENTORNO FAMILIAR
-		if ($acta->recorrido == 1) {
+
+	if ($acta->recorrido_virtual == 1) {
+		if ($acta->CobActaconteoDatos) {
+			$usuario =
 			$html .= "
 			<div class='seccion' id='datos_generales'>
 			<div class='fila center bold'><div style='border:none; width: 100%'>2. DATOS GENERALES</div></div>
-			<div class='fila col3'>
-			<div>2.1 FECHA VISITA:</div>
-			<div>2.2 HORA INICIO VISITA:</div>
-			<div>2.3 HORA FIN VISITA:</div>
+			<div class='fila col2'>
+			<div>2.1 FECHA VERIFICACIÓN DE LA EVIDENCIA: ".$this->conversiones->fecha(2, $acta->CobActaconteoDatos->fecha)."</div>
+			<div style='width: 40%;'>2.5 NOMBRE TÉCNICO CONTEO: ".$acta->IbcUsuario->nombre."</div>
 			</div>
 			<div class='fila col2'>
-			<div style='width: 55%;'>2.4 NOMBRE ENCARGADO DEL ENCUENTRO:</div>
-			<div style='width: 40%;'>2.5 NOMBRE TÉCNICO CONTEO:</div>
-			</div>
-			<div class='fila col2'>
-			<div>2.6 CUENTA CON VALLA DE IDENTIFICACIÓN:</div>
-			<div>2.7 CORRECCIÓN DIRECCIÓN:</div>
+			<!--<div>2.8 CUENTA CON REGISTRO FOTOGRÁFICO FÍSICO:</div>
+			<div>2.9 CUENTA CON REGISTRO FOTOGRÁFICO DIGITAL:</div>-->
 			</div>
 			<div class='clear'></div>
 			</div>
 			<div class='seccion' id='observaciones'>
-			<div class='fila center bold'><div style='border:none; width: 100%'>3. OBSERVACIONES AL MOMENTO DE LA VISITA DE CONTEO</div></div>
-			<div class='fila observacion'><div>3.1 OBSERVACIÓN DEL TÉCNICO DE CONTEO:$aiepi</div></div>
-			<div class='fila observacion'><div>3.2 OBSERVACIÓN DEL ENCARGADO DE LA SEDE:</div></div>
+			<div class='fila center bold'><div style='border:none; width: 100%'>3. 3. OBSERVACIONES AL MOMENTO DE LA VERIFICACIÓN DE EVIDENCIAS</div></div>
+			<div class='fila observacion' style='margin-top:0px; height: 250px !important; font-size: 10px !important;'><div>3.1 OBSERVACIÓN DEL TÉCNICO DE CONTEO: <br><br>Tras la declaratoria de “Emergencia Sanitaria” en todo el territorio colombiano por parte del Ministerio de Salud y Protección Social, según Resolución 385
+			del 12 de marzo de 2020 y de calamidad pública por Decreto Municipal 373 del 16 de marzo de 2020, la interventoría a través de medios no presenciales
+			realizará la verificación de evidencias de atención a los estudiantes. Adicional a lo anterior, mediante Decreto 457 del 22 de marzo de 2020, el Gobierno
+			Nacional ordenó el aislamiento preventivo obligatorio de todas las personas habitantes de la República de Colombia, entre el 25 de marzo y el 11 de mayo
+			de 2020, con algunas excepciones. Con fundamento en lo anterior, el equipo de interventoría realiza labores de verificación, haciendo uso de herramientas
+			de las TIC`s, que permitan en forma remota la certificación de los estudiantes en el período de abril.<br><br>".$acta->CobActaconteoDatos->observacionUsuario."</div></div>
+			<div class='fila observacion' style='height: 160px !important'><div>3.2 OBSERVACIONES DEL CONTRATISTA: ".$acta->CobActaconteoDatos->observacionEncargado."</div></div>
 			<div class='clear'></div>
 			</div>";
-		}else {
+		}else{
 			$html .= "
-			<div class='seccion visitapresencial1' id='datos_generales'>
-			<div class='fila center bold'>
-			<div style='border:none; width: 100%'>2. DATOS GENERALES</div>
-			</div>
-			<div class='fila col3'>
-			<div>2.1 FECHA VISITA:</div>
-			<div>2.2 HORA INICIO VISITA:</div>
-			<div>2.3 HORA FIN VISITA:</div>
-			</div>
+			<div class='seccion' id='datos_generales'>
+			<div class='fila center bold'><div style='border:none; width: 100%'>2. DATOS GENERALES</div></div>
 			<div class='fila col2'>
-			<div style='width: 55%;'>2.4 NOMBRE ENCARGADO DEL ENCUENTRO:</div>
-			<div style='width: 40%;'>2.5 NOMBRE TÉCNICO CONTEO:</div>
+			<div>2.1 FECHA VISITA: </div>
+			<div style='width: 40%;'>2.2 NOMBRE TÉCNICO CONTEO:</div>
 			</div>
+
 			<div class='fila col2'>
-			<div>2.6 CUENTA CON VALLA DE IDENTIFICACIÓN:</div>
-			<div>2.7 CORRECCIÓN DIRECCIÓN:</div>
-			</div>
-			<div class='clear'></div>
-			</div>
-			<div class='seccion visitavirtual1' id=''>
-			<div class='fila center bold'>
-			<div style='border:none; width: 100%'>2. DATOS GENERALES</div>
-			</div>
-			<div class='fila col3'>
-			<div style='width: 50%;'>2.1 FECHA VISITA:</div>
-			<div style='width: 50%;'>2.2 NOMBRE TÉCNICO CONTEO:</div>
+			<!--<div>2.8 CUENTA CON REGISTRO FOTOGRÁFICO FÍSICO:</div>
+			<div>2.9 CUENTA CON REGISTRO FOTOGRÁFICO DIGITAL:</div>-->
 			</div>
 			<div class='clear'></div>
 			</div>
 			<div class='seccion' id='observaciones'>
-			<div class='fila center bold'><div style='border:none; width: 100%'>3. OBSERVACIONES AL MOMENTO DE LA VISITA DE CONTEO</div></div>
-			<div class='fila observacion visitapresencial1'><div>3.1 OBSERVACIÓN DEL TÉCNICO DE CONTEO:$aiepi</div></div>
-			<div class='fila observacion visitapresencial1'><div>3.2 OBSERVACIÓN DEL ENCARGADO DE LA SEDE:</div></div>
-			<div class='fila observacion3 visitavirtual1'><div>3.1 OBSERVACIÓN DEL TÉCNICO DE CONTEO:$aiepi</div></div>
+			<div class='fila center bold'><div style='border:none; width: 100%'>3. 3. OBSERVACIONES AL MOMENTO DE LA VERIFICACIÓN DE EVIDENCIAS</div></div>
+			<div class='fila observacion' style='margin-top:0px;'><div>3.1 OBSERVACIÓN DEL TÉCNICO DE CONTEO:<br><br>Tras la declaratoria de “Emergencia Sanitaria” en todo el territorio colombiano por parte del Ministerio de Salud y Protección Social, según Resolución 385
+			del 12 de marzo de 2020 y de calamidad pública por Decreto Municipal 373 del 16 de marzo de 2020, la interventoría a través de medios no presenciales
+			realizará la verificación de evidencias de atención a los estudiantes. Adicional a lo anterior, mediante Decreto 457 del 22 de marzo de 2020, el Gobierno
+			Nacional ordenó el aislamiento preventivo obligatorio de todas las personas habitantes de la República de Colombia, entre el 25 de marzo y el 11 de mayo
+			de 2020, con algunas excepciones. Con fundamento en lo anterior, el equipo de interventoría realiza labores de verificación, haciendo uso de herramientas
+			de las TIC`s, que permitan en forma remota la certificación de los estudiantes en el período de abril.</div></div>
+			<div class='fila observacion'><div>3.2 OBSERVACIONES DEL CONTRATISTA:</div></div>
 			<div class='clear'></div>
 			</div>";
 		}
-
-	}
-	else
-	{
+	}else{
 		if ($acta->CobActaconteoDatos) {
 			$usuario =
 			$html .= "
@@ -1116,12 +1032,12 @@ class CobActaconteo extends \Phalcon\Mvc\Model
 	{
 		$encabezado_beneficiarios = "<div class='seccion visitapresencial' id='listado_beneficiarios'>
 		<div class='fila center bold'><div style='border:none; width: 100%'>4. LISTADO DE BENEFICIARIOS</div></div>
-		<div class='fila colb'><div style='width: 5%;'>#</div><div style='width: 15%;'>4.1 DOCUMENTO</div><div style='width: 30%'>4.2 NOMBRE COMPLETO</div><div style='width: 30%'>4.3 GRADO / GRUPO / JORNADA</div><div style='width: 10%'>4.4 ASISTENCIA</div>$fecha_encabezado</div>";
+		<div class='fila colb'><div style='width: 5%;'>#</div><div style='width: 15%;'>4.1 DOCUMENTO</div><div style='width: 30%'>4.2 NOMBRE COMPLETO</div><div style='width: 30%'>4.3 GRADO / GRUPO</div><div style='width: 10%'>4.4 VERIFICACIÓN</div>$fecha_encabezado</div>";
 	}
 	$html .= $encabezado;
 	$html .= $encabezado_beneficiarios;
 	if($acta->id_modalidad == 12){
-		foreach($acta->getCobActaconteoPersona(["tipoPersona = 0", 'order' => 'id_grupo, primerNombre asc']) as $row){
+		foreach($acta->getCobActaconteoPersona(["tipoPersona = 0", 'order' => 'id_grupo, id_jornada, primerApellido asc']) as $row){
 			$mayor5 = "";
 			$mayor_5 = "";
 			if($row->fechaNacimiento){
@@ -1136,7 +1052,7 @@ class CobActaconteo extends \Phalcon\Mvc\Model
 			$nombre_completo = array($row->primerApellido, $row->segundoApellido, $row->primerNombre, $row->segundoNombre);
 			$nombre_completo = implode(" ", $nombre_completo);
 			$i = ($i<10) ? "0" .$i : $i;
-			$html .="<div class='fila colb'$mayor5><div style='width: 5%;'>$i</div><div style='width: 15%;'>$row->numDocumento</div><div style='width: 30%;'>$mayor_5$nombre_completo</div><div style='width: 30%;'>$row->grupo</div><div style='width: 10%;'>&nbsp;</div>$fecha_lista</div>";
+			$html .="<div class='fila colb'$mayor5><div style='width: 5%;'>$i</div><div style='width: 15%;'>$row->numDocumento</div><div style='width: 30%;'>$mayor_5$nombre_completo</div><div style='width: 30%;'>$row->grupo / $row->nombre_jornada</div><div style='width: 10%;'>&nbsp;</div>$fecha_lista</div>";
 			$i++;
 			$j++;
 		}
@@ -1150,7 +1066,7 @@ class CobActaconteo extends \Phalcon\Mvc\Model
 		$html .= "<div class='clear'></div></div>" . $pie_pagina;
 		$html .= "<div class='paginacion'>PÁGINA $p</div>";
 	} else {
-		foreach($acta->getCobActaconteoPersona(["tipoPersona = 0", 'order' => 'id_grupo, primerNombre asc']) as $row){
+		foreach($acta->getCobActaconteoPersona(["tipoPersona = 0", 'order' => 'id_grupo, id_jornada, primerApellido asc']) as $row){
 			$mayor5 = "";
 			$mayor_5 = "";
 			if($row->fechaNacimiento){
@@ -1176,7 +1092,7 @@ class CobActaconteo extends \Phalcon\Mvc\Model
 			if($acta->id_modalidad == 5){ // ENTORNO FAMILIAR
 
 				if ($acta->recorrido == '1') {
-					$html .="<div class='fila colb'$mayor5><div style='width: 5%;'>$i</div><div style='width: 15%;'>$row->numDocumento</div><div style='width: 30%;'>$mayor_5$nombre_completo</div><div style='width: 10%;'>$row->grupo&nbsp;</div><div style='width: 10%;'>&nbsp;</div><div style='width: 10%;'>&nbsp;</div><div style='width: 10%;'>&nbsp;</div><div style='width: 10%;'>&nbsp;</div>$fecha_lista</div>";
+					$html .="<div class='fila colb'$mayor5><div style='width: 5%;'>$i</div><div style='width: 15%;'>$row->numDocumento</div><div style='width: 30%;'>$mayor_5$nombre_completo</div><div style='width: 10%;'>$row->grupo / $row->nombre_jornada&nbsp;</div><div style='width: 10%;'>&nbsp;</div><div style='width: 10%;'>&nbsp;</div><div style='width: 10%;'>&nbsp;</div><div style='width: 10%;'>&nbsp;</div>$fecha_lista</div>";
 				}else {
 					$query = $this->modelsManager->createQuery("SELECT *
 						FROM CobActaconteoPersonaExcusa
@@ -1195,7 +1111,7 @@ class CobActaconteo extends \Phalcon\Mvc\Model
 						<div style='width: 5%; min-height: 100%; height: auto;' class='clearfix'>$i</div>
 						<div style='width: 15%; min-height: 100%; height: auto;' class='clearfix'>$row->numDocumento</div>
 						<div style='width: 30%; min-height: 100%; height: auto;' class='clearfix'>$mayor_5$nombre_completo</div>
-						<div style='width: 10%; min-height: 100%; height: auto;' class='clearfix'>$row->grupo&nbsp;</div>
+						<div style='width: 10%; min-height: 100%; height: auto;' class='clearfix'>$row->grupo / $row->nombre_jornada&nbsp;</div>
 						<div style='width: 10%; min-height: 100%; height: auto;' class='clearfix'>$row->asistencia&nbsp;</div>
 						<div style='width: 10%; min-height: 100%; height: auto;' class='clearfix'>$excusa&nbsp;</div>
 						<div style='width: 10%; min-height: 100%; height: auto;' class='clearfix'>$row->fechaInterventoria&nbsp;</div>
@@ -1222,7 +1138,7 @@ class CobActaconteo extends \Phalcon\Mvc\Model
 					<div style='width: 5%;'>$i</div>
 					<div style='width: 15%;'>$row->numDocumento</div>
 					<div style='width: 30%;'>$mayor_5$nombre_completo</div>
-					<div style='width: 30%;'>$row->grupo&nbsp;</div>
+					<div style='width: 30%;'>$row->grupo / $row->nombre_jornada&nbsp;</div>
 					<div style='width: 10%;'>$row->asistencia</div>
 					$fecha_lista</div>";
 				}
@@ -1356,7 +1272,7 @@ class CobActaconteo extends \Phalcon\Mvc\Model
 						}
 					}
 				}else {
-					$('#botones_visitas').css('display','none');
+					//$('#botones_visitas').css('display','none');
 				}
 			});
 			setTimeout(function(){

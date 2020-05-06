@@ -345,7 +345,7 @@ class CobAjusteController extends ControllerBase
     	}
     	$id_contrato = $this->request->getPost("id_contrato");
     	$numDocumento = $this->request->getPost("numDocumento");
-    	$beneficiario = CobActaconteoPersonaFacturacion::findFirst(array("id_periodo = $id_periodo AND id_contrato = $id_contrato AND numDocumento = $numDocumento"));
+    	$beneficiario = CobActaconteoPersonaFacturacion::findFirst(array("id_periodo = $id_periodo AND id_contrato = $id_contrato AND numDocumento = '$numDocumento'"));
     	if (!$beneficiario) {
     		$this->flash->error("El beneficiario con número de documento <strong>$numDocumento</strong> no fue encontrado en el contrato <strong>$id_contrato</strong> para el periodo <strong>$cob_periodo->fecha</strong>");
     		return $this->response->redirect("cob_ajuste/buscar");

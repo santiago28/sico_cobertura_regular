@@ -523,15 +523,15 @@ class CobActaconteoPersonaFacturacion extends \Phalcon\Mvc\Model
 
   public function getCertificarDetail()
   {
-//     	if ($this->certificar == 0) {
-//     		return 'Pendiente de Certificación';
-//     	} else if($this->certificar == 1) {
-//     		return 'Certificar Atención del periodo por ajuste';
-//     	} else if($this->certificar == 3) {
-//     		return 'Descontar Atención del periodo por ajuste';
-//     	} else if($this->certificar == 4) {
-//     		return 'No afectar';
-//     	}
+    //     	if ($this->certificar == 0) {
+    //     		return 'Pendiente de Certificación';
+    //     	} else if($this->certificar == 1) {
+    //     		return 'Certificar Atención del periodo por ajuste';
+    //     	} else if($this->certificar == 3) {
+    //     		return 'Descontar Atención del periodo por ajuste';
+    //     	} else if($this->certificar == 4) {
+    //     		return 'No afectar';
+    //     	}
 
     if ($this->certificar == 0) {
       return 'PENDIENTE DE CERTIFICACIÓN';
@@ -706,5 +706,27 @@ class CobActaconteoPersonaFacturacion extends \Phalcon\Mvc\Model
     $asiste10 = CobActaconteoPersonaFacturacion::count("id_periodo = $id_periodo AND id_sede_contrato = $id_sede_contrato AND asistenciaFinalFacturacion = 10");
     $asiste11 = CobActaconteoPersonaFacturacion::count("id_periodo = $id_periodo AND id_sede_contrato = $id_sede_contrato AND asistenciaFinalFacturacion = 11");
     return array("asiste1" => $asiste1, "asiste2" => $asiste2, "asiste3" => $asiste3, "asiste4" => $asiste4, "asiste5" => $asiste5, "asiste6" => $asiste6, "asiste7" => $asiste7, "asiste8" => $asiste8, "asiste10" => $asiste10, "asiste11" => $asiste11);
+  }
+
+
+  public function getAsistenciaFinalDetail()
+  {
+    switch ($this->asistenciaFinalFacturacion) {
+      case 1:
+      return "PRESENTA EVIDENCIA DE ATENCIÓN VÁLIDA";
+      break;
+      case 2:
+      return "NO PRESENTA EVIDENCIA DE ATENCIÓN VÁLIDA";
+      break;
+      case 3:
+      return "NO PRESENTA EVIDENCIA DE ATENCIÓN";
+      break;
+      case 4:
+      return "RETIRADO / CANCELADO";
+      break;
+      default:
+      return "";
+      break;
+    }
   }
 }
