@@ -590,6 +590,12 @@ class SecurityPlugin extends Plugin
       'guardar_beneficiario' => array(
         'nivelPermiso' => '4'
       ),
+      'eliminar' => array(
+        'nivelPermiso' => '4'
+      ),
+      'subirEvidencia' => array(
+      'nivelPermiso' => '4'
+      ),
     )
 
   );

@@ -1,6 +1,6 @@
 {{ content() }}
 
-<h1>Crear Beneficiario</h1>
+<h1>Pre-Matricular Estudiante</h1>
 
 <br>
 <br>
@@ -20,7 +20,8 @@
                 name="institucion"
                 placeholder="Institución"
                 value="{{oferente.oferente_nombre}}"
-                required>
+                required
+                readonly>
             </input>
         </div>
 
@@ -47,20 +48,21 @@
                 class="form-control"
                 name="etc"
                 placeholder="Etc"
-                value="MEDELLÍN">
+                value="MEDELLÍN" 
+                readonly>
             </input>
         </div>
 
         <div class="form-group col-md-4">
             <label for="">Estado Matricula *</label>
 
-            {{ select("estado", estado_simat, "class" : "form-control") }}
+            {{ select("estado", estado_simat, "class" : "form-control", "required":"required") }}
         </div>
 
         <div class="form-group col-md-4">
             <label for="">Jerarquía *</label>
 
-            {{ select("jerarquia", jerarquia, "class" : "form-control") }}
+            {{ select("jerarquia", jerarquia, "class" : "form-control", "required":"required") }}
         </div>
     </div>
 
@@ -69,17 +71,17 @@
     <div class="form-row">
         <div class="form-group col-md-4">
             <label for="">Calendario Estudiantil *</label>
-            {{ select("calendario", prestacion_servicio, "class" : "form-control") }}
+            {{ select("calendario", calendario, "class" : "form-control", "required":"required") }}
         </div>
 
         <div class="form-group col-md-4">
             <label for="">Sector *</label>
-            {{ select("sector", sector, "class" : "form-control") }}
+            {{ select("sector", sector, "class" : "form-control", "required":"required") }}
         </div>
 
         <div class="form-group col-md-4">
             <label for="">Prestación de Servicio *</label>
-            {{ select("prestacion_servicio", prestacion_servicio, "class" : "form-control") }}
+            {{ select("prestacion_servicio", prestacion_servicio, "class" : "form-control", "required":"required") }}
         </div>
     </div>
 
@@ -88,7 +90,7 @@
     <div class="form-row">
         <div class="form-group col-md-4">
             <label for="inputEmail4">Tipo Documento *</label>
-            {{ select("tipo_documento", tipo_documento, "class" : "form-control") }}
+            {{ select("tipo_documento", tipo_documento, "class" : "form-control", "required":"required") }}
         </div>
 
         <div class="form-group col-md-4">
@@ -99,7 +101,9 @@
                 name="documento"
                 placeholder="Documento"
                 value="{{beneficiario.documento_identidad}}"
-                required>
+                id="documento"
+                required
+                readonly>
             </input>
         </div>
 
@@ -165,13 +169,13 @@
         <div class="form-group col-md-4">
             <label for="inputEmail4">Jornada *</label>
         
-            {{ select("id_jornada", jornada,  "class" : "form-control") }}
+            {{ select("id_jornada", jornada,  "class" : "form-control", "required":"required") }}
         </div>
         
         <div class="form-group col-md-4">
             <label for="inputEmail4">Grado *</label>
         
-            {{ select("grado_cod_simat", grados_simat, "class" : "form-control") }}
+            {{ select("grado_cod_simat", grados_simat, "class" : "form-control", "required":"required") }}
         </div>
     </div>
 
@@ -180,19 +184,19 @@
         <div class="form-group col-md-4">
             <label for="inputEmail4">Grupo *</label>
 
-            {{ select("grupo_simat", grupos_simat, "class" : "form-control") }}
+            {{ select("grupo_simat", grupos_simat, "class" : "form-control", "required":"required") }}
         </div>
 
         <div class="form-group col-md-4">
             <label for="inputEmail4">Modelo *</label>
 
-            {{ select("modelo", modelo, "class" : "form-control") }}
+            {{ select("modelo", modelo, "class" : "form-control" , "required":"required") }}
         </div>
 
         <div class="form-group col-md-4">
             <label for="inputEmail4">Zona *</label>
 
-            {{ select("zona_sede", zona_sede,  "class" : "form-control") }}
+            {{ select("zona_sede", zona_sede,  "class" : "form-control", "required":"required") }}
         </div>
     </div>
 
@@ -222,7 +226,7 @@
         <div class="form-group col-md-4">
             <label for="inputEmail4">Matriculado en Simat *</label>
 
-            {{ select("matricula_simat", matricula_simat,  "class" : "form-control") }}
+            {{ select("matricula_simat", matricula_simat,  "class" : "form-control", "required":"required") }}
         </div>
     </div>
 
@@ -233,6 +237,7 @@
             <label for="inputPassword4">Puntaje Sisben</label>
             <input
                 type="number"
+                step="any"
                 class="form-control"
                 name="sisben_tres"
                 placeholder="Puntaje Sisben">
@@ -241,7 +246,7 @@
 
         <div class="form-group col-md-4">
             <label for="inputEmail4">Genero *</label>
-            {{ select("genero", genero,  "class" : "form-control") }}
+            {{ select("genero", genero,  "class" : "form-control", "required":"required") }}
         </div>
 
         <div class="form-group col-md-4">
@@ -295,7 +300,7 @@
     <div class="form-row">
         <div class="form-group col-md-4">
             <label for="inputEmail4">Matrícula Contratada *</label>
-            {{ select("matricula_contratada", matricula_contratada,  "class" : "form-control") }}
+            {{ select("matricula_contratada", matricula_contratada,  "class" : "form-control", "required":"required") }}
         </div>
 
         <div class="form-group col-md-4">
@@ -326,12 +331,12 @@
     <div class="form-row">
         <div class="form-group col-md-4">
             <label for="inputEmail4">Apoyo Academico Especial *</label>
-            {{ select("apoyo_acadmico_especial", apoyo_acadmico_especial,  "class" : "form-control") }}
+            {{ select("apoyo_acadmico_especial", apoyo_acadmico_especial,  "class" : "form-control", "required":"required") }}
         </div>
 
         <div class="form-group col-md-4">
             <label for="inputEmail4">SRPA *</label>
-            {{ select("srpa", srpa,  "class" : "form-control") }}
+            {{ select("srpa", srpa,  "class" : "form-control", "required":"required") }}
         </div>
 
         <div class="form-group col-md-4">
@@ -350,7 +355,7 @@
     <div class="form-row">
         <div class="form-group col-md-4">
             <label for="inputEmail4">Estrato *</label>
-            {{ select("estrato", estrato,  "class" : "form-control") }}
+            {{ select("estrato", estrato,  "class" : "form-control", "required":"required") }}
         </div>
 
         <div class="form-group col-md-4">
@@ -375,6 +380,34 @@
         </div>
     </div>
 
-    <button type="submit" class="btn btn-primary">GUARDAR</button>  
+      <!-- fila 14 -->
 
+    <div class="form-row">
+
+        <div class="form-group col-md-4" >
+            <label for="inputPassword4">Tipo Sangre</label>
+            <input
+                type="text"
+                class="form-control"
+                name="tipo_sangre"
+                placeholder="Tipo Sangre">
+            </input>
+        </div>
+        <div class="form-group col-md-4">
+            <label for="cargarDocumento">Evidencia matricula Smat</label>
+            <div>
+                <input class="fileupload filestyle form-control" data-input="false" data-badge="false" type="file" name="evidencia" multiple>
+                <div id="progress" class="progress" style="margin: 0 !important;">
+                    <div class="progress-bar progress-bar-success"></div>
+                </div>
+                <input type='hidden' class='urlEvidenciaAtencion' name='urlEvidenciaAtencion'>
+            </div>
+        </div>
+        <div  class="form-group col-md-4" style="margin-top: 2%;">
+            <button type="submit" class="btn btn-primary">GUARDAR</button>  
+        </div>
+        
+    </div>
+  
 </form>
+

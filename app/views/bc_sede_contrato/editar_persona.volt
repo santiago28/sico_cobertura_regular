@@ -1,5 +1,5 @@
 {{ content() }}
-<h1>Editar Beneficiario</h1>
+<h1>Editar Estudiante</h1>
 <br>
 <br>
 <!-- <form style="margin-top: 4%;" action="bc_sede_contrato/guardar_update_beneficiario" method="POST" > -->
@@ -61,11 +61,11 @@
             {{ select("matricula_simat", matricula_simat, "value" : beneficiario.matricula_simat, "class" : "form-control") }}
         </div>
       </div> 
-      <div class="form-row">
+      <!-- <div class="form-row">
         <div class="form-group col-md-12">
             <label for="inputEmail4">Observaciones</label>
-            <textarea class="form-control" name="observaciones"  rows="3">{{beneficiario.observaciones}}</textarea>
+            <textarea class="form-control" name="observaciones"  rows="3"></textarea>
         </div>
-      </div> 
+      </div>  -->
     <button type="submit" class="btn btn-primary">GUARDAR</button>
   </form>

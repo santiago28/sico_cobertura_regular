@@ -281,7 +281,25 @@ class CobOferentePersonaSimat extends \Phalcon\Mvc\Model
      *
      * @var string
      */
-    public $observaciones;
+    public $observaciones_retiro;
 
+      /**
+     *
+     * @var integer
+     */
+    public $estado_activo;
+
+     /**
+     *
+     * @var string
+     */
+    public $fecha_retiro;
+
+    
+        /**
+     *
+     * @var string
+     */
+    public $urlEvidenciaMatricula;
 
 }

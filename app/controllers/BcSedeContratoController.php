@@ -95,19 +95,19 @@ class BcSedeContratoController extends ControllerBase
 
       // count de esta consulta
       $beneficiarios = CobOferentePersonaSimat::find([
-        'id_contrato = '. $this->usuario]);
+        'id_contrato = '. $this->usuario.' and estado_activo = "1"']);
      
         $db = $this->getDI()->getDb();
       $config = $this->getDI()->getConfig();
 
        $count_beneficiarios = CobOferentePersonaSimat::count([
-        'id_contrato = '. $this->usuario]);
+        'id_contrato = '. $this->usuario.' and estado_activo = "1"']);
 
       $beneficiarios_retirado = CobOferentePersonaSimat::count([
-        'id_contrato = '. $this->usuario.' and estado != "MATRICULADO"']);
+        'id_contrato = '. $this->usuario.' and estado != "MATRICULADO" and estado_activo = "1"']);
 
         $beneficiarios_activos = CobOferentePersonaSimat::count([
-          'id_contrato = '. $this->usuario.' and estado = "MATRICULADO"']);
+          'id_contrato = '. $this->usuario.' and estado = "MATRICULADO" and estado_activo = "1"']);
 
         $beneficiarios_contrato = $db->query(
             "SELECT cob_periodo_contratosedecupos.cuposTotal, 
@@ -217,8 +217,8 @@ class BcSedeContratoController extends ControllerBase
             grado_cod_simat='$grado_cod_simat',
             grupo_simat='$grupo_simat',
             codigo_dane='$codigo_dane',
-            matricula_simat='$matricula_simat',
-            observaciones='$observaciones'
+            matricula_simat='$matricula_simat'
+            -- observaciones='$observaciones'
           WHERE id_oferente_persona='$id_oferente_persona'");
         
 
@@ -295,17 +295,24 @@ class BcSedeContratoController extends ControllerBase
   public function crearBeneficiarioAction()
   {
     $documento =$this->request->getPost("documento");
+    $activos =(int)$this->request->getPost("activos");
+    $cuposTotal =(int)$this->request->getPost("cuposTotal");
+    
+    if ($activos>=$cuposTotal) {
+      $this->flash->error("No es posible registrar un estudiante nuevo, su cobertura se encuentra al 100%");
+      return $this->response->redirect("bc_sede_contrato/beneficiarios");
+    }
 
     $beneficiario = CobComitePersona::findFirst(['documento_identidad= '.  $documento, 'id_contrato='.  $this->usuario]);
-    // $beneficiario = CobComitePersona::findFirst(['documento_identidad= '.  $documento]);
+    // // $beneficiario = CobComitePersona::findFirst(['documento_identidad= '.  $documento]);
     if (empty($beneficiario)) {
       $this->flash->error("El documento ". $documento ." no se encuentra registrado en ningún comité asociado a su contrato");
       return $this->response->redirect("bc_sede_contrato/beneficiarios");
     }
 
-    $beneficiario_simat = CobOferentePersonaSimat::findFirst(['documento= '. $documento]);
+    $beneficiario_simat = CobOferentePersonaSimat::findFirst(['documento= '. $documento, 'estado_retirado='. 1]);
     if (!empty($beneficiario_simat)) {
-      $this->flash->error("El documento ". $documento ." ya se encuentra registrado");
+      $this->flash->error("El documento ". $documento ." ya se encuentra registrado en su contrato o en otro contrato");
       return $this->response->redirect("bc_sede_contrato/beneficiarios");
     }
 
@@ -337,6 +344,10 @@ class BcSedeContratoController extends ControllerBase
     $this->view->srpa = $this->elements->getSelect("srpa");
     $this->view->zona_sede = $this->elements->getSelect("zona_sede");
     $this->view->sedes = $sedes_array;
+    $this->assets
+			->addJs('js/parsley.min.js')
+			->addJs('js/parsley.extend.js')
+			->addJs('js/crearBeneficiario.js');
     // $this->view->beneficiario = $beneficiario;
   }
 
@@ -344,6 +355,17 @@ class BcSedeContratoController extends ControllerBase
   {
     if (!$this->request->isPost()) {
       return $this->response->redirect("bc_sede_contrato/");
+    }
+
+      if ($this->request->hasFiles()) {
+        $files = $this->request->getUploadedFiles();
+        // Print the real file names and sizes
+        foreach ($files as $file) {
+            // Print file details
+            $this->logger->info($file->getName(). ' '. $file->getSize());
+            // Move the file into the application
+            $file->moveTo('img/' . $file->getName());
+        }
     }
 
     $sede = BcSedeContrato::findFirst(['id_sede = '.  $this->request->getPost("id_sede")]);
@@ -397,7 +419,8 @@ class BcSedeContratoController extends ControllerBase
     $beneficiario->nombre_sede =$sede->sede_nombre;
     $beneficiario->id_jornada = $this->request->getPost("id_jornada");
     $beneficiario->nombre_jornada = $this->request->getPost("id_jornada");
-    $beneficiario->ingreso = $this->request->getPost("ingreso");
+    $beneficiario->ingreso = trim($this->request->getPost("ingreso"));
+    $beneficiario->urlEvidenciaMatricula = $this->request->getPost("urlEvidenciaAtencion");
     // $beneficiario->estado_certificacion = $this->request->getPost("estado_certificacion");
 
 
@@ -411,6 +434,76 @@ class BcSedeContratoController extends ControllerBase
     return $this->response->redirect("bc_sede_contrato/beneficiarios");
 
   }
+
+  public function eliminarAction($id_oferente_persona)
+  {
+    if (!$this->request->isPost()) {
+      return $this->response->redirect("bc_sede_contrato/beneficiario");
+    }
+
+      $id_oferente_persona = (int)$this->request->getPost("id_oferente_persona");
+      $observaciones = $this->request->getPost("observaciones");
+      // $fecha= strval(date('Y')."-".date('m')."-".date('d'));
+      $fecha= date('Y-m-d');
+     
+    $db = $this->getDI()->getDb();
+
+    $query = $db->query("UPDATE cob_oferente_persona_simat
+        SET
+          observaciones_retiro='$observaciones',
+          fecha_retiro= '$fecha',
+          estado_activo=0
+        WHERE id_oferente_persona='$id_oferente_persona'");
+
+    if (!$query) {
+      foreach ($query->getMessages() as $message) {
+        $this->flash->error($message);
+      }
+      return $this->response->redirect("bc_sede_contrato/beneficiarios");
+    }
+    $this->flash->success("Él estudiante fue eliminado exitosamente");
+    return $this->response->redirect("bc_sede_contrato/beneficiarios");
+  }
+
+  public function subirEvidenciaAction($documento) {
+		$this->view->disable();
+		$tipos = array("image/png", "image/jpeg", "image/jpg", "image/bmp", "image/gif", "application/pdf", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "application/vnd.ms-excel", "application/vnd.openxmlformatsofficedocument.spreadsheetml.sheet");
+		if ($this->request->isPost()) {
+			if ($this->request->hasFiles() == true) {
+				$uploads = $this->request->getUploadedFiles();
+				$isUploaded = false;
+				foreach($uploads as $upload){
+					if(!$upload->getName()){
+						continue;
+					}
+					if(in_array($upload->gettype(), $tipos)){
+						$nombre = $documento.date("ymdHis").".".$upload->getextension();
+						$tamano_archivo=$upload->getsize();
+						$peso_mb=100;
+						$tamano_maximo = $peso_mb*1024*1024;
+						$path = "files/excusas/".$nombre;
+						if ($tamano_archivo>$tamano_maximo) {
+							echo "Peso";
+							exit;
+						}
+						($upload->moveTo($path)) ? $isUploaded = true : $isUploaded = false;
+					} else {
+						echo "Tipo";
+						exit;
+					}
+				}
+				if($isUploaded){
+					chmod($path, 0777);
+					echo $nombre;
+
+				} else {
+					echo "Error";
+				}
+			}else {
+				return "Error";
+			}
+		}
+	}
 }
 
 ?>

@@ -121,7 +121,7 @@ th     { background:#eee; }
   </div>
   <button class="btn btn-success" id="ExportarExcel">EXPORTAR REGISTROS</button>
   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
-    Crear Beneficiario
+    Pre-matricular Estudiante
   </button>
   <div id="contenedo">
     <div class="loader" id="loader"></div>
@@ -136,7 +136,7 @@ th     { background:#eee; }
   <table class="table table-bordered table-hover" id="tabla_beneficiarios">
     <thead>
       <tr>
-        <th>Editar</th>
+        <th>Acciones</th>
         <th>Documento</th>
         <th>Nombres</th>
         <th>C. Dane</th>
@@ -152,7 +152,10 @@ th     { background:#eee; }
     <tbody>
       {% for beneficiario in beneficiarios %}
       <tr >
-        <td>{{ link_to("bc_sede_contrato/editar_persona/?id_persona="~beneficiario.id_oferente_persona,  "Editar", "class": "btn btn-default") }}</td>
+        <td>
+          {{ link_to("bc_sede_contrato/editar_persona/?id_persona="~beneficiario.id_oferente_persona,  '<i class="glyphicon glyphicon-pencil"></i> ', "rel": "tooltip", "title":"Editar") }}
+          <a style="margin-left:7%;" onclick="abrirModal()" rel="tooltip" title="Retirar Beneficiario" class="eliminar_fila" data-toggle = "modal" id="{{ beneficiario.id_oferente_persona }}"><i class="glyphicon glyphicon-trash"></i></a>
+        </td>
         <td>{{ beneficiario.documento }}</td>
         <td>{{ beneficiario.apellido1 }} {{ beneficiario.apellido2 }} {{ beneficiario.nombre1 }} {{ beneficiario.nombre2 }}</td>
         <td>{{ beneficiario.codigo_dane }}</td>
@@ -183,7 +186,7 @@ th     { background:#eee; }
 
 
 
-<!-- Modal -->
+<!-- Modal Busqueda de beneficiario-->
 <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
@@ -195,6 +198,8 @@ th     { background:#eee; }
       </div>
       <div class="modal-body">
         {{ form("bc_sede_contrato/crearBeneficiario/", "method":"post", "parsley-validate" : "", "id" : "beneficiarios_form") }}
+        {{ hidden_field("activos", "value": beneficiarios_activos) }}
+        {{ hidden_field("cuposTotal", "value": cuposTotal) }}
           <div class="form-group">
             <label for="inputPassword4">Documento</label>
             <input type="text" class="form-control" name="documento" placeholder="Documento" required>
@@ -209,17 +214,52 @@ th     { background:#eee; }
   </div>
 </div>
 
+<!-- Modal eliminar beneficiario-->
+<div class="modal fade" id="eliminar_elemento" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Retirar Beneficiario</h4>
+      </div>
+      <div class="modal-body">
+        {{ form("bc_sede_contrato/eliminar/", "method":"post", "parsley-validate" : "", "id" : "beneficiarios_eliminar_form") }}
+        <input type="hidden" name="id_oferente_persona">
+          <p>¿Estás seguro que desea retirar el estudiante?</p>
+          <p><div class="alert alert-danger"><i class="glyphicon glyphicon-warning-sign"></i> <strong>Atención: </strong>Después de eliminado no podrá ser recuperado y la información asociada se perderá.</div></p>
+          <div class="form-group">
+            <label for="comment">Obesevaciones:</label>
+            <textarea class="form-control" rows="3" name="observaciones"  required></textarea>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <!-- <a class="btn btn-primary" >Eliminar</a> -->
+        <button type="submit" class="btn btn-primary" id="boton_eliminar">Retirar Beneficiario</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+      </div>
+    </form>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 
 <script>
 
+  function abrirModal(){
+    $("#eliminar_elemento").modal("show");
+      setTimeout(function(){
+      var id= $('#boton_eliminar').attr('href');
+      $('input:hidden[name="id_oferente_persona"]').val(id);
+    }, 1000);
+  }
 
-window.onload = function() {
+  window.onload = function() {
   //funciones a ejecutar
   setTimeout(function(){
     document.getElementById("contenedo").style.display = "none";
   }, 2000);
 };
-setTimeout(function(){
+
+  setTimeout(function(){
   $("#ExportarExcel").click(function(){
     var Export = [];
     {% for beneficiario in beneficiarios %}
@@ -241,8 +281,7 @@ setTimeout(function(){
   });
 }, 1000);
 
-
-setTimeout(function(){
+  setTimeout(function(){
   $(function() {
 
     $.extend($.tablesorter.themes.bootstrap, {

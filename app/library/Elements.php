@@ -1018,6 +1018,7 @@ public function getSelect($select)
 												return array();
 												case "jornada":
 												return array(
+													""=>'Seleccione una opción',
 													"1" => "Mañana",
 													"2" => "Tarde",
 													"3" => "Nocturna",
@@ -1122,6 +1123,7 @@ public function getSelect($select)
 														break;
 														case "tipo_documento":
 															return array(
+																""=>'Seleccione una opción',
 																"CC:CÉDULA DE CIUDADANÍA" => "CC:CÉDULA DE CIUDADANÍA",
 																"CCB:CERTIFICADO CABILDO" => "CCB:CERTIFICADO CABILDO",
 																"CE:CÉDULA DE EXTRANJERÍA" => "CE:CÉDULA DE EXTRANJERÍA",
@@ -1137,6 +1139,7 @@ public function getSelect($select)
 															break;
 															case "grados_simat":
 																return array (
+																	""=>'Seleccione una opción',
 																	'1' => '1',
 																	'2' => '2',
 																	'3' => '3',
@@ -1148,16 +1151,6 @@ public function getSelect($select)
 																	'9' => '9',
 																	'10' => '10',
 																	'11' => '11',
-																	'12' => '12',
-																	'13' => '13',
-																	'14' => '14',
-																	'15' => '15',
-																	'16' => '16',
-																	'17' => '17',
-																	'18' => '18',
-																	'19' => '19',
-																	'20' => '20',
-																	'21' => '21',
 																	'22' => '22',
 																	'23' => '23',
 																	'24' => '24',
@@ -1168,6 +1161,7 @@ public function getSelect($select)
 																	break;
 																	case "grupos_simat":
 																		return array (
+																			""=>'Seleccione una opción',
 																			'01' => '01',
 																			'02' => '02',
 																			'03' => '03',
@@ -1198,18 +1192,21 @@ public function getSelect($select)
 																			break;
 																		case "matricula_simat";
 																			return array(
+																			""=>'Seleccione una opción',
 																			'SI'=>'SI',
 																			'NO'=>'NO'
 																			);
 																		 break;
 																		 case "estado_simat";
 																			return array(
+																			""=>'Seleccione una opción',
 																			'MATRICULADO'=>'MATRICULADO',
 																			'NO MATRICULADO'=>'NO MATRICULADO'
 																			);
 																		 break;
 																		 case "jerarquia";
 																		 return array(
+																		 ""=>'Seleccione una opción',
 																		 'COMUNA 10'=>'COMUNA 10',
 																		 'MEDELLÍN'=>'MEDELLÍN',
 																		 'NUCLEO 914'=>'NUCLEO 914',
@@ -1227,12 +1224,14 @@ public function getSelect($select)
 																	  break;
 																	  case "prestacion_servicio";
 																	  return array(
+																	   ""=>'Seleccione una opción',
 																	  'COBERTURA CONTRATADA'=>'COBERTURA CONTRATADA',
 																	  'CONFESIONES RELIGIOSAS'=>'CONFESIONES RELIGIOSAS',
 																	  );
 																	break;
 																	case "calendario";
 																	return array(
+																	""=>'Seleccione una opción',
 																	'A'=>'A',
 																	'B'=>'B',
 																	'OTRO'=>'OTRO',
@@ -1240,12 +1239,14 @@ public function getSelect($select)
 																	break;
 																	case "sector";
 																	return array(
+																	""=>'Seleccione una opción',
 																	'OFICIAL'=>'OFICIAL',
 																	'NO OFICIAL'=>'NO OFICIAL',
 																	);
 																	break;
 																	case "modelo";
 																	return array(
+																	""=>'Seleccione una opción',
 																	'ACELERACIÓN DEL APRENDIZAJE'=>'ACELERACIÓN DEL APRENDIZAJE',
 																	'CAMINAR EN SECUNDARIA I'=>'CAMINAR EN SECUNDARIA I',
 																	'CAMINAR EN SECUNDARIA II'=>'CAMINAR EN SECUNDARIA II',
@@ -1256,7 +1257,8 @@ public function getSelect($select)
 																	break;
 																	case "estrato";
 																	return array(
-																	'ESTRATO O'=>'ESTRATO O',
+																	""=>'Seleccione una opción',
+																	'ESTRATO 0'=>'ESTRATO 0',
 																	'ESTRATO 1'=>'ESTRATO 1',
 																	'ESTRATO 2'=>'ESTRATO 2',
 																	'ESTRATO 3'=>'ESTRATO 3',
@@ -1269,12 +1271,14 @@ public function getSelect($select)
 																	break;
 																	case "genero";
 																	return array(
+																	""=>'Seleccione una opción',
 																	'MASCULINO'=>'MASCULINO',
 																	'FEMENINO'=>'FEMENINO',
 																	);
 																	break;
 																	case "apoyo_academico";
 																	return array(
+																	""=>'Seleccione una opción',
 																	'ATENCIÓN DOMICILIARIA'=>'ATENCIÓN DOMICILIARIA',
 																	'ATENCIÓN EN EL ESTABLECIMIENTO EDUCATIVO'=>'ATENCIÓN EN EL ESTABLECIMIENTO EDUCATIVO',
 																	'ATENCIÓN EN INSTITUCIONES DE APOYO'=>'ATENCIÓN EN INSTITUCIONES DE APOYO',
@@ -1284,6 +1288,7 @@ public function getSelect($select)
 																	break;
 																	case "srpa";
 																	return array(
+																	 ""=>'Seleccione una opción',
 																	'NO PRIVADO DE LA LIBERTAD'=>'NO PRIVADO DE LA LIBERTAD',
 																	'PRIVADO DE LA LIBERTAD'=>'PRIVADO DE LA LIBERTAD',
 																	'NO APLICA'=>'NO APLICA',
