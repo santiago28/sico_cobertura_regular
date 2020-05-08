@@ -17,7 +17,7 @@
     {% for periodo in periodos %}
         <tr>
             <td>{{ periodo.CobPeriodo.getFechaDetail() }}</td>
-						<td>{{ link_to("bc_reporte/beneficiarios_contrato_periodo/"~periodo.id_periodo~"/"~contrato.id_contrato, '<i class="glyphicon glyphicon-file"></i> ', "rel": "tooltip", "title":"Reporte R1 y R2") }}</td>
+						<td>{{ link_to("bc_reporte/beneficiarios_contrato_periodo/"~periodo.id_periodo~"/"~contrato.id_contrato, '<i class="glyphicon glyphicon-file"></i> ', "rel": "tooltip", "title":"Reporte Consolidado Facturación", 'target': '_blank') }}</td>
             {# <td>{{ link_to("bc_reporte/beneficiarios_contratoparcial/"~periodo.id_periodo~"/"~contrato.id_contrato, '<i class="glyphicon glyphicon-file"></i> ', "rel": "tooltip", "title":"Reporte R1 y R2") }}</td>
             <td>{{ link_to("bc_reporte/beneficiarios_contratofinal/"~periodo.id_periodo~"/"~contrato.id_contrato, '<i class="glyphicon glyphicon-file"></i> ', "rel": "tooltip", "title":"Reporte Recorridos") }}</td>
             <td>{{ link_to("bc_reporte/beneficiarios_contratofacturacion/"~periodo.id_periodo~"/"~contrato.id_contrato, '<i class="glyphicon glyphicon-file"></i> ', "rel": "tooltip", "title":"Reporte Facturación") }}</td>

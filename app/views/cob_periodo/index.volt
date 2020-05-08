@@ -33,7 +33,7 @@
             <th>Descripcion</th>
             {% if (nivel <= 1) %}
             <th>Reporte Contratos</th>
-            <th>Reporte Sedes</th>
+            {# <th>Reporte Sedes</th> #}
             {% endif %}
          </tr>
     </thead>
@@ -49,7 +49,7 @@
             <td>{{ cob_periodo.getDescripcionperiodoDetail()}}</td>
             {% if (nivel <= 1) %}
             <td>{{ link_to("bc_reporte/cob_contratos/"~cob_periodo.id_periodo~"/"~cob_periodo.tipo, '<i class="glyphicon glyphicon-book"></i> ', "rel": "tooltip", "title":"Reporte Contratos") }}</td>
-            <td>{{ link_to("bc_reporte/cob_sedes/"~cob_periodo.id_periodo~"/"~cob_periodo.tipo, '<i class="glyphicon glyphicon-file"></i> ', "rel": "tooltip", "title":"Reporte Sedes") }}</td>
+            {# <td>{{ link_to("bc_reporte/cob_sedes/"~cob_periodo.id_periodo~"/"~cob_periodo.tipo, '<i class="glyphicon glyphicon-file"></i> ', "rel": "tooltip", "title":"Reporte Sedes") }}</td> #}
             {% endif %}
         </tr>
     {% endfor %}
