@@ -1,11 +1,11 @@
-var url = window.location.protocol + "//" + window.location.host + "/sico_cobertura_regular/" + "bc_sede_contrato/subirEvidencia/" + $("#documento").val();
 
 $(".fileupload").change(function() {
+    var url = window.location.protocol + "//" + window.location.host + "/sico_cobertura_regular/" + "bc_sede_contrato/subirEvidencia/" + $("#documento").val();
   var archivo = $(this);
   $(archivo).parent().find('#progress .progress-bar').css(
     "width", "0%"
   );
-  var formData = new FormData($('#beneficiarios_form ')[0]);
+  var formData = new FormData($('#evidencia_form ')[0]);
   $.ajax( {
     url: url,
     type: 'POST',

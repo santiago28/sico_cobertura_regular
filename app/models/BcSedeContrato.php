@@ -80,6 +80,11 @@ class BcSedeContrato extends \Phalcon\Mvc\Model
      * @var integer
      */
     public $estado;
+    /**
+     *
+     * @var integer
+     */
+    public $cuposSostenibilidad;
 
     public function initialize()
     {

@@ -50,16 +50,14 @@
       <div class="form-row">
         <div class="form-group col-md-4">
             <label for="inputEmail4">Grupo</label>
-            {{ select("grupo_simat", grupos_simat, "value" : beneficiario.grupo_simat, "class" : "form-control") }}
+            {{ select("grupo_simat", grupos_simat, "value" : grupo, "class" : "form-control") }}
         </div>
         <div class="form-group col-md-4">
             <label for="inputEmail4">Código Dane</label>
-            <input type="text" class="form-control" name="codigo_dane" placeholder="Código Dane" value="{{beneficiario.codigo_dane}}" required>
+            <input type="text" class="form-control" name="codigo_dane" placeholder="Código Dane" value="{{beneficiario.codigo_dane}}" readonly required>
         </div>
-        <div class="form-group col-md-4">
-            <label for="inputEmail4">Matriculado en Simat</label>
-            {{ select("matricula_simat", matricula_simat, "value" : beneficiario.matricula_simat, "class" : "form-control") }}
-        </div>
+    
+        <button type="submit" style="margin-top: 2%;" class="btn btn-primary">GUARDAR</button>
       </div> 
       <!-- <div class="form-row">
         <div class="form-group col-md-12">
@@ -67,5 +65,5 @@
             <textarea class="form-control" name="observaciones"  rows="3"></textarea>
         </div>
       </div>  -->
-    <button type="submit" class="btn btn-primary">GUARDAR</button>
+    
   </form>

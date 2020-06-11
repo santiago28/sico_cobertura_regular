@@ -105,10 +105,9 @@ class BcCargaCoberturaController extends ControllerBase
         $beneficiarios->setFetchMode(Phalcon\Db::FETCH_OBJ);
 
         
-        // var_dump($beneficiarios->fetchAll());
         $beneficiario=$beneficiarios->fetchAll();
         if (empty($beneficiario)) {
-          $this->flash->error("No se encontro beneficiarios con el número de contrato ". 	$numDocumento );
+          $this->flash->error("No se encontraron beneficiarios con el número de documento o de contrato ". 	$numDocumento );
          	return $this->response->redirect("bc_carga_cobertura/nuevo");
         }
 
@@ -120,10 +119,8 @@ class BcCargaCoberturaController extends ControllerBase
   public function guardarbeneficiariosAction()
     {
 
-      // $this->view->disable();
-
       if (!$this->request->isPost()) {
-        return $this->response->redirect("bc_sede_contrato/");
+        return $this->response->redirect("bc_sede_contrato/nuevo");
       }
 
       // return $this->request->getPost("id_oferente_persona");

@@ -1,6 +1,6 @@
 <?php
 
-class CobOferentePersonaSimat extends \Phalcon\Mvc\Model
+class CobOferentePersonaEliminado extends \Phalcon\Mvc\Model
 {
 
     /**
@@ -38,21 +38,6 @@ class CobOferentePersonaSimat extends \Phalcon\Mvc\Model
      * @var string
      */
     public $jerarquia;
-    /**
-     *
-     * @var integer
-     */
-    public $id_modalidad;
-    /**
-     *
-     * @var string
-     */
-    public $modalidad_nombre;
-    /**
-     *
-     * @var integer
-     */
-    public $id_oferente;
 
     /**
      *
@@ -288,7 +273,7 @@ class CobOferentePersonaSimat extends \Phalcon\Mvc\Model
     public $ingreso;
     /**
      *
-     * @var int
+     * @var string
      */
     public $estado_certificacion;
 
@@ -321,24 +306,5 @@ class CobOferentePersonaSimat extends \Phalcon\Mvc\Model
      * @var string
      */
     public $urlEvidenciaMatricula;
-
-    public function getMatriculaDetail()
-    {
-    	switch ($this->estado_certificacion) {
-    		case 1:
-    			return " class='warning'";
-    			break;
-    		case 2:
-    			return " class='success'";
-    			break;
-    		case 3:
-    			return " class='danger'";
-    			break;
-    		default:
-    			return "";
-    			break;
-    	}
-    }
-
 
 }

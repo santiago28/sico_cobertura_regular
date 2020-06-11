@@ -160,10 +160,10 @@ class Elements extends Component
 'caption' => 'Cronograma Itinerante',
 'action' => 'index'
 ),*/
-'bc_sede_contrato' => array(
-	'caption' => 'Beneficiarios',
-	'action' => 'beneficiarios'
-)
+// 'bc_sede_contrato' => array(
+// 	'caption' => 'Beneficiarios',
+// 	'action' => 'beneficiarios'
+// )
 );
 
 private $_headerMenuBCReportes = array(
@@ -390,10 +390,12 @@ public function getMenu()
 				$menu ['cob_ajuste'] = array ('caption' => 'Ajustes', 'action' => 'index');
 				$menu ['bc_reporte'] = array ('caption' => 'Reportes', 'action' => '');
 				$menu ['cob_actaconteo'] = array ('caption' => 'Reporte Beneficiario', 'action' => 'reportebeneficiario');
-				// $menu ['ibc_usuario'] = array ('caption' => 'Usuarios', 'action' => 'index');
+				$menu ['bc_sede_contrato'] = array ('caption' => 'Solicitud Matrículas', 'action' => 'solicitudMatricula');
 			}
 			if ($user['nivel'] <= 3) {
 				$menu ['cob_ajuste'] = array ('caption' => 'Ajustes', 'action' => 'index');
+				//bc_sede_contrato("nombre carpeta vista"), nombre del link, vista a lanzar
+				$menu ['cob_ajuste1'] = array ('caption' => 'Ajustes1', 'action' => 'index');
 			}
 			$menu_usuario .= '<div class="item-menu-titulo"><span>Info</span></div>';
 
@@ -1192,7 +1194,6 @@ public function getSelect($select)
 																			break;
 																		case "matricula_simat";
 																			return array(
-																			""=>'Seleccione una opción',
 																			'SI'=>'SI',
 																			'NO'=>'NO'
 																			);
