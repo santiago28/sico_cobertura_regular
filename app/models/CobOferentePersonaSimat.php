@@ -291,6 +291,11 @@ class CobOferentePersonaSimat extends \Phalcon\Mvc\Model
      * @var int
      */
     public $estado_certificacion;
+    /**
+     *
+     * @var string
+     */
+    public $motivo_certificacion;
 
      /**
      *
@@ -308,6 +313,11 @@ class CobOferentePersonaSimat extends \Phalcon\Mvc\Model
      * @var integer
      */
     public $estado_activo;
+      /**
+     *
+     * @var string
+     */
+    public $fecha_pre_matricula;
 
      /**
      *

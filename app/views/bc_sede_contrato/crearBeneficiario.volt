@@ -28,7 +28,7 @@
         <div class="form-group col-md-4">
             <label for="">Código Dane *</label>
             <input
-                type="text"
+                type="number"
                 class="form-control"
                 name="codigo_dane"
                 placeholder="Código Dane"
@@ -41,7 +41,7 @@
 
     <div class="form-row">
         <div class="form-group col-md-4">
-            <label for="inputEmail4">Etc</label>
+            <label for="inputEmail4">ETC</label>
 
             <input
                 type="text"
@@ -115,6 +115,7 @@
                 name="nombre1"
                 placeholder="Primer Nombre"
                 value="{{beneficiario.primer_nombre}}"
+                style="text-transform: uppercase;"
                 required>
             </input>
         </div>
@@ -129,6 +130,7 @@
                 class="form-control"
                 name="nombre2"
                 placeholder="Segundo Nombre"
+                style="text-transform: uppercase;"
                 value="{{beneficiario.segundo_nombre}}">
             </input>
         </div>
@@ -140,6 +142,7 @@
                 class="form-control"
                 name="apellido1"
                 placeholder="Primer Apelllido"
+                style="text-transform: uppercase;"
                 value="{{beneficiario.primer_apellido}}"
                 required>
             </input>
@@ -152,6 +155,7 @@
                 class="form-control"
                 name="apellido2"
                 placeholder="Segundo Apellido"
+                style="text-transform: uppercase;"
                 value="{{beneficiario.segundo_apellido}}">
             </input>
         </div>
@@ -205,15 +209,16 @@
             <label for="inputPassword4">Fecha Inicio *</label>
             <input
                 id="fecha_ini"
-                type="text"
+                type="date"
                 class="form-control"
                 name="fecha_ini"
-                placeholder="yyyy/mm/dd"
+                min="{{fecha_inicio_min}}"
+                max="{{fecha_fin_max}}"
                 required>
             </input>
         </div>
 
-        <div class="form-group col-md-4">
+        <!-- <div class="form-group col-md-4">
             <label for="inputPassword4">Fecha Finalización</label>
             <input
                 id="fecha_fin"
@@ -222,16 +227,17 @@
                 name="fecha_fin"
                 placeholder="yyyy/mm/dd">
             </input>
-        </div>
+        </div> -->
 
         <div class="form-group col-md-4" >
-            <label for="inputPassword4">Tipo Sangre</label>
-            <input
+            <label for="inputPassword4">RH</label>
+            <!-- <input
                 type="text"
                 class="form-control"
                 name="tipo_sangre"
                 placeholder="Tipo Sangre">
-            </input>
+            </input> -->
+            {{ select("tipo_sangre", tipo_sangre, "class" : "form-control", "required":"required") }}
         </div>
     </div>
 
@@ -258,10 +264,10 @@
             <label for="inputPassword4">Fecha Nacimiento *</label>
             <input
                 id="fecha_nacimiento"
-                type="text"
+                type="date"
                 class="form-control"
                 name="fecha_nacimiento"
-                placeholder="yyyy/mm/dd"
+                max="{{fecha_fin}}"
                 required>
             </input>
         </div>
@@ -309,7 +315,7 @@
             {{ select("matricula_contratada", matricula_contratada,  "class" : "form-control", "required":"required") }}
         </div> -->
 
-        <div class="form-group col-md-4">
+        <!-- <div class="form-group col-md-4">
             <label for="inputPassword4">FUENTE DE RECURSOS</label>
             <input
                 type="text"
@@ -318,9 +324,9 @@
                 placeholder="FUENTE DE RECURSOS"
                 value="SGP"
             ></input>
-        </div>
+        </div> -->
 
-        <div class="form-group col-md-4">
+        <!-- <div class="form-group col-md-4">
             <label for="inputPassword4">Internado</label>
             <input
                 type="text"
@@ -329,7 +335,7 @@
                 placeholder="Internado"
                 value="NINGUNO"
             ></input>
-        </div>
+        </div> -->
     </div>
 
     <!-- fila 12 -->
@@ -339,11 +345,11 @@
             <label for="inputEmail4">Apoyo Academico Especial *</label>
             {{ select("apoyo_acadmico_especial", apoyo_acadmico_especial,  "class" : "form-control", "required":"required") }}
         </div>
-
+<!-- 
         <div class="form-group col-md-4">
             <label for="inputEmail4">SRPA *</label>
             {{ select("srpa", srpa,  "class" : "form-control", "required":"required") }}
-        </div>
+        </div> -->
 
         <div class="form-group col-md-4">
             <label for="inputPassword4">Discapacidad</label>
@@ -389,14 +395,14 @@
       <!-- fila 14 -->
 
     <div class="form-row">
-        <div class="form-group col-md-4">
+        <!-- <div class="form-group col-md-4">
             <label for="inputEmail4">Matriculado en Simat *</label>
 
             {{ select("matricula_simat", matricula_simat,  "class" : "form-control", "required":"required", "onchange":"ocultar_campo_evidencia()") }}
-        </div>
+        </div> -->
       
         <div class="form-group col-md-4"  id="evidencia_archivo">
-            <label for="cargarDocumento">Evidencia matricula Simat</label>
+            <label for="cargarDocumento">Adjuntar Evidencia De Matrícula Simat*</label>
             <div>
                 <input class="fileupload filestyle form-control" data-input="false" id="archivo" required data-badge="false" type="file" name="evidencia" multiple required>
                 <div id="progress" class="progress" style="margin: 0 !important;">
@@ -428,41 +434,41 @@
         }
     }
 
-    window.onload = function() {
-        var getDate = function (input) {
-            return new Date(input.date.valueOf());
-        }
+    // window.onload = function() {
+    //     var getDate = function (input) {
+    //         return new Date(input.date.valueOf());
+    //     }
 
-        var d = new Date();
-        var endDate_nac =  d.getFullYear() + "/" + (d.getMonth()+1) + "/"+ d.getDate();
-        $('#fecha_nacimiento').datepicker({
-            format: "yyyy/mm/dd",
-            language: 'es',
-            endDate: endDate_nac,
-        });
-        var strDate = d.getFullYear() + "/" + (d.getMonth())  + "/"+ d.getDate();
-        var endDate = d.getFullYear()+"/12" + "/31" ;
+    //     var d = new Date();
+    //     var endDate_nac =  d.getFullYear() + "/" + (d.getMonth()+1) + "/"+ d.getDate();
+    //     $('#fecha_nacimiento').datepicker({
+    //         format: "yyyy/mm/dd",
+    //         language: 'es',
+    //         endDate: endDate_nac,
+    //     });
+    //     var strDate = d.getFullYear() + "/" + (d.getMonth())  + "/"+ d.getDate();
+    //     var endDate = d.getFullYear()+"/12" + "/31" ;
        
-        $('#fecha_fin').datepicker({
-            format: "yyyy/mm/dd",
-            language: 'es',
-            startDate: strDate,
-            endDate: endDate,
-        });
+    //     $('#fecha_fin').datepicker({
+    //         format: "yyyy/mm/dd",
+    //         language: 'es',
+    //         startDate: strDate,
+    //         endDate: endDate,
+    //     });
        
-        var strDate_ini = d.getFullYear() + "/" + (d.getMonth()) + "/"+ d.getDate() ;
-        var endDate_ini =  d.getFullYear() + "/" + (d.getMonth()+1) + "/"+ d.getDate();
-        $('#fecha_ini').datepicker({
-            format: "yyyy/mm/dd",
-            language: 'es',
-            startDate: strDate_ini,
-            endDate: endDate_ini,
-         }).on('changeDate',
-        function (selected) {
-            $('#fecha_fin').datepicker('clearDates');
-            $('#fecha_fin').datepicker('setStartDate', getDate(selected));
-            console.log( $('#fecha_ini').val())
-        });
-    };
+    //     var strDate_ini = d.getFullYear() + "/" + (d.getMonth()) + "/"+ d.getDate() ;
+    //     var endDate_ini =  d.getFullYear() + "/" + (d.getMonth()+1) + "/"+ d.getDate();
+    //     $('#fecha_ini').datepicker({
+    //         format: "yyyy/mm/dd",
+    //         language: 'es',
+    //         startDate: strDate_ini,
+    //         endDate: endDate_ini,
+    //      }).on('changeDate',
+    //     function (selected) {
+    //         $('#fecha_fin').datepicker('clearDates');
+    //         $('#fecha_fin').datepicker('setStartDate', getDate(selected));
+    //         console.log( $('#fecha_ini').val())
+    //     });
+    // };
 
 </script>

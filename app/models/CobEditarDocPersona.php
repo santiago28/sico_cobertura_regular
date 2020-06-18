@@ -32,6 +32,11 @@ class CobEditarDocPersona extends \Phalcon\Mvc\Model
      * @var string
      */
     public $documento_nuevo;
+    /**
+     *
+     * @var string
+     */
+    public $urlEvidenciaDoc;
 
      /**
      *

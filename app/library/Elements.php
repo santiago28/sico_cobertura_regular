@@ -1021,29 +1021,28 @@ public function getSelect($select)
 												case "jornada":
 												return array(
 													""=>'Seleccione una opción',
-													"1" => "Mañana",
-													"2" => "Tarde",
-													"3" => "Nocturna",
-													"4" => "Sabatina",
-													"5" => "Dominical",
-													"6" => "Completa",
-													'7' => 'Lunes',
-													'8' => 'Martes',
-													'9' => 'Miercoles',
-													'10' => 'Jueves',
-													'11' => 'Viernes',
-													'12' => 'Vier-Sab-Dom',
-													'13' => 'Sab-Dom',
-													'14' => 'Mi-Vi Tarde',
-													'15' => 'Mi-Vi Mañana',
-													'16' => 'Mi-Vi Noche',
-													'17' => 'Ma-Ju Tarde',
-													'18' => 'Ma-Ju Mañana',
-													'19' => 'Ma-Ju Noche',
-													'20' => 'Vi-Sa Tarde',
-													'21' => 'Vi-Sa Mañana',
-													'22'  => 'Vi-Sa Noche',
-													"23" => "Otra"
+													'1' => 'LUNES',
+													'2' => 'MARTES',
+													'3' => 'MIERCOLES',
+													'4' => 'JUEVES',
+													'5' => 'VIERNES',
+													'6' => 'SABATINA',
+													'7' => 'DOMINICAL',
+													'8' => 'L A V MAÑANA',
+													'9' => 'L A V TARDE',
+													'10' => 'L A V NOCTURNA',
+													'11' => 'L A V COMPLETA',
+													'12' => 'MA-JU MAÑANA',
+													'13' => 'MA-JU TARDE',
+													'14' => 'MA-JU NOCHE',
+													'15' => 'MI-VI MAÑANA',
+													'16' => 'MI-VI NOCHE',
+													'17' => 'MI-VI TARDE',
+													'18' => 'VI-SA MAÑANA',
+													'19' => 'VI-SA TARDE',
+													'20' => 'VI-SA NOCHE',
+													'21' => 'VIE-SAB-DOM',
+													'22' => 'SAB-DOM',
 												);
 												break;
 												case "numeroGrados":
@@ -1142,6 +1141,7 @@ public function getSelect($select)
 															case "grados_simat":
 																return array (
 																	""=>'Seleccione una opción',
+																	'0' => '0',
 																	'1' => '1',
 																	'2' => '2',
 																	'3' => '3',
@@ -1153,12 +1153,12 @@ public function getSelect($select)
 																	'9' => '9',
 																	'10' => '10',
 																	'11' => '11',
-																	'22' => '22',
-																	'23' => '23',
-																	'24' => '24',
-																	'25' => '25',
-																	'26' => '26',
-																	'99' => '99',
+																	'22' => '22 CLEI 1',
+																	'23' => '23 CLEI 2',
+																	'24' => '24 CLEI 3',
+																	'25' => '25 CLEI 4',
+																	'26' => '26 CLEI 5 Y 6',
+																	'99' => '99 ACELERACIÓN',
 																);
 																	break;
 																	case "grupos_simat":
@@ -1278,26 +1278,45 @@ public function getSelect($select)
 																	);
 																	break;
 																	case "apoyo_academico";
-																	return array(
-																	""=>'Seleccione una opción',
-																	'ATENCIÓN DOMICILIARIA'=>'ATENCIÓN DOMICILIARIA',
-																	'ATENCIÓN EN EL ESTABLECIMIENTO EDUCATIVO'=>'ATENCIÓN EN EL ESTABLECIMIENTO EDUCATIVO',
-																	'ATENCIÓN EN INSTITUCIONES DE APOYO'=>'ATENCIÓN EN INSTITUCIONES DE APOYO',
-																	'AULA HOSPITALARIA'=>'AULA HOSPITALARIA',
-																	'NO APLICA'=>'NO APLICA',
-																	);
+																		return array(
+																		""=>'Seleccione una opción',
+																		'ATENCIÓN DOMICILIARIA'=>'ATENCIÓN DOMICILIARIA',
+																		'ATENCIÓN EN EL ESTABLECIMIENTO EDUCATIVO'=>'ATENCIÓN EN EL ESTABLECIMIENTO EDUCATIVO',
+																		'ATENCIÓN EN INSTITUCIONES DE APOYO'=>'ATENCIÓN EN INSTITUCIONES DE APOYO',
+																		'AULA HOSPITALARIA'=>'AULA HOSPITALARIA',
+																		'NO APLICA'=>'NO APLICA',
+																		);
 																	break;
 																	case "srpa";
-																	return array(
-																	 ""=>'Seleccione una opción',
-																	'NO PRIVADO DE LA LIBERTAD'=>'NO PRIVADO DE LA LIBERTAD',
-																	'PRIVADO DE LA LIBERTAD'=>'PRIVADO DE LA LIBERTAD',
-																	'NO APLICA'=>'NO APLICA',
-																	);
+																		return array(
+																		""=>'Seleccione una opción',
+																		'NO PRIVADO DE LA LIBERTAD'=>'NO PRIVADO DE LA LIBERTAD',
+																		'PRIVADO DE LA LIBERTAD'=>'PRIVADO DE LA LIBERTAD',
+																		'NO APLICA'=>'NO APLICA',
+																		);
 																	case "zona_sede";
-																	return array(
-																	'URBANA'=>'URBANA',
-																	'RURAL'=>'RURAL',
+																		return array(
+																		'URBANA'=>'URBANA',
+																		'RURAL'=>'RURAL',
+																	);
+																	case "error_archivo";
+																		return array(
+																		""=>'Seleccione una opción',
+																		'El archivo subido no corresponde'=>'El archivo subido no corresponde',
+																		'El archivo subido es ilegible'=>'El archivo subido es ilegible',
+																		'El número de documento no corresponde'=>'El número de documento no corresponde',
+																	);
+																	case "RH";
+																		return array(
+																		""=>'Seleccione una opción',
+																		'O+'=>'O+',
+																		'O-'=>'O-',
+																		'A+'=>'A+',
+																		'A-'=>'A-',
+																		'B+'=>'B+',
+																		'B-'=>'B-',
+																		'AB+'=>'AB+',
+																		'AB-'=>'AB-'
 																	);
 													}
 												}

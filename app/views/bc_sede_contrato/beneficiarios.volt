@@ -123,6 +123,7 @@ th     { background:#eee; }
   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
     Pre-matricular Estudiante
   </button>
+  <img src="/sico_cobertura_regular/public/img/semaforo.png" width="600" height="30" style="float:right">
   <div id="contenedo">
     <div class="loader" id="loader"></div>
     <h6 align="center"><b>Cargando información en la tabla, un momento por favor</b></h6>
@@ -145,7 +146,7 @@ th     { background:#eee; }
         <th>Jornada</th>
         <th>Grado</th>
         <th>Grupo</th>
-        <th>Matriculado Simat</th>
+        <!-- <th>Matriculado Simat</th> -->
         <th>Comité</th>
       </tr>
     </thead>
@@ -153,9 +154,11 @@ th     { background:#eee; }
       {% for beneficiario in beneficiarios %}
       <tr<?php echo $beneficiario->getMatriculaDetail(); ?>>  
         <td>
-          {{ link_to("bc_sede_contrato/editar_persona/?id_persona="~beneficiario.id_oferente_persona,  '<i class="glyphicon glyphicon-pencil"></i> ', "rel": "tooltip", "title":"Editar") }}
+          {{ link_to("bc_sede_contrato/editar_persona/?id_persona="~beneficiario.id_oferente_persona, '<i class="glyphicon glyphicon-pencil"></i> ', "rel": "tooltip", "title":"Editar") }}
           <a style="margin-left:7%;" onclick="abrirModal('{{beneficiario.documento}}','{{beneficiario.nombre1}} {{beneficiario.nombre2}} {{beneficiario.apellido1}} {{beneficiario.apellido2}}')" rel="tooltip" title="Retirar Estudiante" class="eliminar_fila" data-toggle = "modal" id="{{ beneficiario.id_oferente_persona }}"><i class="glyphicon glyphicon-trash"></i></a>
-         <?php if ($beneficiario->estado_certificacion==3) {?> <a style="margin-left:7%;" onclick="abrirModalEvidencia('{{beneficiario.id_oferente_persona}}','{{beneficiario.documento}}')" rel="tooltip" title="Adjuntar nueva evidencia" class="eliminar_fila" data-toggle = "modal" id="{{ beneficiario.id_oferente_persona }}"><i class="glyphicon glyphicon-file"></i></a><?php }?>
+         <?php if ($beneficiario->estado_certificacion==3) {?>
+           <a style="margin-left:7%;" onclick="abrirModalEvidencia('{{beneficiario.id_oferente_persona}}','{{beneficiario.documento}}','{{beneficiario.motivo_certificacion}}')" rel="tooltip" title="Adjuntar nueva evidencia" class="eliminar_fila" data-toggle = "modal" id="{{ beneficiario.id_oferente_persona }}"><i class="glyphicon glyphicon-file"></i></a>
+         <?php }?>
         </td>
         <td id="documentoIdentidad"><span style="display:outline"> {{ beneficiario.documento }}</span> <a style="display:outline" rel="tooltip" title="Editar Documento" class="eliminar_fila" data-toggle = "modal" id="{{ beneficiario.documento}}"><i class="glyphicon glyphicon-pencil"></i></a></td>
         <td>{{ beneficiario.apellido1 }} {{ beneficiario.apellido2 }} {{ beneficiario.nombre1 }} {{ beneficiario.nombre2 }}</td>
@@ -165,7 +168,7 @@ th     { background:#eee; }
         <td>{{ beneficiario.nombre_jornada }}</td>
         <td>{{ beneficiario.grado_cod_simat }}</td>
         <td>{{ beneficiario.grupo_simat }}</td>
-        <td>{{ beneficiario.matricula_simat }}</td>
+        <!-- <td>{{ beneficiario.matricula_simat }}</td> -->
         <td>{{ beneficiario.ingreso }}</td>
        
       </tr>
@@ -233,7 +236,7 @@ th     { background:#eee; }
           </div>
           <div class="form-group">
             <label>Fecha Retiro</label>
-            <input type="date" class="form-control" name="fecha_retiro" placeholder="Fecha"  min='1899-01-01' max="2020-11-05" required>
+            <input type="date" class="form-control" name="fecha_retiro" placeholder="Fecha"  max="{{fecha_fin_eliminado}}" required>
           </div>
           <div class="form-group">
             <label for="comment">Observaciones:</label>
@@ -271,6 +274,7 @@ th     { background:#eee; }
       <div class="modal-body">
         {{ form("bc_sede_contrato/solicitudEditarDocumento/", "method":"post", "parsley-validate" : "", "id" : "editar_documento") }}
         {{ hidden_field("id_contrato", "value": id_contrato) }}
+        {{ hidden_field("documento1") }}
           <div class="form-group">
             <label for="inputPassword4">Documento Actual</label>
             <input type="text" class="form-control" name="documento_anterior" placeholder="Documento" readonly>
@@ -283,6 +287,16 @@ th     { background:#eee; }
             <label for="inputPassword4">Confirmar Documento Nuevo</label>
             <input type="text" class="form-control" name="documento_confirmar" id="documento_confirmar" maxlength="15" onchange='confirmar_documento()' placeholder="Documento Confirmar" required>
           </div>
+          <div class="form-group" id="evidencia_archivo">
+            <label for="cargarDocumento">Evidencia Documento</label>
+            <div>
+                <input class="fileupload filestyle form-control" data-input="false" id="archivo" data-badge="false" type="file" name="evidencia" multiple required>
+                <div id="progress" class="progress" style="margin: 0 !important;">
+                    <div class="progress-bar progress-bar-success"></div>
+                </div>
+                <input type='hidden' class='urlEvidenciaAtencion' name='urlEvidenciaDoc'>
+            </div>
+        </div>
           <div class="modal-footer">
             <button type="submit" class="btn btn-primary" id="submit" disabled>Solicitar Edición</button>
             <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
@@ -298,7 +312,7 @@ th     { background:#eee; }
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">Editar Evidencia Matrícula Simat</h5>
+        <h5 class="modal-title" id="exampleModalLongTitle">EDITAR EVIDENCIA MATRÍCULA SIMAT</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -307,7 +321,10 @@ th     { background:#eee; }
         {{ form("bc_sede_contrato/editarEvidenciaSimat/", "method":"post", "parsley-validate" : "", "id" : "evidencia_form") }}
         {{ hidden_field("id_oferente_persona") }}
         {{ hidden_field("documento") }}
-            <div class="form-group" id="evidencia_archivo">
+          <div class="form-group" id="evidencia_archivo">
+              <div class="form-group">
+                <label id="motivo_rechazo"></label>
+              </div>
               <label for="cargarDocumento">Evidencia matricula Simat</label>
               <div>
                   <input class="fileupload filestyle form-control" data-input="false" id="archivo" data-badge="false" type="file" name="evidencia" multiple required>
@@ -352,10 +369,10 @@ th     { background:#eee; }
       $(".mostrar").show();
     }
 
-    function abrirModalEvidencia(id_oferente_persona, documento){
+    function abrirModalEvidencia(id_oferente_persona, documento, motivo){
       $("#id_oferente_persona").val(id_oferente_persona);
       $("#documento").val(documento);
-      console.log(documento);
+      $("#motivo_rechazo").text("La evidencia de matrícula anterior fue rechazada por: " + motivo + ", por favor cargue correctamente el nuevo archivo.")
       $("#modal_editar_evidencia").modal("show");
     }
 
@@ -369,8 +386,8 @@ th     { background:#eee; }
       $('body').on('click', '#documentoIdentidad a', function(){
         $("#modal_editar_documento").modal("show");
           var id= $(this).attr('id');
-          console.log(id);
           $('input[name="documento_anterior"]').val(id);
+          $("#documento1").val(id);
       })
     };
 

@@ -28,7 +28,7 @@
            <td><p><a class="captura" target="_blank" href="/sico_cobertura_regular/files/excusas/{{ beneficiario.urlEvidenciaMatricula }}">{% if beneficiario.urlEvidenciaMatricula %}Clic para ver{% endif %}</a></p></td>
            <td>
             <div class="btn-group" role="group">
-                <button type="button" class="btn btn-success" onclick="abrilModal(2, '{{beneficiario.id_oferente_persona}}')"><i class="glyphicon glyphicon-ok"></i></button>
+                <button type="button" class="btn btn-success" onclick="abrilModal(1, '{{beneficiario.id_oferente_persona}}')"><i class="glyphicon glyphicon-ok"></i></button>
                 <button type="button" class="btn btn-danger" onclick="abrilModal(3, '{{beneficiario.id_oferente_persona}}')"><i class="glyphicon glyphicon-remove"></i></button>                
               </div>
            </td>
@@ -55,6 +55,10 @@
             <div class="form-group">
               <label id="texto"></label>
             </div>
+            <div class="form-group" id="rechazo">
+              <label for="inputEmail4">Motivo Rechazo</label>
+              {{ select("error_archivo", error_archivo,  "class" : "form-control", "required":"required") }}
+            </div>
             <div class="modal-footer">
                <button type="submit" class="btn btn-primary">Aceptar</button>
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
@@ -67,10 +71,13 @@
  
   <script>
        function abrilModal(opc, id){
-           if (opc==2) {
+           if (opc==1) {
                $("#texto").text("¿Esta seguro que desea confirmar la matrícula?")
+               $('#error_archivo').removeAttr("required");
+               $("#rechazo").hide();
            }else{
                $("#texto").text("¿Esta seguro que desea rechazar la matrícula?")
+               $("#rechazo").show();
            }
            $("#id_oferente_persona").val(id);
            $("#estado_certificacion").val(opc);

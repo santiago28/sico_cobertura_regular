@@ -12,6 +12,7 @@
           <th>Nombres</th>
           <th>Doc. Actual</th>
           <th>Doc. Nuevo</th>
+          <th>Evidencia</th>
           <th>Acciones</th>
        </tr>
   </thead>
@@ -22,9 +23,10 @@
           <td>{{beneficiario.id_contrato}}</td>
           <td>{{beneficiario.institucion}}</td>
           <td>{{beneficiario.nombre_sede}}</td>
-          <td> {{beneficiario.nombre1}} {{beneficiario.nombre2}} {{beneficiario.apellido1}} {{beneficiario.apellido2}}</td>
+          <td>{{beneficiario.nombre1}} {{beneficiario.nombre2}} {{beneficiario.apellido1}} {{beneficiario.apellido2}}</td>
           <td>{{beneficiario.documento_anterior}}</td>
           <td>{{beneficiario.documento_nuevo}}</td>
+          <td><p><a class="captura" target="_blank" href="/sico_cobertura_regular/files/excusas/{{ beneficiario.urlEvidenciaDoc }}">{% if beneficiario.urlEvidenciaDoc %}Clic para ver{% endif %}</a></p></td>
           <td>
            <div class="btn-group" role="group">
                <button type="button" class="btn btn-success" onclick="abrilModal(1, '{{beneficiario.id_oferente_persona}}')"><i class="glyphicon glyphicon-ok"></i></button>
@@ -37,7 +39,7 @@
   </tbody>
 </table>
 
-<!-- Modal cambiar documento-->
+<!-- Modal cambiar documento -->
 <div class="modal fade" id="modalCambioDoc" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
    <div class="modal-dialog modal-dialog-centered" role="document">
      <div class="modal-content">
