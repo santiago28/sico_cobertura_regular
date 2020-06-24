@@ -1,11 +1,17 @@
-var url = window.location.protocol + "//" + window.location.host + "/sico_cobertura_regular/" + "bc_sede_contrato/subirEvidencia/" + $("#documento").val();
 
 $(".fileupload").change(function() {
   var archivo = $(this);
   $(archivo).parent().find('#progress .progress-bar').css(
     "width", "0%"
   );
-  var formData = new FormData($('#beneficiarios_form ')[0]);
+  var form =$(this).closest("form").attr('id');
+  var url ="";
+  if(form =="evidencia_form"){
+      url = window.location.protocol + "//" + window.location.host + "/sico_cobertura_regular/" + "bc_sede_contrato/subirEvidencia/" + $("#documento").val();
+   }else{
+     url = window.location.protocol + "//" + window.location.host + "/sico_cobertura_regular/" + "bc_sede_contrato/subirEvidencia/" + $("#documento1").val();
+   }
+  var formData = new FormData($('#'+ form)[0]);
   $.ajax( {
     url: url,
     type: 'POST',
@@ -13,7 +19,6 @@ $(".fileupload").change(function() {
     processData: false,
     contentType: false,
     success: function (data) {
-      console.log(data);
       if(data == "Tipo"){
         alert("El tipo de imagen debe de ser jpg, png, bmp, o gif");
       } else if(data == "Error"){

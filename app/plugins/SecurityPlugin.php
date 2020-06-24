@@ -611,6 +611,45 @@ class SecurityPlugin extends Plugin
       'subirEvidencia' => array(
       'nivelPermiso' => '4'
       ),
+      'solicitudEditarDocumento' => array(
+        'nivelPermiso' => '4'
+      ),
+      'solicitudMatricula' => array(
+        'nivelPermiso' => '2'//2
+      ),
+      'cambiarEstadoMatricula' => array(
+        'nivelPermiso' => '2'//2
+      ),
+      'modificarDocumentos' => array(
+        'nivelPermiso' => '2'//2
+      ),
+      'actualizarDocumento' => array(
+        'nivelPermiso' => '2'//2
+      ),
+      'editarEvidenciaSimat' => array(
+        'nivelPermiso' => '4'
+      ),
+      'sedeContrato' => array(
+        'nivelPermiso' => '1'
+      ),
+      'eliminarSede' => array(
+        'nivelPermiso' => '1'
+      ),
+      'crearSede' => array(
+        'nivelPermiso' => '1'
+      ),
+      'consultarContratos' => array(
+        'nivelPermiso' => '1'
+      ),
+      'guardarSedeContrato' => array(
+        'nivelPermiso' => '1'
+      ),
+      'editarSede' => array(
+        'nivelPermiso' => '1'
+      ),
+      'guardarEdicionSede' => array(
+        'nivelPermiso' => '1'
+      ),
     )
 
   );

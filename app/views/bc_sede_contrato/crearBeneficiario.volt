@@ -6,8 +6,9 @@
 <br>
 <!-- <form style="margin-top: 4%;" action="bc_sede_contrato/guardar_update_beneficiario" method="POST" > -->
 {{ form("bc_sede_contrato/guardar_beneficiario/", "method":"post", "parsley-validate" : "", "id" : "beneficiarios_form") }}
-{{ hidden_field("id_contrato", "value": beneficiario.id_contrato) }}
+{{ hidden_field("id_contrato", "value": id_contrato) }}
 {{ hidden_field("ingreso", "value": beneficiario.proviene) }}
+{{ hidden_field("nombre_jornada") }}
 
     <!-- fila 1 -->
 
@@ -28,7 +29,7 @@
         <div class="form-group col-md-4">
             <label for="">Código Dane *</label>
             <input
-                type="text"
+                type="number"
                 class="form-control"
                 name="codigo_dane"
                 placeholder="Código Dane"
@@ -41,7 +42,7 @@
 
     <div class="form-row">
         <div class="form-group col-md-4">
-            <label for="inputEmail4">Etc</label>
+            <label for="inputEmail4">ETC</label>
 
             <input
                 type="text"
@@ -53,11 +54,11 @@
             </input>
         </div>
 
-        <div class="form-group col-md-4">
+        <!-- <div class="form-group col-md-4">
             <label for="">Estado Matricula *</label>
 
             {{ select("estado", estado_simat, "class" : "form-control", "required":"required") }}
-        </div>
+        </div> -->
 
         <div class="form-group col-md-4">
             <label for="">Jerarquía *</label>
@@ -115,6 +116,7 @@
                 name="nombre1"
                 placeholder="Primer Nombre"
                 value="{{beneficiario.primer_nombre}}"
+                style="text-transform: uppercase;"
                 required>
             </input>
         </div>
@@ -129,6 +131,7 @@
                 class="form-control"
                 name="nombre2"
                 placeholder="Segundo Nombre"
+                style="text-transform: uppercase;"
                 value="{{beneficiario.segundo_nombre}}">
             </input>
         </div>
@@ -140,20 +143,21 @@
                 class="form-control"
                 name="apellido1"
                 placeholder="Primer Apelllido"
+                style="text-transform: uppercase;"
                 value="{{beneficiario.primer_apellido}}"
                 required>
             </input>
         </div>
 
         <div class="form-group col-md-4">
-            <label for="inputPassword4">Segundo Apellido *</label>
+            <label for="inputPassword4">Segundo Apellido</label>
             <input
                 type="text"
                 class="form-control"
                 name="apellido2"
                 placeholder="Segundo Apellido"
-                value="{{beneficiario.segundo_apellido}}"
-                required>
+                style="text-transform: uppercase;"
+                value="{{beneficiario.segundo_apellido}}">
             </input>
         </div>
     </div>
@@ -169,7 +173,7 @@
         <div class="form-group col-md-4">
             <label for="inputEmail4">Jornada *</label>
         
-            {{ select("id_jornada", jornada,  "class" : "form-control", "required":"required") }}
+            {{ select("id_jornada", jornada,  "class" : "form-control","onchange":"obtener_jornada()" ,"required":"required") }}
         </div>
         
         <div class="form-group col-md-4">
@@ -205,28 +209,36 @@
         <div class="form-group col-md-4">
             <label for="inputPassword4">Fecha Inicio *</label>
             <input
+                id="fecha_ini"
                 type="date"
                 class="form-control"
                 name="fecha_ini"
-                placeholder="Segundo Nombre"
+                min="{{fecha_inicio_min}}"
+                max="{{fecha_fin_max}}"
                 required>
             </input>
         </div>
 
-        <div class="form-group col-md-4">
+        <!-- <div class="form-group col-md-4">
             <label for="inputPassword4">Fecha Finalización</label>
             <input
-                type="date"
+                id="fecha_fin"
+                type="text"
                 class="form-control"
                 name="fecha_fin"
-                placeholder="Segundo Nombre">
+                placeholder="yyyy/mm/dd">
             </input>
-        </div>
+        </div> -->
 
-        <div class="form-group col-md-4">
-            <label for="inputEmail4">Matriculado en Simat *</label>
-
-            {{ select("matricula_simat", matricula_simat,  "class" : "form-control", "required":"required") }}
+        <div class="form-group col-md-4" >
+            <label for="inputPassword4">RH</label>
+            <!-- <input
+                type="text"
+                class="form-control"
+                name="tipo_sangre"
+                placeholder="Tipo Sangre">
+            </input> -->
+            {{ select("tipo_sangre", tipo_sangre, "class" : "form-control", "required":"required") }}
         </div>
     </div>
 
@@ -245,17 +257,18 @@
         </div>
 
         <div class="form-group col-md-4">
-            <label for="inputEmail4">Genero *</label>
+            <label for="inputEmail4">Sexo *</label>
             {{ select("genero", genero,  "class" : "form-control", "required":"required") }}
         </div>
 
         <div class="form-group col-md-4">
             <label for="inputPassword4">Fecha Nacimiento *</label>
             <input
+                id="fecha_nacimiento"
                 type="date"
                 class="form-control"
                 name="fecha_nacimiento"
-                placeholder="Segundo Nombre"
+                max="{{fecha_fin}}"
                 required>
             </input>
         </div>
@@ -298,12 +311,12 @@
     <!-- fila 11 -->
 
     <div class="form-row">
-        <div class="form-group col-md-4">
+        <!-- <div class="form-group col-md-4">
             <label for="inputEmail4">Matrícula Contratada *</label>
             {{ select("matricula_contratada", matricula_contratada,  "class" : "form-control", "required":"required") }}
-        </div>
+        </div> -->
 
-        <div class="form-group col-md-4">
+        <!-- <div class="form-group col-md-4">
             <label for="inputPassword4">FUENTE DE RECURSOS</label>
             <input
                 type="text"
@@ -312,9 +325,9 @@
                 placeholder="FUENTE DE RECURSOS"
                 value="SGP"
             ></input>
-        </div>
+        </div> -->
 
-        <div class="form-group col-md-4">
+        <!-- <div class="form-group col-md-4">
             <label for="inputPassword4">Internado</label>
             <input
                 type="text"
@@ -323,7 +336,7 @@
                 placeholder="Internado"
                 value="NINGUNO"
             ></input>
-        </div>
+        </div> -->
     </div>
 
     <!-- fila 12 -->
@@ -333,11 +346,11 @@
             <label for="inputEmail4">Apoyo Academico Especial *</label>
             {{ select("apoyo_acadmico_especial", apoyo_acadmico_especial,  "class" : "form-control", "required":"required") }}
         </div>
-
+<!-- 
         <div class="form-group col-md-4">
             <label for="inputEmail4">SRPA *</label>
             {{ select("srpa", srpa,  "class" : "form-control", "required":"required") }}
-        </div>
+        </div> -->
 
         <div class="form-group col-md-4">
             <label for="inputPassword4">Discapacidad</label>
@@ -383,31 +396,84 @@
       <!-- fila 14 -->
 
     <div class="form-row">
+        <!-- <div class="form-group col-md-4">
+            <label for="inputEmail4">Matriculado en Simat *</label>
 
-        <div class="form-group col-md-4" >
-            <label for="inputPassword4">Tipo Sangre</label>
-            <input
-                type="text"
-                class="form-control"
-                name="tipo_sangre"
-                placeholder="Tipo Sangre">
-            </input>
-        </div>
-        <div class="form-group col-md-4">
-            <label for="cargarDocumento">Evidencia matricula Smat</label>
+            {{ select("matricula_simat", matricula_simat,  "class" : "form-control", "required":"required", "onchange":"ocultar_campo_evidencia()") }}
+        </div> -->
+      
+        <div class="form-group col-md-4"  id="evidencia_archivo">
+            <label for="cargarDocumento">Adjuntar Captura De Matrícula En Simat*</label>
             <div>
-                <input class="fileupload filestyle form-control" data-input="false" data-badge="false" type="file" name="evidencia" multiple>
+                <input class="fileupload filestyle form-control" data-input="false" id="archivo" required data-badge="false" type="file" name="evidencia" multiple required>
                 <div id="progress" class="progress" style="margin: 0 !important;">
                     <div class="progress-bar progress-bar-success"></div>
                 </div>
                 <input type='hidden' class='urlEvidenciaAtencion' name='urlEvidenciaAtencion'>
             </div>
         </div>
-        <div  class="form-group col-md-4" style="margin-top: 2%;">
-            <button type="submit" class="btn btn-primary">GUARDAR</button>  
-        </div>
-        
+        <div class="form-group col-md-4">
+            <label for="inputEmail4">Observaciones</label>
+            <textarea class="form-control" name="observaciones_prematricula"  rows="2"></textarea>
+        </div>        
     </div>
-  
+    <div  class="form-group col-md-4" style="margin-top: 2%;">
+        <button type="submit" class="btn btn-primary">GUARDAR</button>  
+    </div>
 </form>
 
+<script>
+
+    function ocultar_campo_evidencia(){
+        var valor =$("#matricula_simat").val();
+        if ( valor == "SI") {
+            $('#evidencia_archivo').show()
+            $("#archivo").prop('required')
+        }else{
+            $('#evidencia_archivo').hide()
+            $('#archivo').removeAttr("required");
+        }
+    }
+
+      
+    function obtener_jornada(){
+        $("#nombre_jornada").val($('select[name="id_jornada"] option:selected').text());
+    }
+    // window.onload = function() {
+    //     var getDate = function (input) {
+    //         return new Date(input.date.valueOf());
+    //     }
+
+    //     var d = new Date();
+    //     var endDate_nac =  d.getFullYear() + "/" + (d.getMonth()+1) + "/"+ d.getDate();
+    //     $('#fecha_nacimiento').datepicker({
+    //         format: "yyyy/mm/dd",
+    //         language: 'es',
+    //         endDate: endDate_nac,
+    //     });
+    //     var strDate = d.getFullYear() + "/" + (d.getMonth())  + "/"+ d.getDate();
+    //     var endDate = d.getFullYear()+"/12" + "/31" ;
+       
+    //     $('#fecha_fin').datepicker({
+    //         format: "yyyy/mm/dd",
+    //         language: 'es',
+    //         startDate: strDate,
+    //         endDate: endDate,
+    //     });
+       
+    //     var strDate_ini = d.getFullYear() + "/" + (d.getMonth()) + "/"+ d.getDate() ;
+    //     var endDate_ini =  d.getFullYear() + "/" + (d.getMonth()+1) + "/"+ d.getDate();
+    //     $('#fecha_ini').datepicker({
+    //         format: "yyyy/mm/dd",
+    //         language: 'es',
+    //         startDate: strDate_ini,
+    //         endDate: endDate_ini,
+    //      }).on('changeDate',
+    //     function (selected) {
+    //         $('#fecha_fin').datepicker('clearDates');
+    //         $('#fecha_fin').datepicker('setStartDate', getDate(selected));
+    //         console.log( $('#fecha_ini').val())
+    //     });
+    // };
+
+</script>

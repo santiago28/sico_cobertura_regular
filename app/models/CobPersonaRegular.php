@@ -121,7 +121,8 @@ class CobPersonaRegular extends \Phalcon\Mvc\Model
       segundo_apellido varchar(50), 
       ciclo varchar(50), 
       respuesta_comite VARCHAR(100), 
-      proviene VARCHAR(100)) CHARACTER SET utf8 COLLATE utf8_bin");
+      proviene VARCHAR(100), 
+      fecha_reunion VARCHAR(50)) CHARACTER SET utf8 COLLATE utf8_bin");
     $db->query("LOAD DATA INFILE '$archivo_mat' IGNORE INTO TABLE $tabla_mat FIELDS TERMINATED BY ';' LINES TERMINATED BY '\n' IGNORE 1 LINES 
     (      
         @NUCLEO,
@@ -135,7 +136,8 @@ class CobPersonaRegular extends \Phalcon\Mvc\Model
         @SEGUNDO_APELLIDO, 
         @CICLO, 
         @RESPUESTA_COMITE, 
-        @PROVIENE
+        @PROVIENE,
+        @FECHA_REUNION
       ) SET 
           nucleo = @NUCLEO, 
           id_contrato = @CONTRATO, 
@@ -148,7 +150,8 @@ class CobPersonaRegular extends \Phalcon\Mvc\Model
           segundo_apellido = @SEGUNDO_APELLIDO, 
           ciclo = @CICLO, 
           respuesta_comite = @RESPUESTA_COMITE,
-          proviene = @PROVIENE");
+          proviene = @PROVIENE,
+          fecha_reunion = @FECHA_REUNION");
 
     $db->query("INSERT IGNORE INTO cob_comite_persona 
     (
@@ -163,7 +166,8 @@ class CobPersonaRegular extends \Phalcon\Mvc\Model
       segundo_apellido, 
       ciclo, 
       respuesta_comite, 
-      proviene
+      proviene,
+      fecha_reunion
       ) SELECT 
           nucleo,
           id_contrato,
@@ -176,7 +180,8 @@ class CobPersonaRegular extends \Phalcon\Mvc\Model
           segundo_apellido,
           ciclo, 
           respuesta_comite, 
-          proviene
+          proviene,
+          fecha_reunion
       FROM $tabla_mat WHERE $tabla_mat.documento_identidad NOT IN (SELECT documento_identidad FROM cob_comite_persona WHERE id_contrato = $tabla_mat.id_contrato)");
     return TRUE;
   }

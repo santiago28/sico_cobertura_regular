@@ -1,101 +1,86 @@
 <?php
 
-class CobOferentePersonaSimat extends \Phalcon\Mvc\Model
+class CobOferentePersonaEliminado extends \Phalcon\Mvc\Model
 {
 
-  /**
-  *
-  * @var integer
-  */
-  public $id_oferente_persona;
+    /**
+     *
+     * @var integer
+     */
+    public $id_oferente_persona;
 
-  /**
-  *
-  * @var string
-  */
-  public $id_contrato;
+    /**
+     *
+     * @var string
+     */
+    public $id_contrato;
 
-  /**
-  *
-  * @var string
-  */
-  public $ano;
+    /**
+     *
+     * @var string
+     */
+    public $ano;
 
-  /**
-  *
-  * @var string
-  */
-  public $etc;
+    /**
+     *
+     * @var string
+     */
+    public $etc;
 
-  /**
-  *
-  * @var string
-  */
-  public $estado;
+    /**
+     *
+     * @var string
+     */
+    public $estado;
 
     /**
      *
      * @var string
      */
     public $jerarquia;
-    /**
-     *
-     * @var integer
-     */
-    public $id_modalidad;
+
     /**
      *
      * @var string
      */
-    public $modalidad_nombre;
+    public $institucion;
+
     /**
      *
-     * @var integer
+     * @var string
      */
-    public $id_oferente;
+    public $codigo_dane;
 
-  /**
-  *
-  * @var string
-  */
-  public $institucion;
+    /**
+     *
+     * @var string
+     */
+    public $prestacion_servicio;
 
-  /**
-  *
-  * @var string
-  */
-  public $codigo_dane;
+    /**
+     *
+     * @var string
+     */
+    public $calendario;
 
-  /**
-  *
-  * @var string
-  */
-  public $prestacion_servicio;
+    /**
+     *
+     * @var string
+     */
+    public $sector;
 
-  /**
-  *
-  * @var string
-  */
-  public $calendario;
-
-  /**
-  *
-  * @var string
-  */
-  public $sector;
-
-  /**
-  *
-  * @var string
-  */
-  public $sede_simat;
+    /**
+     *
+     * @var string
+     */
+    public $sede_simat;
 
     /**
      *
      * @var string
      */
     public $codigo_dane_sede;
-
+  
     /**
      *
      * @var string
@@ -288,14 +273,9 @@ class CobOferentePersonaSimat extends \Phalcon\Mvc\Model
     public $ingreso;
     /**
      *
-     * @var int
-     */
-    public $estado_certificacion;
-    /**
-     *
      * @var string
      */
-    public $motivo_certificacion;
+    public $estado_certificacion;
 
      /**
      *
@@ -313,55 +293,18 @@ class CobOferentePersonaSimat extends \Phalcon\Mvc\Model
      * @var integer
      */
     public $estado_activo;
-      /**
+
+     /**
      *
      * @var string
      */
-    public $fecha_pre_matricula;
+    public $fecha_retiro;
 
-  /**
-  *
-  * @var integer
-  */
-  public $estado_activo;
-
-  /**
-  *
-  * @var string
-  */
-  public $fecha_retiro;
-
-
-  /**
-  *
-  * @var string
-  */
-  public $urlEvidenciaMatricula;
-
-
-
-  public function initialize()
-  {
-    $this->belongsTo(array('id_contrato', 'id_sede'), 'BcSedeContrato', array('id_contrato', 'id_sede'));
-  }
-
-    public function getMatriculaDetail()
-    {
-    	switch ($this->estado_certificacion) {
-    		case 1:
-    			return " class='success'";
-    			break;
-    		case 2:
-    			return " class='warning'";
-    			break;
-    		case 3:
-    			return " class='danger'";
-    			break;
-    		default:
-    			return "";
-    			break;
-    	}
-    }
-
+    
+        /**
+     *
+     * @var string
+     */
+    public $urlEvidenciaMatricula;
 
 }
