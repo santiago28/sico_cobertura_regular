@@ -343,6 +343,9 @@ class SecurityPlugin extends Plugin
       'beneficiarios_periodofacturacion_consolidado' => array(
         'nivelPermiso' => '2'
       ),
+      'beneficiarios_consolidado_simat' => array(
+        'nivelPermiso' => '1'
+      ),
       'cob_contratos' => array(
         'nivelPermiso' => '1'
       ),

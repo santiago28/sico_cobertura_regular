@@ -30,10 +30,12 @@
 {% if crear_recorrido == 1 %}
 {{ link_to("cob_periodo/nuevorecorrido1/"~id_periodo, "Generar Recorrido 1", "class": "btn btn-primary btn-lg btn-block") }}
 {% else %}
+{% if (existe_facturacion is null) %}
 {{ link_to("cob_periodo/nuevorecorrido/"~id_periodo,  "Generar Recorrido "~crear_recorrido, "class": "btn btn-primary btn-lg btn-block") }}
+{% endif %}
 {% endif %}
 <a data-toggle="modal" href='#confirmacion_cierre' class="btn btn-danger btn-lg btn-block">Cerrar Periodo</a>
 {% endif %}
-{% if (id_facturacion is empty) %}
+{# {% if (id_facturacion is empty) %}
 {{ link_to("cob_periodo/elegirfacturacion/"~id_periodo, "Elegir BD Facturación", "class": "btn btn-success btn-lg btn-block") }}
-{% endif %}
+{% endif %} #}

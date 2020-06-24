@@ -11,6 +11,10 @@
          </tr>
     </thead>
     <tbody>
+      <tr>
+         <td>REPORTE SIMAT</td>
+         <td>{{ link_to("bc_reporte/beneficiarios_consolidado_simat/", '<i class="glyphicon glyphicon-file"></i> ', "rel": "tooltip", "title":"MAT Consolidada", 'target': '_blank') }}</td>
+      </tr>
     {% for periodo in periodos %}
         <tr>
             <td>{{ periodo.CobPeriodo.getFechaDetail() }}</td>
