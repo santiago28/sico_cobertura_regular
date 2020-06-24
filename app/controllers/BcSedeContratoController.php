@@ -93,7 +93,6 @@ class BcSedeContratoController extends ControllerBase
   {
     if (isset($this->usuario)) {
 
-      // count de esta consulta
       $beneficiarios = CobOferentePersonaSimat::find([
         'id_contrato = '. $this->usuario.' and estado_activo = 1', 'order' => 'estado_certificacion desc' ]);
 
@@ -103,11 +102,11 @@ class BcSedeContratoController extends ControllerBase
        $count_beneficiarios = CobOferentePersonaSimat::count([
         'id_contrato = '. $this->usuario.' and estado_activo = "1"']);
 
-      $beneficiarios_retirado = CobOferentePersonaSimat::count([
-        'id_contrato = '. $this->usuario.' and estado != "MATRICULADO" and estado_activo = "1"']);
+       $beneficiarios_totales = CobOferentePersonaSimat::count([
+        'id_contrato = '. $this->usuario.' and estado_activo = "1"']);
 
         $beneficiarios_activos = CobOferentePersonaSimat::count([
-          'id_contrato = '. $this->usuario.' and estado = "MATRICULADO" and estado_activo = "1"']);
+          'id_contrato = '. $this->usuario.' and estado_certificacion = "1" and estado_activo = "1"']);
 
 
         $beneficiariosEliminados = CobOferentePersonaEliminado::count([
@@ -143,6 +142,7 @@ class BcSedeContratoController extends ControllerBase
         $this->view->beneficiarios = $beneficiarios;
         $this->view->total_beneficiarios = $count_beneficiarios;
         $this->view->beneficiarios_activos = $beneficiarios_activos;
+        $this->view->beneficiarios_totales = $beneficiarios_totales;
         $this->view->beneficiarios_retirado = $beneficiariosEliminados;
         $this->view->cuposTotal =$cuposTotal;
         $this->view->modalidad =  $modalidad;
@@ -207,6 +207,7 @@ class BcSedeContratoController extends ControllerBase
         $apellido1 = $this->request->getPost("apellido1");
         $apellido2 = $this->request->getPost("apellido2");
         $id_sede = $this->request->getPost("id_sede");
+        $nombre_sede = $this->request->getPost("nombre_sede");
         $id_jornada = $this->request->getPost("id_jornada");
         $nombre_jornada = $this->request->getPost("nombre_jornada");
         $grado_cod_simat = $this->request->getPost("grado_cod_simat");
@@ -226,6 +227,7 @@ class BcSedeContratoController extends ControllerBase
             apellido1='$apellido1',
             apellido2='$apellido2',
             id_sede='$id_sede',
+            nombre_sede='$nombre_sede',
             id_jornada='$id_jornada',
             nombre_jornada='$nombre_jornada',
             grado_cod_simat='$grado_cod_simat',
@@ -462,7 +464,7 @@ class BcSedeContratoController extends ControllerBase
     $beneficiario->id_sede = $this->request->getPost("id_sede");
     $beneficiario->nombre_sede =$sede->sede_nombre;
     $beneficiario->id_jornada = $this->request->getPost("id_jornada");
-    $beneficiario->nombre_jornada = $this->request->getPost("id_jornada");
+    $beneficiario->nombre_jornada = $this->request->getPost("nombre_jornada");
     $beneficiario->ingreso = trim($this->request->getPost("ingreso"));
     $beneficiario->urlEvidenciaMatricula = $this->request->getPost("urlEvidenciaAtencion");
     $beneficiario->observaciones_prematricula = $this->request->getPost("observaciones_prematricula");
@@ -675,7 +677,7 @@ class BcSedeContratoController extends ControllerBase
       $this->view->beneficiarios = $beneficiarios->fetchAll();
   }
 
-   public function actualizarDocumentoAction()
+  public function actualizarDocumentoAction()
   {
       if (!$this->request->isPost()) {
          return $this->response->redirect("bc_sede_contrato/modificarDocumentos");
@@ -722,7 +724,7 @@ class BcSedeContratoController extends ControllerBase
   }
 
   public function solicitudMatriculaAction(){
-    //Estado certificado 1= Pre-matriculado, 2= Devuelto, 3= Matriculado
+    //Estado certificado 1= Matricualdo(amariillo), 2=Pre-matriculado(verde), 3=Rechazado(rojo) 
     $beneficiarios = CobOferentePersonaSimat::find([
       'estado_certificacion =2 and estado_activo = 1']);
 
@@ -753,7 +755,8 @@ class BcSedeContratoController extends ControllerBase
 
   }
 
-  public function editarEvidenciaSimatAction(){
+  public function editarEvidenciaSimatAction()
+  {
     if (!$this->request->isPost()) {
       return $this->response->redirect("bc_sede_contrato/beneficiarios");
     }
@@ -819,6 +822,124 @@ class BcSedeContratoController extends ControllerBase
       return $this->response->redirect("bc_sede_contrato/sedeContrato");
 
   }
+
+  public function crearSedeAction()
+  {
+    if (isset($this->usuario)) {
+      $oferentes = BcOferente::find();
+      $modalidades = BcModalidad::find();
+      $this->view->oferentes = $oferentes;
+      $this->view->modalidades = $modalidades;
+    }
+  }
+  public function consultarContratosAction()
+  {
+    if (isset($this->usuario)) {
+      $this->view->disable();
+      $id_oferente = $_GET['valor_busqueda'];
+      $contratos = BcSedeContrato::find(['id_oferente='. $id_oferente]);  
+      echo json_encode($contratos);
+    }
+  }
+
+  public function guardarSedeContratoAction()
+  {
+    if (!$this->request->isPost()) {
+      return $this->response->redirect("bc_sede_contrato/sedeContrato");
+    }
+
+    $id_sede = BcSedeContrato::findFirst(['order' => 'id_sede desc']);
+
+    $sede_contrato = new BcSedeContrato();
+    $idSede= (int)$id_sede->id_sede + 1;
+    $sede_contrato->id_oferente = $this->request->getPost("id_oferente");
+    $sede_contrato->oferente_nombre = $this->request->getPost("oferente_nombre");
+    $sede_contrato->id_contrato = $this->request->getPost("id_contrato");
+    $sede_contrato->id_sede = $idSede;
+    $sede_contrato->sede_nombre = $this->request->getPost("sede_nombre");
+    $sede_contrato->sede_barrio = $this->request->getPost("sede_barrio");
+    $sede_contrato->sede_comuna = $this->request->getPost("sede_comuna");
+    $sede_contrato->sede_direccion = $this->request->getPost("sede_direccion");
+    $sede_contrato->sede_telefono = $this->request->getPost("sede_telefono");
+    $sede_contrato->id_modalidad = $this->request->getPost("id_modalidad");
+    $sede_contrato->modalidad_nombre = $this->request->getPost("modalidad_nombre");
+    $sede_contrato->cuposSostenibilidad = $this->request->getPost("cuposSostenibilidad");
+    $sede_contrato->estado = 1;
+
+    if (!$sede_contrato->save()) {
+      foreach ($sede_contrato->getMessages() as $message) {
+        $this->flash->error($message);
+      }
+      return $this->response->redirect("bc_sede_contrato/sedeContrato");
+    }
+    $this->flash->success("La sede fue creada exitosamente.");
+    return $this->response->redirect("bc_sede_contrato/sedeContrato");
+
+  }
+
+  public function editarSedeAction()
+  {
+    if (isset($this->usuario)) {
+      $id_sede_contrato = $_GET['id_sede_contrato'];
+      $sedeContrato = BcSedeContrato::findFirst(['id_sede_contrato = '. $id_sede_contrato]);
+      $oferentes = BcOferente::find();
+      $modalidades = BcModalidad::find();
+      $this->view->oferentes = $oferentes;
+      $this->view->modalidades = $modalidades;
+      $this->view->sedeContrato = $sedeContrato;
+    }
+  }
+
+  public function guardarEdicionSedeAction()
+  {
+    if (!$this->request->isPost()) {
+      return $this->response->redirect("bc_sede_contrato/sedeContrato");
+    }
+
+    // return $this->request->getPost("id_oferente_persona");
+    // $elementos = array(
+      $id_sede_contrato = (int)$this->request->getPost("id_sede_contrato");
+      $id_oferente = $this->request->getPost("id_oferente");
+      $oferente_nombre = $this->request->getPost("oferente_nombre");
+      $id_contrato = $this->request->getPost("id_contrato");
+      $sede_nombre = $this->request->getPost("sede_nombre");
+      $sede_barrio = $this->request->getPost("sede_barrio");
+      $sede_comuna = $this->request->getPost("sede_comuna");
+      $sede_direccion = $this->request->getPost("sede_direccion");
+      $sede_telefono = $this->request->getPost("sede_telefono");
+      $id_modalidad = $this->request->getPost("id_modalidad");
+      $modalidad_nombre = $this->request->getPost("modalidad_nombre");
+      $cuposSostenibilidad = $this->request->getPost("cuposSostenibilidad");
+    // );
+
+    $db = $this->getDI()->getDb();
+
+    $query = $db->query("UPDATE bc_sede_contrato
+        SET
+          id_oferente ='$id_oferente',
+          oferente_nombre='$oferente_nombre',
+          id_contrato='$id_contrato',
+          id_sede='$id_sede_contrato',
+          sede_nombre='$sede_nombre',
+          sede_barrio='$sede_barrio',
+          sede_comuna='$sede_comuna',
+          sede_direccion='$sede_direccion',
+          sede_telefono='$sede_telefono',
+          id_modalidad='$id_modalidad',
+          modalidad_nombre='$modalidad_nombre',
+          cuposSostenibilidad='$cuposSostenibilidad'
+        WHERE id_sede_contrato='$id_sede_contrato'");
+
+    if (!$query) {
+      foreach ($query->getMessages() as $message) {
+        $this->flash->error($message);
+      }
+      return $this->response->redirect("bc_sede_contrato/sedeContrato");
+    }
+    $this->flash->success("La sede fue actualizada exitosamente");
+    return $this->response->redirect("bc_sede_contrato/sedeContrato");
+  }
+
 }
 
 ?>

@@ -8,6 +8,7 @@
 {{ form("bc_sede_contrato/guardar_beneficiario/", "method":"post", "parsley-validate" : "", "id" : "beneficiarios_form") }}
 {{ hidden_field("id_contrato", "value": id_contrato) }}
 {{ hidden_field("ingreso", "value": beneficiario.proviene) }}
+{{ hidden_field("nombre_jornada") }}
 
     <!-- fila 1 -->
 
@@ -172,7 +173,7 @@
         <div class="form-group col-md-4">
             <label for="inputEmail4">Jornada *</label>
         
-            {{ select("id_jornada", jornada,  "class" : "form-control", "required":"required") }}
+            {{ select("id_jornada", jornada,  "class" : "form-control","onchange":"obtener_jornada()" ,"required":"required") }}
         </div>
         
         <div class="form-group col-md-4">
@@ -402,7 +403,7 @@
         </div> -->
       
         <div class="form-group col-md-4"  id="evidencia_archivo">
-            <label for="cargarDocumento">Adjuntar Evidencia De Matrícula Simat*</label>
+            <label for="cargarDocumento">Adjuntar Captura De Matrícula En Simat*</label>
             <div>
                 <input class="fileupload filestyle form-control" data-input="false" id="archivo" required data-badge="false" type="file" name="evidencia" multiple required>
                 <div id="progress" class="progress" style="margin: 0 !important;">
@@ -434,6 +435,10 @@
         }
     }
 
+      
+    function obtener_jornada(){
+        $("#nombre_jornada").val($('select[name="id_jornada"] option:selected').text());
+    }
     // window.onload = function() {
     //     var getDate = function (input) {
     //         return new Date(input.date.valueOf());

@@ -111,6 +111,7 @@
     <br>
     <div class="form-group" >
       <button class="btn btn-success" id="ExportarExcel">EXPORTAR REGISTROS</button>
+      <a href="/sico_cobertura_regular/bc_sede_contrato/crearSede" class="btn btn-primary">CREAR SEDE</a>
       <div id="contenedo">
         <div class="loader" id="loader"></div>
         <h6 align="center"><b>Cargando información en la tabla, un momento por favor</b></h6>
@@ -128,6 +129,7 @@
             <th>Contrato</th>
             <th>Oferente</th>
             <th>Nombre Sede</th>
+            <th>Modalidad</th>
             <th>Comuna</th>
             <th>Barrio</th>
             <th>Dirección</th>
@@ -139,12 +141,13 @@
           {% for sede_contrato in sedes_contratos %}
           <tr>  
             <td>
-              {{ link_to("bc_sede_contrato/editar_persona/?id_persona="~sede_contrato.id_sede_contrato,  '<i class="glyphicon glyphicon-pencil"></i> ', "rel": "tooltip", "title":"Editar") }}
-              <a style="margin-left:7%;" onclick="abrirModal('{{sede_contrato.id_sede_contrato}}','{{sede_contrato.sede_nombre}}')" rel="tooltip" title="Retirar Estudiante" class="eliminar_fila" data-toggle = "modal"><i class="glyphicon glyphicon-trash"></i></a>
+              {{ link_to("bc_sede_contrato/editarSede/?id_sede_contrato="~sede_contrato.id_sede_contrato,  '<i class="glyphicon glyphicon-pencil"></i> ', "rel": "tooltip", "title":"Editar Sede") }}
+              <a style="margin-left:7%;" onclick="abrirModal('{{sede_contrato.id_sede_contrato}}','{{sede_contrato.sede_nombre}}')" rel="tooltip" title="Eliminar Sede" class="eliminar_fila" data-toggle = "modal"><i class="glyphicon glyphicon-trash"></i></a>
             </td>
             <td>{{ sede_contrato.id_contrato }} </td>
             <td>{{ sede_contrato.oferente_nombre }}</td>
             <td>{{ sede_contrato.sede_nombre }}</td>
+            <td>{{ sede_contrato.modalidad_nombre }}</td>
             <td>{{ sede_contrato.sede_comuna }}</td>
             <td>{{ sede_contrato.sede_barrio }}</td>
             <td>{{ sede_contrato.sede_direccion }}</td>

@@ -336,10 +336,10 @@ class CobOferentePersonaSimat extends \Phalcon\Mvc\Model
     {
     	switch ($this->estado_certificacion) {
     		case 1:
-    			return " class='warning'";
+    			return " class='success'";
     			break;
     		case 2:
-    			return " class='success'";
+    			return " class='warning'";
     			break;
     		case 3:
     			return " class='danger'";

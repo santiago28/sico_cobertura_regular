@@ -6,6 +6,7 @@
 {{ form("bc_sede_contrato/guardar_update_beneficiario/", "method":"post", "parsley-validate" : "", "id" : "beneficiarios_form") }}
     {{ hidden_field("id_oferente_persona", "value": beneficiario.id_oferente_persona) }}
     {{ hidden_field("nombre_jornada", "value": beneficiario.nombre_jornada) }}
+    {{ hidden_field("nombre_sede") }}
     <div class="form-row">
       <div class="form-group col-md-4">
         <label for="inputEmail4">Tipo Documento</label>
@@ -37,11 +38,11 @@
       <div class="form-row">
         <div class="form-group col-md-4">
             <label for="inputEmail4">Sede</label>
-            {{ select("id_sede", sedes, "value" : beneficiario.id_sede, "class" : "form-control") }}
+            {{ select("id_sede", sedes, "value" : beneficiario.id_sede, "class" : "form-control", "onchange":"obtener_jornada_sede()") }}
         </div>
         <div class="form-group col-md-4">
             <label for="inputEmail4">Jornada</label>
-            {{ select("id_jornada", jornada, "value" : beneficiario.id_jornada, "class" : "form-control", "onchange":"obtener_jornada()", "required":"required") }}
+            {{ select("id_jornada", jornada, "value" : beneficiario.id_jornada, "class" : "form-control", "onchange":"obtener_jornada_sede()", "required":"required") }}
         </div>
         <div class="form-group col-md-4">
             <label for="inputEmail4">Grado</label>
@@ -69,11 +70,13 @@
     
   </form>
   <script>
-      function obtener_jornada(){
-        $("#nombre_jornada").val($('select[name="id_jornada"] option:selected').text());
+      function obtener_jornada_sede(){
+          $("#nombre_jornada").val($('select[name="id_jornada"] option:selected').text());
+          $("#nombre_sede").val($('select[name="id_sede"] option:selected').text());
       }
 
       window.onload = function() {
         $("#nombre_jornada").val($('select[name="id_jornada"] option:selected').text());
+        $("#nombre_sede").val($('select[name="id_sede"] option:selected').text());
       }
   </script>

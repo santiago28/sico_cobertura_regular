@@ -139,6 +139,10 @@ class Elements extends Component
 		'caption' => 'Reportes',
 		'action' => 'oferente_contratos'
 		),
+		'bc_sede_contrato' => array(
+		'caption' => 'Pre-matrícula',
+		'action' => 'beneficiarios'
+		),
 		// 'ibc_mensaje' => array(
 		// 	'caption' => 'Ubicación Sedes',
 		// 	'action' => 'anuncios'
@@ -165,6 +169,8 @@ class Elements extends Component
 // 	'action' => 'beneficiarios'
 // )
 );
+
+
 
 private $_headerMenuBCReportes = array(
 	// 'ibc_mensaje' => array(
@@ -390,12 +396,11 @@ public function getMenu()
 				$menu ['cob_ajuste'] = array ('caption' => 'Ajustes', 'action' => 'index');
 				$menu ['bc_reporte'] = array ('caption' => 'Reportes', 'action' => '');
 				$menu ['cob_actaconteo'] = array ('caption' => 'Reporte Beneficiario', 'action' => 'reportebeneficiario');
-				$menu ['bc_sede_contrato'] = array ('caption' => 'Solicitud Matrículas', 'action' => 'solicitudMatricula');
+				$menu ['bc_sede_contrato'] =  array ('caption' => 'Verificación Documentos', 'action' => 'modificarDocumentos');
 			}
 			if ($user['nivel'] <= 3) {
 				$menu ['cob_ajuste'] = array ('caption' => 'Ajustes', 'action' => 'index');
 				//bc_sede_contrato("nombre carpeta vista"), nombre del link, vista a lanzar
-				$menu ['cob_ajuste1'] = array ('caption' => 'Ajustes1', 'action' => 'index');
 			}
 			$menu_usuario .= '<div class="item-menu-titulo"><span>Info</span></div>';
 
@@ -423,8 +428,27 @@ public function getMenu()
 		echo '</div>';
 		echo '</div>';
 		echo '<div class="body-menu-principal">';
+
 		foreach ($menu as $controller => $option) {
+			
+				if ($controller == "bc_sede_contrato" && $user['nivel'] <= 2) {
+					
+					echo '<div class="item-menu-titulo">';
+					echo '<span>Gestión Matricula </span>';
+					echo '</div>';
+
+					// echo '<div class="item-menu">';
+					// echo '<i class="material-icons"></i>';
+					// echo '<span>'.$this->tag->linkTo("bc_sede_contrato/modificarDocumentos", "Verificación Documento").'</span>';
+					// echo '</div>';
+					
+					echo '<div class="item-menu">';
+					echo '<i class="material-icons"></i>';
+					echo '<span>'.$this->tag->linkTo("bc_sede_contrato/solicitudMatricula", "Matrículas").'</span>';
+					echo '</div>';
+				}
 			if ($controller == "bc_reporte" && $user['nivel'] <= 2) {
+				
 				// if ($controllerName == $controller) {
 				// 	echo '<li class="dropdown bc_reporte active">';
 				// } else {
@@ -1153,11 +1177,12 @@ public function getSelect($select)
 																	'9' => '9',
 																	'10' => '10',
 																	'11' => '11',
-																	'22' => '22 CLEI 1',
-																	'23' => '23 CLEI 2',
-																	'24' => '24 CLEI 3',
-																	'25' => '25 CLEI 4',
-																	'26' => '26 CLEI 5 Y 6',
+																	'21' => '21 CLEI 1',
+																	'22' => '22 CLEI 2',
+																	'23' => '23 CLEI 3',
+																	'24' => '24 CLEI 4',
+																	'25' => '25 CLEI 5',
+																	'26' => '26 CLEI 6',
 																	'99' => '99 ACELERACIÓN',
 																);
 																	break;
@@ -1208,19 +1233,30 @@ public function getSelect($select)
 																		 case "jerarquia";
 																		 return array(
 																		 ""=>'Seleccione una opción',
-																		 'COMUNA 10'=>'COMUNA 10',
-																		 'MEDELLÍN'=>'MEDELLÍN',
 																		 'NUCLEO 914'=>'NUCLEO 914',
+																		 'NUCLEO 915'=>'NUCLEO 915',
 																		 'NUCLEO 916'=>'NUCLEO 916',
+																		 'NUCLEO 917'=>'NUCLEO 917',
 																		 'NUCLEO 918'=>'NUCLEO 918',
+																		 'NUCLEO 919'=>'NUCLEO 919',
+																		 'NUCLEO 920'=>'NUCLEO 920',
 																		 'NUCLEO 921'=>'NUCLEO 921',
+																		 'NUCLEO 922'=>'NUCLEO 922',
 																		 'NUCLEO 923'=>'NUCLEO 923',
+																		 'NUCLEO 924'=>'NUCLEO 924',
+																		 'NUCLEO 925'=>'NUCLEO 925',
 																		 'NUCLEO 926'=>'NUCLEO 926',
 																		 'NUCLEO 927'=>'NUCLEO 927',
 																		 'NUCLEO 928'=>'NUCLEO 928',
+																		 'NUCLEO 929'=>'NUCLEO 929',
 																		 'NUCLEO 930'=>'NUCLEO 930',
 																		 'NUCLEO 931'=>'NUCLEO 931',
+																		 'NUCLEO 932'=>'NUCLEO 932',
+																		 'NUCLEO 933'=>'NUCLEO 933',
+																		 'NUCLEO 934'=>'NUCLEO 934',
+																		 'NUCLEO 935'=>'NUCLEO 935',
 																		 'NUCLEO 936'=>'NUCLEO 936',
+																		 'NUCLEO 937'=>'NUCLEO 937',
 																		 );
 																	  break;
 																	  case "prestacion_servicio";

@@ -201,7 +201,7 @@ th     { background:#eee; }
       </div>
       <div class="modal-body">
         {{ form("bc_sede_contrato/crearBeneficiario/", "method":"post", "parsley-validate" : "", "id" : "beneficiarios_form") }}
-        {{ hidden_field("activos", "value": beneficiarios_activos) }}
+        {{ hidden_field("activos", "value": beneficiarios_totales) }}
         {{ hidden_field("cuposTotal", "value": cuposTotal) }}
           <div class="form-group">
             <label for="inputPassword4">Documento</label>
