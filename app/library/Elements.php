@@ -504,6 +504,13 @@ public function getMenu()
 			}
 		}
 		echo $menu_usuario;
+
+		
+		echo '<div class="item-menu">';
+		echo '<i class="material-icons"></i>';
+		echo '<span><a target="_blank" href="https://docs.google.com/forms/d/e/1FAIpQLScJOIeTH3QQ_a70m3QRJ0w_hWVV7paTMN37p8es6rv5MqrF-A/viewform?pli=1">Soporte Plataforma</a></span>';
+		echo '</div>';
+
 		echo '</div>';
 		// echo '<div class="item-menu">';
 		// echo '<i class="material-icons"></i>';

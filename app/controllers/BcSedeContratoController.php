@@ -496,17 +496,17 @@ class BcSedeContratoController extends ControllerBase
 
     $db = $this->getDI()->getDb();
 
-    // $query = $db->query("UPDATE cob_oferente_persona_simat
-    //     SET
-    //       observaciones_retiro='$observaciones',
-    //       fecha_retiro= '$fecha',
-    //       estado_activo=0
-    //     WHERE id_oferente_persona='$id_oferente_persona'");
+    $query = $db->query("UPDATE cob_oferente_persona_simat
+        SET
+          observaciones_retiro='$observaciones',
+          fecha_retiro= '$fecha',
+          estado_activo=0
+        WHERE id_oferente_persona='$id_oferente_persona'");
 
     $beneficiario = CobOferentePersonaSimat::findFirst(['id_oferente_persona = '.  $id_oferente_persona]);
-    $beneficiario->observaciones_retiro = $observaciones;
-    $beneficiario->fecha_retiro = $fecha;
-    $beneficiario->estado_activo= 0;
+    // $beneficiario->observaciones_retiro = $observaciones;
+    // $beneficiario->fecha_retiro = $fecha;
+    // $beneficiario->estado_activo= 0;
 
     $beneficiarioEliminado = new CobOferentePersonaEliminado();
     $beneficiarioEliminado->id_contrato = $beneficiario->id_contrato;
@@ -561,8 +561,8 @@ class BcSedeContratoController extends ControllerBase
     $beneficiarioEliminado->estado_activo= 0;
     $beneficiarioEliminado->save();
 
-    if (!$beneficiario->save()) {
-      foreach ($beneficiario->getMessages() as $message) {
+    if (!$query) {
+      foreach ($query->getMessages() as $message) {
         $this->flash->error($message);
       }
       return $this->response->redirect("bc_sede_contrato/beneficiarios");
