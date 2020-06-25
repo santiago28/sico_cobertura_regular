@@ -3,7 +3,7 @@
     .tablesorter-filter {
       width: 90px;
     }
-    
+
     .boton-abrir{
       width: 45px;
       height: 45px;
@@ -22,7 +22,7 @@
       cursor: pointer;
       z-index: 1000;
     }
-    
+
     .boton-exportar{
       width: 45px;
       height: 45px;
@@ -43,12 +43,12 @@
     }
     .tableFixHead          { overflow-y: auto; height: 600px; }
     .tableFixHead thead th { position: sticky; top: 0; }
-    
+
     /* Just common table stuff. Really. */
     table  { border-collapse: collapse; width: 100%; }
     th, td { padding: 8px 16px; }
     th     { background:#eee; }
-    
+
     .loader,
     .loader:before,
     .loader:after {
@@ -105,7 +105,7 @@
       }
     }
     </style>
-    
+
     <h1>SEDES CONTRATO</h1>
     <br>
     <br>
@@ -121,7 +121,7 @@
     <h4> </h4>
     <h4></h4>
     <div class="tableFixHead">
-    
+
       <table class="table table-bordered table-hover" id="tabla_beneficiarios">
         <thead>
           <tr>
@@ -139,7 +139,7 @@
         </thead>
         <tbody>
           {% for sede_contrato in sedes_contratos %}
-          <tr>  
+          <tr>
             <td>
               {{ link_to("bc_sede_contrato/editarSede/?id_sede_contrato="~sede_contrato.id_sede_contrato,  '<i class="glyphicon glyphicon-pencil"></i> ', "rel": "tooltip", "title":"Editar Sede") }}
               <a style="margin-left:7%;" onclick="abrirModal('{{sede_contrato.id_sede_contrato}}','{{sede_contrato.sede_nombre}}')" rel="tooltip" title="Eliminar Sede" class="eliminar_fila" data-toggle = "modal"><i class="glyphicon glyphicon-trash"></i></a>
@@ -169,9 +169,9 @@
       <a class="material-icons" title="Exportar a Excel" style="color:white; text-decoration:none;">arrow_downward</a>
     </div> #}
     </form>
-    
-    
-    
+
+
+
     <!-- Modal Busqueda de beneficiario-->
     <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered" role="document">
@@ -199,7 +199,7 @@
         </div>
       </div>
     </div>
-    
+
     <!-- Modal eliminar sede-->
     <div class="modal fade" id="eliminar_elemento" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog">
@@ -216,7 +216,7 @@
               </div>
               <p style="font-size: large;">
                 <div class="alert alert-danger">
-                  <i class="glyphicon glyphicon-warning-sign"></i> 
+                  <i class="glyphicon glyphicon-warning-sign"></i>
                   <strong>Atención:¿Esta seguro de eliminar la sede? </strong>
                   <button type="button"  class="btn btn-primary" onclick="confirmarEliminar()">SI</button>
                   <button type="button"  class="btn btn-default" data-dismiss="modal">No</button>
@@ -232,10 +232,10 @@
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
-    
-    
+
+
     <script>
-    
+
         function abrirModal(id,sede){
           $("#id_sede_contrato").val(id);
           $("#nombre_sede").text(sede);
@@ -243,26 +243,26 @@
           $(".mostrar").hide();
         }
 
-    
+
         function confirmarEliminar(){
           $(".mostrar").show();
         }
-    
-    
+
+
         window.onload = function() {
         //funciones a ejecutar
             setTimeout(function(){
             document.getElementById("contenedo").style.display = "none";
             }, 2000);
         };
-    
+
         setTimeout(function(){
         $("#ExportarExcel").click(function(){
           var Export = [];
           {% for sede_contrato in sedes_contratos %}
           Export.push({
             "Contrato": "{{sede_contrato.id_contrato}}",
-            "Oferente": "{{sede_contrato.oferente_nombre}} ",
+            "Oferente": "<?php echo str_replace('"', '', $sede_contrato->oferente_nombre); ?> ",
             "Sede": "{{sede_contrato.sede_nombre}} ",
             "Comuna": "{{sede_contrato.sede_comuna}}",
             "Barrio": "{{sede_contrato.sede_barrio}}",
@@ -274,10 +274,10 @@
           alasql('SELECT * INTO XLSX("Reporte.xlsx",{headers:true}) FROM ?', [Export]);
         });
         }, 1000);
-    
+
         setTimeout(function(){
           $(function() {
-    
+
             $.extend($.tablesorter.themes.bootstrap, {
               // these classes are added to the table. To see other table classes available,
               // look here: http://twitter.github.com/bootstrap/base-css.html#tables
@@ -296,40 +296,39 @@
               even       : '', // odd row zebra striping
               odd        : ''  // even row zebra striping
             });
-    
+
             // call the tablesorter plugin and apply the uitheme widget
             $("table").tablesorter({
               // this will apply the bootstrap theme if "uitheme" widget is included
               // the widgetOptions.uitheme is no longer required to be set
               theme : "bootstrap",
-    
+
               widthFixed: true,
               headers: { 0: { sorter: false, filter:false}}  ,
-    
+
               headerTemplate : '{content} {icon}', // new in v2.7. Needed to add the bootstrap icon!
-    
+
               // widget code contained in the jquery.tablesorter.widgets.js file
               // use the zebra stripe widget if you plan on hiding any rows (filter widget)
               widgets : [ "uitheme", "filter", "zebra" ],
-    
+
               widgetOptions : {
                 // using the default zebra striping class name, so it actually isn't included in the theme variable above
                 // this is ONLY needed for bootstrap theming if you are using the filter widget, because rows are hidden
                 zebra : ["even", "odd"],
-    
+
                 // reset filters button
                 filter_reset : ".reset",
-    
+
                 // set the uitheme widget to use the bootstrap theme class names
                 // this is no longer required, if theme is set
                 // ,uitheme : "bootstrap"
-    
+
               }
             });
-    
+
           });
         }, 1000);
-    
-    
+
+
     </script>
-    
