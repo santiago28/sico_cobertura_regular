@@ -4,6 +4,8 @@ $(".fileupload").change(function() {
   $(archivo).parent().find('#progress .progress-bar').css(
     "width", "0%"
   );
+  // document.getElementById('submit').disabled = false;
+  $(".submit").prop( "disabled", true );
   var form =$(this).closest("form").attr('id');
   var url ="";
   if(form =="evidencia_form"){
@@ -20,7 +22,7 @@ $(".fileupload").change(function() {
     contentType: false,
     success: function (data) {
       if(data == "Tipo"){
-        alert("El tipo de imagen debe de ser jpg, png, bmp, o gif");
+        alert("El tipo de imagen debe de ser jpg, png, bmp, o pdf");
       } else if(data == "Error"){
         alert("Ocurrió un error la subir la imagen");
       } else if(data == "Peso") {
@@ -29,6 +31,12 @@ $(".fileupload").change(function() {
         $(archivo).parent().find('#progress .progress-bar').css(
           "width", "100%"
         );
+      if (document.getElementById('documento_nuevo').value == document.getElementById('documento_confirmar').value) {
+        setTimeout(function(){
+          $(".submit").prop( "disabled", false );
+        },500);
+      }
+   
         // $(archivo).parent().find(".captura").html("Clic para ver");
         $(archivo).parent().find("href").html(window.location.protocol + "//" + window.location.host + "/sico_cobertura_regular/files/excusa/" + data);
         $(".urlEvidenciaAtencion").val(data);

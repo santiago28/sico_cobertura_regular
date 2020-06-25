@@ -418,7 +418,7 @@
         </div>        
     </div>
     <div  class="form-group col-md-4" style="margin-top: 2%;">
-        <button type="submit" class="btn btn-primary">GUARDAR</button>  
+        <button type="submit" class="btn btn-primary submit">GUARDAR</button>  
     </div>
 </form>
 

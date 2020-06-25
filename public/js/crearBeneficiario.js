@@ -5,6 +5,7 @@ $(".fileupload").change(function() {
   $(archivo).parent().find('#progress .progress-bar').css(
     "width", "0%"
   );
+  $(".submit").prop( "disabled", true );
   var formData = new FormData($('#beneficiarios_form ')[0]);
   $.ajax( {
     url: url,
@@ -24,6 +25,9 @@ $(".fileupload").change(function() {
         $(archivo).parent().find('#progress .progress-bar').css(
           "width", "100%"
         );
+        setTimeout(function(){
+          $(".submit").prop( "disabled", false );
+        },500);
         // $(archivo).parent().find(".captura").html("Clic para ver");
         $(archivo).parent().find("href").html(window.location.protocol + "//" + window.location.host + "/sico_cobertura_regular/files/excusa/" + data);
         $(".urlEvidenciaAtencion").val(data);

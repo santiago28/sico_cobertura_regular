@@ -281,11 +281,11 @@ th     { background:#eee; }
           </div>
           <div class="form-group">
             <label for="inputPassword4">Documento Nuevo</label>
-            <input type="text" class="form-control" name="documento_nuevo" id="documento_nuevo" maxlength="15" onchange='confirmar_documento()' placeholder="Documento" required>
+            <input type="text" class="form-control" name="documento_nuevo" id="documento_nuevo" maxlength="15" onkeyup='confirmar_documento()' placeholder="Documento" required>
           </div>
           <div class="form-group">
             <label for="inputPassword4">Confirmar Documento Nuevo</label>
-            <input type="text" class="form-control" name="documento_confirmar" id="documento_confirmar" maxlength="15" onchange='confirmar_documento()' placeholder="Documento Confirmar" required>
+            <input type="text" class="form-control" name="documento_confirmar" id="documento_confirmar" maxlength="15" onkeyup='confirmar_documento()' placeholder="Documento Confirmar" required>
           </div>
           <div class="form-group" id="evidencia_archivo">
             <label for="cargarDocumento">Evidencia Documento</label>
@@ -298,7 +298,7 @@ th     { background:#eee; }
             </div>
         </div>
           <div class="modal-footer">
-            <button type="submit" class="btn btn-primary" id="submit" disabled>Solicitar Edición</button>
+            <button type="submit" class="btn btn-primary submit" id="submit" disabled >Solicitar Edición</button>
             <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
           </div>
        </form>
@@ -358,7 +358,7 @@ th     { background:#eee; }
     }
 
     function confirmar_documento() {
-        if (document.getElementById('documento_nuevo').value == document.getElementById('documento_confirmar').value) {
+        if ((document.getElementById('documento_nuevo').value == document.getElementById('documento_confirmar').value) && $('#archivo').val() != "") {
             document.getElementById('submit').disabled = false;
         } else {
             document.getElementById('submit').disabled = true;
