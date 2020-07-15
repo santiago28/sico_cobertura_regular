@@ -49,7 +49,11 @@
             <td>{{ acta.id_sede }} - {{ acta.sede_nombre }}</td>
             <td>{{ acta.nombre_jornada }}</td>
             <td>{{ acta.modalidad_nombre }}</td>
-            <td>{{ acta.IbcUsuario.usuario }}</td>
+            <td>
+              {% if (acta.IbcUsuario) %}
+              {{ acta.IbcUsuario.usuario }}
+              {% endif %}
+            </td>
             <td>{{ acta.getEstadoDetail() }}</td>
         </tr>
         {% endif %}

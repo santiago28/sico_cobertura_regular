@@ -26,22 +26,35 @@ setTimeout(function(){
     var Export = [];
     {% for beneficiario in beneficiarios %}
     Export.push({
-      "Contrato": "{{ beneficiario.id_contrato }}",
+      "DANE": "{{ beneficiario.codigo_dane }}",
+      "CALENDARIO": "{{ beneficiario.calendario }}",
+      "PRESTACIÓN SERVICIO": "{{ beneficiario.prestacion_servicio }}",
+      "GRADO": "{{ beneficiario.id_grupo }}",
+      "GRUPO": "{{ beneficiario.grupo }}",
+      "PER_ID": "{{ beneficiario.id_persona }}",
+      "TIPODOC": "{{ beneficiario.tipoDocumento }}",
+      "NUMDOC": "{{ beneficiario.numDocumento }}",
+      "APELLIDO1": "{{ beneficiario.primerApellido }}",
+      "APELLIDO2": "{{ beneficiario.segundoApellido }}",
+      "NOMBRE1": "{{ beneficiario.primerNombre }}",
+      "NOMBRE2": "{{ beneficiario.segundoNombre }}",
+      "GENERO": "{{ beneficiario.genero }}",
+      "CONTRATO": "{{ beneficiario.id_contrato }}",
       {% if(beneficiario.CobActaconteo) %}
-      "Oferente": "{{ beneficiario.CobActaconteo.oferente_nombre }}",
-      "Nombre sede": "{{ beneficiario.CobActaconteo.sede_nombre }}",
+      "ID_SEDE": "{{ beneficiario.id_sede }}",
+      "SEDE": "<?php echo str_replace('"', '', $beneficiario->CobActaconteo->sede_nombre); ?>",
+      "OFERENTE": "<?php echo str_replace('"', '', $beneficiario->CobActaconteo->oferente_nombre); ?>",
       {% else %}
-      "Oferente Nombre":"",
-      "Nombre sede":"",
+      "ID_SEDE":"",
+      "SEDE":"",
+      "OFERENTE":"",
       {% endif %}
-      "Número documento": "{{ beneficiario.numDocumento }}",
-      "Apellidos": "{{ beneficiario.primerApellido }} {{ beneficiario.segundoApellido }}",
-      "Nombres": "{{ beneficiario.primerNombre }} {{ beneficiario.segundoNombre }}",
-      "Grupo - Jornada": "{{ beneficiario.grupo }} - {{beneficiario.nombre_jornada}}",
-      "Asistencia  Final": "{{ beneficiario.asistenciaFinalFacturacion }}",
-      "Asistencia Final Texto": "{{ beneficiario.getAsistenciaFinalDetail() }}",
-      "Certificación Facturación": "{{ beneficiario.getCertificacionFacturacion() }}",
-      "Matriculado SIMAT": "OK"
+      "JORNADA": "{{ beneficiario.nombre_jornada }}",
+      "MATRICULADO SIMAT": "SI",
+      "ESTADO CERTIFICACIÓN": "{{ beneficiario.getCertificacionFacturacion() }}",
+      "INGRESO": "{{ beneficiario.ingreso }}",
+      "ASISTENCIA": "{{ beneficiario.asistenciaFinalFacturacion }}. {{ beneficiario.getAsistenciaFinalDetail() }}",
+      "FECHA MATRÍCULA": "{{ beneficiario.fecha_matricula }}"
     })
     {% endfor %}
     alasql('SELECT * INTO XLSX("Reporte Consolidado Facturación.xlsx",{headers:true}) FROM ?', [Export]);

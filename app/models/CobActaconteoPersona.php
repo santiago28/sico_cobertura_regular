@@ -99,6 +99,54 @@ class CobActaconteoPersona extends \Phalcon\Mvc\Model
      */
     public $asistencia;
 
+    /**
+     *
+     * @var string
+     */
+    public $urlAdicional;
+
+    /**
+     *
+     * @var string
+     */
+    public $observacionAdicional;
+
+    /**
+     *
+     * @var string
+     */
+    public $ingreso;
+
+    /**
+     *
+     * @var string
+     */
+    public $codigo_dane;
+
+    /**
+     *
+     * @var string
+     */
+    public $fecha_matricula;
+
+    /**
+     *
+     * @var string
+     */
+    public $prestacion_servicio;
+
+    /**
+     *
+     * @var string
+     */
+    public $calendario;
+
+    /**
+     *
+     * @var integer
+     */
+    public $estaRetirado;
+
     //Virtual Foreign Key para poder acceder a la fecha de corte del acta
     public function initialize()
     {

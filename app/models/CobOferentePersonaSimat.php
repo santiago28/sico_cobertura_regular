@@ -3,35 +3,35 @@
 class CobOferentePersonaSimat extends \Phalcon\Mvc\Model
 {
 
-    /**
-     *
-     * @var integer
-     */
-    public $id_oferente_persona;
+  /**
+  *
+  * @var integer
+  */
+  public $id_oferente_persona;
 
-    /**
-     *
-     * @var string
-     */
-    public $id_contrato;
+  /**
+  *
+  * @var string
+  */
+  public $id_contrato;
 
-    /**
-     *
-     * @var string
-     */
-    public $ano;
+  /**
+  *
+  * @var string
+  */
+  public $ano;
 
-    /**
-     *
-     * @var string
-     */
-    public $etc;
+  /**
+  *
+  * @var string
+  */
+  public $etc;
 
-    /**
-     *
-     * @var string
-     */
-    public $estado;
+  /**
+  *
+  * @var string
+  */
+  public $estado;
 
     /**
      *
@@ -54,48 +54,48 @@ class CobOferentePersonaSimat extends \Phalcon\Mvc\Model
      */
     public $id_oferente;
 
-    /**
-     *
-     * @var string
-     */
-    public $institucion;
+  /**
+  *
+  * @var string
+  */
+  public $institucion;
 
-    /**
-     *
-     * @var string
-     */
-    public $codigo_dane;
+  /**
+  *
+  * @var string
+  */
+  public $codigo_dane;
 
-    /**
-     *
-     * @var string
-     */
-    public $prestacion_servicio;
+  /**
+  *
+  * @var string
+  */
+  public $prestacion_servicio;
 
-    /**
-     *
-     * @var string
-     */
-    public $calendario;
+  /**
+  *
+  * @var string
+  */
+  public $calendario;
 
-    /**
-     *
-     * @var string
-     */
-    public $sector;
+  /**
+  *
+  * @var string
+  */
+  public $sector;
 
-    /**
-     *
-     * @var string
-     */
-    public $sede_simat;
+  /**
+  *
+  * @var string
+  */
+  public $sede_simat;
 
     /**
      *
      * @var string
      */
     public $codigo_dane_sede;
-  
+
     /**
      *
      * @var string
@@ -319,18 +319,27 @@ class CobOferentePersonaSimat extends \Phalcon\Mvc\Model
      */
     public $fecha_pre_matricula;
 
-     /**
-     *
-     * @var string
-     */
-    public $fecha_retiro;
+  
 
-    
-        /**
-     *
-     * @var string
-     */
-    public $urlEvidenciaMatricula;
+  /**
+  *
+  * @var string
+  */
+  public $fecha_retiro;
+
+
+  /**
+  *
+  * @var string
+  */
+  public $urlEvidenciaMatricula;
+
+
+
+  public function initialize()
+  {
+    $this->belongsTo(array('id_contrato', 'id_sede'), 'BcSedeContrato', array('id_contrato', 'id_sede'));
+  }
 
     public function getMatriculaDetail()
     {

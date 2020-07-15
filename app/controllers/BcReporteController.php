@@ -376,4 +376,13 @@ class BcReporteController extends ControllerBase
 		$this->view->beneficiarios = $reporte_periodo;
 		$this->view->setTemplateAfter('../bc_reporte/beneficiarios_periodofacturacion_consolidado');
 	}
+
+	public function beneficiarios_consolidado_simatAction(){
+		$beneficiarios = CobOferentePersonaSimat::find(['order' => 'id_contrato, id_sede asc']);
+		$this->assets
+		->addJs('js/alasql.min.js')
+		->addJs('js/xlsx.core.min.js');
+		$this->view->beneficiarios = $beneficiarios;
+		$this->view->setTemplateAfter('../bc_reporte/reporte_consolidado_simat');
+	}
 }

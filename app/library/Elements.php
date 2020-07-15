@@ -389,7 +389,7 @@ public function getMenu()
 		}else{
 			$menu = $this->_headerMenu;
 			if($user['nivel'] <= 1){
-				$menu ['bc_carga'] = array ('caption' => 'Cargas', 'action' => 'index');
+				// $menu ['bc_carga'] = array ('caption' => 'Cargas', 'action' => 'index');
 				$menu ['bc_carga_cobertura'] = array ('caption' => 'Comité', 'action' => 'nuevo');
 			}
 			if($user['nivel'] <= 2){
@@ -430,9 +430,9 @@ public function getMenu()
 		echo '<div class="body-menu-principal">';
 
 		foreach ($menu as $controller => $option) {
-			
+
 				if ($controller == "bc_sede_contrato" && $user['nivel'] <= 2) {
-					
+
 					echo '<div class="item-menu-titulo">';
 					echo '<span>Gestión Matricula </span>';
 					echo '</div>';
@@ -441,14 +441,14 @@ public function getMenu()
 					// echo '<i class="material-icons"></i>';
 					// echo '<span>'.$this->tag->linkTo("bc_sede_contrato/modificarDocumentos", "Verificación Documento").'</span>';
 					// echo '</div>';
-					
+
 					echo '<div class="item-menu">';
 					echo '<i class="material-icons"></i>';
 					echo '<span>'.$this->tag->linkTo("bc_sede_contrato/solicitudMatricula", "Matrículas").'</span>';
 					echo '</div>';
 				}
 			if ($controller == "bc_reporte" && $user['nivel'] <= 2) {
-				
+
 				// if ($controllerName == $controller) {
 				// 	echo '<li class="dropdown bc_reporte active">';
 				// } else {
@@ -458,10 +458,10 @@ public function getMenu()
 				echo '<span>Reportes</span>';
 				echo '</div>';
 
-				echo '<div class="item-menu">';
-				echo '<i class="material-icons"></i>';
-				echo '<span>'.$this->tag->linkTo("bc_reporte/contratos_liquidacion", "Generar Reporte Liquidación").'</span>';
-				echo '</div>';
+				// echo '<div class="item-menu">';
+				// echo '<i class="material-icons"></i>';
+				// echo '<span>'.$this->tag->linkTo("bc_reporte/contratos_liquidacion", "Generar Reporte Liquidación").'</span>';
+				// echo '</div>';
 
 				echo '<div class="item-menu">';
 				echo '<i class="material-icons"></i>';
@@ -505,7 +505,11 @@ public function getMenu()
 		}
 		echo $menu_usuario;
 
-		
+		echo '<div class="item-menu">';
+		echo '<i class="material-icons"></i>';
+		echo '<span><a target="_blank" href="http://asesoriayconsultoria.pascualbravo.edu.co:10001/sico_cobertura_regular/public/files/instructivos/Manual-Registro-Estudiantes-Prematricula.pdf">Manual Usuario</a></span>';
+		echo '</div>';
+
 		echo '<div class="item-menu">';
 		echo '<i class="material-icons"></i>';
 		echo '<span><a target="_blank" href="https://docs.google.com/forms/d/e/1FAIpQLScJOIeTH3QQ_a70m3QRJ0w_hWVV7paTMN37p8es6rv5MqrF-A/viewform?pli=1">Soporte Plataforma</a></span>';
@@ -1222,6 +1226,41 @@ public function getSelect($select)
 																			'24' => '24',
 																			'25' => '25',
 																			'26' => '26',
+																			'27' => '27',
+																			'28' => '28',
+																			'29' => '29',
+																			'30' => '30',
+																			'31' => '31',
+																			'32' => '32',
+																			'33' => '33',
+																			'34' => '34',
+																			'35' => '35',
+																			'36' => '36',
+																			'37' => '37',
+																			'38' => '38',
+																			'39' => '39',
+																			'40' => '40',
+																			'41' => '41',
+																			'42' => '42',
+																			'43' => '43',
+																			'44' => '44',
+																			'45' => '45',
+																			'46' => '46',
+																			'47' => '47',
+																			'48' => '48',
+																			'49' => '49',
+																			'50' => '50',
+																			'51' => '51',
+																			'52' => '52',
+																			'53' => '53',
+																			'54' => '54',
+																			'55' => '55',
+																			'56' => '56',
+																			'57' => '57',
+																			'58' => '58',
+																			'59' => '59',
+																			'60' => '60',
+
 																		);
 																			break;
 																		case "matricula_simat";

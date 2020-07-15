@@ -103,19 +103,19 @@
                 type="number"
                 class="form-control"
                 name="cuposSostenibilidad"
-                placeholder="Nombre Sede"
+                placeholder="Cupos Sede"
                 style="text-transform: uppercase;"
                 required>
             </input>
         </div>
     </div>
     <div  class="form-group">
-        <button type="submit" class="btn btn-primary"  style="margin-top: 2%;">GUARDAR</button>  
+        <button type="submit" class="btn btn-primary"  style="margin-top: 2%;">GUARDAR</button>
     </div>
 </form>
 
 <script>
-    
+
     function obtener_nombres(opc){
         if(opc == 1){
             $("#oferente_nombre").val($('select[name="id_oferente"] option:selected').text());

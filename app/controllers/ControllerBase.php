@@ -9,7 +9,7 @@ class ControllerBase extends Controller
 	 */
     protected function initialize()
     {
-        $this->tag->prependTitle('Interventoría Buen Comienzo | ');
+        $this->tag->prependTitle('Interventoría | ');
         $this->view->setTemplateAfter('main');
     }
     protected function forward($uri)

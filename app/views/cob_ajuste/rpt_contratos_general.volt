@@ -7,18 +7,18 @@
             <th>Número de Contrato</th>
             <th>Modalidad de Atención</th>
             <th>Cupos de Ampliación Contratados</th>
-            <th>Cupos de Sostenibilidad Contratados</th>
+            <th>Cupos Contratados</th>
             <th>Total de cupos por contrato</th>
-            <th>Total de cupos en el SIBC por contrato</th>
+            <th>Total de cupos por contrato</th>
             <th>Total de cupos certificados</th>
             <th>Total Ajustes</th>
             <th>Total Pagos</th>
             <th>Total Descuentos</th>
             <th>Total cupos a certificar</th>
-            <th>Total de cupos a certificar Menores de 2 años</th>
+            {# <th>Total de cupos a certificar Menores de 2 años</th>
             <th>Total de cupos a certificar Igual o mayor de 2 años y menor de 4 años</th>
             <th>Total de cupos a certificar Igual o mayor de 4 años y menor de 6 años</th>
-            <th>Total de cupos a certificar Igual o mayor de 6 años</th>
+            <th>Total de cupos a certificar Igual o mayor de 6 años</th> #}
          </tr>
     </thead>
     <tbody>
@@ -44,10 +44,10 @@
             <td>{{ totalajuste['pagos'] }}</td>
             <td>{% if (totalajuste['descuentos'] > 0) %}-{% endif %}{{ totalajuste['descuentos'] }}</td>
 	    	<td><?php echo $cuposCertificados + ($totalajuste['total']); ?></td>
-	    	<td>{{ edades['menor2'] }}</td>
+	    	{# <td>{{ edades['menor2'] }}</td>
             <td>{{ edades['mayorigual2menor4'] }}</td>
             <td>{{ edades['mayorigual4menor6'] }}</td>
-            <td>{{ edades['mayorigual6'] }}</td>
+            <td>{{ edades['mayorigual6'] }}</td> #}
         </tr>
     {% endfor %}
     </tbody>
