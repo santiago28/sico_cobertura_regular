@@ -319,11 +319,7 @@ class CobOferentePersonaSimat extends \Phalcon\Mvc\Model
      */
     public $fecha_pre_matricula;
 
-  /**
-  *
-  * @var integer
-  */
-  public $estado_activo;
+  
 
   /**
   *
