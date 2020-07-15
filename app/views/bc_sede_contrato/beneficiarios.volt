@@ -400,12 +400,11 @@ th     { background:#eee; }
         "Apellidos": "{{beneficiario.apellido1}}  {{beneficiario.apellido2}} ",
         "Nombres": "{{beneficiario.nombre1}}  {{beneficiario.nombre2}}",
         "Codigo_dane": "{{beneficiario.codigo_dane}}",
-        "Sede_simat": "{{beneficiario.sede_simat}}",
-        "Sede": "{{beneficiario.nombre_sede}}",
+        "Sede_simat": "<?php echo str_replace('"', '', $beneficiario->sede_simat); ?>",
+        "Sede": "<?php echo str_replace('"', '', $beneficiario->nombre_sede); ?>",
         "Jornada": "{{beneficiario.nombre_jornada}}",
         "Grado": "{{beneficiario.grado_cod_simat}}",
         "Grupo": "{{beneficiario.grupo_simat}}",
-        "Grado": "{{beneficiario.matricula_simat}}",
         "Acta_Ingreso": "{{beneficiario.ingreso}}",
       });
       {% endfor %}

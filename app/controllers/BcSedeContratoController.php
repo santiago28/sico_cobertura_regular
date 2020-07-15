@@ -776,6 +776,187 @@ class BcSedeContratoController extends ControllerBase
 
   }
 
+  public function reportePrematriculaAction(){
+    if (isset($this->usuario)) {
+
+      ini_set('max_execution_time', 120); // 120 (seconds) = 2 Minutes
+      $db = $this->getDI()->getDb();
+      $config = $this->getDI()->getConfig();
+
+        $oferente_contratos = $db->query(
+            "SELECT DISTINCT sm.id_contrato, sm.institucion,sm.nombre_sede,c.cuposSostenibilidad,
+            (SELECT COUNT(s.id_oferente_persona) FROM cob_oferente_persona_simat s WHERE s.estado_certificacion='1' and s.id_contrato = sm.id_contrato) as matriculados,
+            (SELECT COUNT(s.id_oferente_persona) FROM cob_oferente_persona_simat s WHERE s.estado_certificacion='2' and s.id_contrato = sm.id_contrato) as pre_matriculas,
+            (SELECT COUNT(s.id_oferente_persona) FROM cob_oferente_persona_simat s WHERE s.estado_certificacion='3' and s.id_contrato = sm.id_contrato) as rechazados,
+            (SELECT COUNT(e.id_oferente_persona) FROM cob_oferente_persona_eliminado e WHERE e.id_contrato = sm.id_contrato) as eliminados
+            FROM cob_oferente_persona_simat sm 
+            join bc_sede_contrato c on c.id_contrato = sm.id_contrato
+            GROUP by sm.id_contrato");
+
+        $oferente_contratos->setFetchMode(Phalcon\Db::FETCH_OBJ);
+
+        $eliminados = CobOferentePersonaEliminado::find([]);
+        $this->view->oferente_contratos = $oferente_contratos->fetchAll();
+        $this->view->eliminados = $eliminados;
+      
+        $this->assets->addJs('js/beneficiarios-oferente.js')
+        ->addJs('js/jquery.fixedtableheader.min.js')
+        ->addJs('js/alasql.min.js')
+        // ->addJs('js/jquery.tablesorter.min.js')
+        // ->addJs('js/jquery.tablesorter.widgets.js')
+        ->addJs('js/xlsx.core.min.js');
+        $this->assets
+        ->addJs('js/parsley.min.js')
+        ->addJs('js/parsley.extend.js')
+        ->addJs('js/cargarSimat.js');
+      } 
+  }
+
+  public function cruceSimatAction()
+  {
+    if (!$this->request->isPost()) {
+      return $this->response->redirect("bc_sede_contrato/reportePrematricula");
+    }
+    ini_set('memory_limit', '-1');
+    $archivo ="";
+    if($this->request->hasFiles() == true){
+        $uploads = $this->request->getUploadedFiles();
+        $isUploaded = false;
+        $i = 1;
+        foreach($uploads as $upload){
+          $path = "files/bc_bd/".$upload->getname();
+          if($i == 1){
+            $archivo = $upload->getname();
+          }
+           ($upload->moveTo($path)) ? $isUploaded = true : $isUploaded = false;
+          $i++;
+        }
+     }
+      
+    $db = $this->getDI()->getDb();
+    $config = $this->getDI()->getConfig();
+    $timestamp = new DateTime();
+    $tabla_mat = "m" . $timestamp->getTimestamp();
+    $archivo_mat = $config->application->basePath . "public/files/bc_bd/" . $archivo;
+    $db->query("CREATE TEMPORARY TABLE $tabla_mat (
+     ano VARCHAR(20),
+     estado VARCHAR(20),
+     institucion VARCHAR(100),
+     dane VARCHAR(50),
+     prestacion_servicio VARCHAR(50),
+     sector VARCHAR(20), 
+     sede VARCHAR(100), 
+     zona_sede VARCHAR(100), 
+     jornada VARCHAR(50),
+     modelo VARCHAR(50),
+     fecha_ini VARCHAR(50),
+     estrato VARCHAR(50),
+     persona_id VARCHAR(50),
+     tipo_doc VARCHAR(50),
+     documento VARCHAR(20),
+     id_contrato VARCHAR(50),
+     apellido1 VARCHAR(50),
+     apellido2 VARCHAR(50),
+     nombre1 VARCHAR(50),
+     nombre2 VARCHAR(50),
+     genero VARCHAR(20),
+     fecha_nacimiento VARCHAR(20),
+     grado_cod_simat VARCHAR(50),
+     grupo_simat VARCHAR(50),
+     matricula_contratada VARCHAR(10), 
+     fuente_recursos VARCHAR(10),
+     pais_origen VARCHAR(100)) 
+     CHARACTER SET utf8 COLLATE utf8_bin");
+    $db->query("LOAD DATA INFILE '$archivo_mat' IGNORE INTO TABLE $tabla_mat FIELDS TERMINATED BY ';' LINES TERMINATED BY '\n' IGNORE 1 LINES 
+    (      
+     @ANO,
+     @ID_CONTRATO,
+     @ESTADO,
+     @INSTITUCION,
+     @DANE,
+     @PRESTACION_SERVICIO ,
+     @SECTOR,
+     @SEDE,
+     @ZONA_SEDE,
+     @JORNADA,
+     @GRADO_COD_SIMAT,
+     @GRUPO_SIMAT,
+     @MODELO,
+     @FECHAINI,
+     @ESTRATO,
+     @PER_ID,
+     @DOCUMENTO,
+     @TIPODOC,
+     @APELLIDO1,
+     @APELLIDO2,
+     @NOMBRE1,
+     @NOMBRE2,
+     @GENERO,
+     @FECHA_NACIMIENTO ,
+     @MATRICULA_CONTRATADA, 
+     @FUENTE_RECURSOS ,
+     @PAIS_ORIGEN 
+
+    ) SET 
+     Ano =  @ANO, 
+     estado = @ESTADO,
+     institucion = @INSTITUCION,
+     dane = @DANE,
+     prestacion_servicio = @PRESTACION_SERVICIO ,
+     sector = @SECTOR,
+     sede = @SEDE,
+     zona_sede = @ZONA_SEDE,
+     jornada = @JORNADA,
+     modelo = @MODELO,
+     fecha_ini = @FECHAINI,
+     estrato = @ESTRATO,
+     persona_id = @PER_ID,
+     tipo_doc = @TIPODOC,
+     documento = @DOCUMENTO,
+     id_contrato = @ID_CONTRATO,
+     apellido1 = @APELLIDO1,
+     apellido2 = @APELLIDO2,
+     nombre1 = @NOMBRE1,
+     nombre2 = @NOMBRE2,
+     genero = @GENERO,
+     fecha_nacimiento = @FECHA_NACIMIENTO,
+     grado_cod_simat = @GRADO_COD_SIMAT,
+     grupo_simat = @GRUPO_SIMAT,
+     matricula_contratada=  @MATRICULA_CONTRATADA,
+     fuente_recursos = @FUENTE_RECURSOS,
+     pais_origen = @PAIS_ORIGEN"
+
+    );
+
+      $beneficiario_sobrantes_simat = $db->query(
+       "SELECT t1.id_contrato, t1.documento, t1.nombre1, t1.nombre2, t1.apellido1, t1.apellido2, t1.grado_cod_simat, t1.grupo_simat
+        FROM  $tabla_mat t1
+        where t1.documento not in (select t2.documento from cob_oferente_persona_simat t2 where t2.id_contrato = t1.id_contrato)");
+
+      $beneficiario_sobrantes_simat->setFetchMode(Phalcon\Db::FETCH_OBJ);
+
+      $beneficiario_sobrantes_cobertura = $db->query(
+        "SELECT t1.*
+        FROM cob_oferente_persona_simat t1
+        where t1.documento not in (select t2.documento from $tabla_mat t2 where t2.id_contrato = t1.id_contrato)");
+
+   
+      $beneficiario_sobrantes_cobertura->setFetchMode(Phalcon\Db::FETCH_OBJ);
+
+
+      
+      $db->query("DROP TABLE $tabla_mat");
+
+      $this->view->beneficiario_sobrantes_simat = $beneficiario_sobrantes_simat->fetchAll();
+      $this->view->beneficiario_sobrantes_cobertura = $beneficiario_sobrantes_cobertura->fetchAll();
+      $this->assets->addJs('js/jquery.fixedtableheader.min.js')
+      ->addJs('js/alasql.min.js')
+      ->addJs('js/xlsx.core.min.js');
+      $this->assets
+      ->addJs('js/parsley.min.js')
+      ->addJs('js/parsley.extend.js');
+    
+  }
 
   //--------------------Crud Sede Contrato -----------------------------
 
@@ -849,6 +1030,7 @@ class BcSedeContratoController extends ControllerBase
     }
 
     $id_sede = BcSedeContrato::findFirst(['order' => 'id_sede desc']);
+    $modalidad = BcOferente::findFirst(['id_oferente' => $this->request->getPost("id_oferente")]);
 
     $sede_contrato = new BcSedeContrato();
     $idSede= (int)$id_sede->id_sede + 1;
@@ -861,8 +1043,8 @@ class BcSedeContratoController extends ControllerBase
     $sede_contrato->sede_comuna = $this->request->getPost("sede_comuna");
     $sede_contrato->sede_direccion = $this->request->getPost("sede_direccion");
     $sede_contrato->sede_telefono = $this->request->getPost("sede_telefono");
-    $sede_contrato->id_modalidad = $this->request->getPost("id_modalidad");
-    $sede_contrato->modalidad_nombre = $this->request->getPost("modalidad_nombre");
+    $sede_contrato->id_modalidad = $modalidad->id_modalidad;
+    $sede_contrato->modalidad_nombre = $modalidad->modalidad_nombre;
     $sede_contrato->cuposSostenibilidad = $this->request->getPost("cuposSostenibilidad");
     $sede_contrato->estado = 1;
 
@@ -885,7 +1067,7 @@ class BcSedeContratoController extends ControllerBase
       $oferentes = BcOferente::find();
       $modalidades = BcModalidad::find();
       $this->view->oferentes = $oferentes;
-      $this->view->modalidades = $modalidades;
+      // $this->view->modalidades = $modalidades;
       $this->view->sedeContrato = $sedeContrato;
     }
   }
@@ -898,6 +1080,7 @@ class BcSedeContratoController extends ControllerBase
 
     // return $this->request->getPost("id_oferente_persona");
     // $elementos = array(
+      $modalidad = BcOferente::findFirst(['id_oferente' => $this->request->getPost("id_oferente")]);
       $id_sede_contrato = (int)$this->request->getPost("id_sede_contrato");
       $id_oferente = $this->request->getPost("id_oferente");
       $oferente_nombre = $this->request->getPost("oferente_nombre");
@@ -907,8 +1090,8 @@ class BcSedeContratoController extends ControllerBase
       $sede_comuna = $this->request->getPost("sede_comuna");
       $sede_direccion = $this->request->getPost("sede_direccion");
       $sede_telefono = $this->request->getPost("sede_telefono");
-      $id_modalidad = $this->request->getPost("id_modalidad");
-      $modalidad_nombre = $this->request->getPost("modalidad_nombre");
+      $id_modalidad = $modalidad->id_modalidad;
+      $modalidad_nombre =$modalidad->modalidad_nombre;
       $cuposSostenibilidad = $this->request->getPost("cuposSostenibilidad");
     // );
 

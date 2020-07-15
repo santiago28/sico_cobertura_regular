@@ -122,7 +122,8 @@ class CobPersonaRegular extends \Phalcon\Mvc\Model
       ciclo varchar(50), 
       respuesta_comite VARCHAR(100), 
       proviene VARCHAR(100), 
-      fecha_reunion VARCHAR(50)) CHARACTER SET utf8 COLLATE utf8_bin");
+      fecha_reunion VARCHAR(50)) 
+      CHARACTER SET utf8 COLLATE utf8_bin");
     $db->query("LOAD DATA INFILE '$archivo_mat' IGNORE INTO TABLE $tabla_mat FIELDS TERMINATED BY ';' LINES TERMINATED BY '\n' IGNORE 1 LINES 
     (      
         @NUCLEO,

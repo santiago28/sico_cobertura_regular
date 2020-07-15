@@ -626,6 +626,12 @@ class SecurityPlugin extends Plugin
       'editarEvidenciaSimat' => array(
         'nivelPermiso' => '4'
       ),
+      'reportePrematricula' => array(
+        'nivelPermiso' => '1'
+      ),
+      'cruceSimat' => array(
+        'nivelPermiso' => '1'
+      ),
       'sedeContrato' => array(
         'nivelPermiso' => '1'
       ),

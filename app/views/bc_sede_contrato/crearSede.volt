@@ -98,15 +98,6 @@
             </input>
         </div>
         <div class="form-group col-md-4">
-            <label for="">Modalidad *</label>
-            <select class="form-control" onchange="obtener_nombres(0)" name="id_modalidad" required>
-                <option value="">Seleccione una opción</option>
-                {% for modalidad in modalidades %}
-                <option value="{{modalidad.id_modalidad}}">{{modalidad.nombre}}</option>
-                {% endfor %}
-            </select>
-        </div>
-        <div class="form-group col-md-4">
             <label for="">Número de cupos*</label>
             <input
                 type="number"
@@ -147,7 +138,7 @@
                     }
                  });
         }else{
-            $("#modalidad_nombre").val($('select[name="id_modalidad"] option:selected').text());
+            // $("#modalidad_nombre").val($('select[name="id_modalidad"] option:selected').text());
         }
 
     }
