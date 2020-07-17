@@ -142,8 +142,8 @@
             <td>{{ oferente_contrato.id_contrato }}</td>
             <td>{{ oferente_contrato.institucion }}</td>
             <td>{{ oferente_contrato.cuposSostenibilidad }}</td>
-            <td>{{ oferente_contrato.pre_matriculas }}</td>
             <td>{{ oferente_contrato.matriculados }}</td>
+            <td>{{ oferente_contrato.pre_matriculas }}</td>
             <td>{{ oferente_contrato.rechazados }}</td>
             <td>{{ oferente_contrato.eliminados }}</td>
           </tr>
@@ -169,7 +169,7 @@
               <label for="cargarDocumento">Cargar archivo Simat</label>
               <div>
                   <!-- <input class="fileupload filestyle form-control" data-input="false" id="archivo" data-badge="false" type="file"  name="files[]" multiple required> -->
-                  <input type="file" class="form-control" name="files[]" multiple id="archivo">
+                  <input type="file" class="form-control" name="files[]" multiple id="archivo" required>
                   <div id="progress" class="progress" style="margin: 0 !important;">
                       <div class="progress-bar progress-bar-success"></div>
                   </div>
@@ -218,8 +218,7 @@
           {% for oferente_contrato in oferente_contratos %}
           Export.push({
           "Contrato": "{{oferente_contrato.id_contrato}}",
-          "Oferente": "{{oferente_contrato.institucion}}",
-          "Sede": "{{oferente_contrato.nombre_sede}}",
+          "Oferente": "<?php echo str_replace('"','', $oferente_contrato->institucion); ?>",
           "T.Cupos": "{{oferente_contrato.cuposSostenibilidad}}",
           "Pre-matriculados": "{{oferente_contrato.matriculados}}",
           "Matriculados": "{{oferente_contrato.pre_matriculas}}",
@@ -235,7 +234,7 @@
           {% for eliminado in eliminados %}
           Export.push({
             "Contrato": "{{eliminado.id_contrato}}",
-            "Oferente": "{{eliminado.institucion}}",
+            "Oferente": "<?php echo str_replace('"','', $eliminado->institucion); ?>",
             "Documento": "{{eliminado.documento}}",
             "Apellidos": "{{eliminado.apellido1}}  {{eliminado.apellido2}} ",
             "Nombres": "{{eliminado.nombre1}}  {{eliminado.nombre2}}",

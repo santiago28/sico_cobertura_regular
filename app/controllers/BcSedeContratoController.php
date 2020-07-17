@@ -784,13 +784,13 @@ class BcSedeContratoController extends ControllerBase
       $config = $this->getDI()->getConfig();
 
         $oferente_contratos = $db->query(
-            "SELECT DISTINCT sm.id_contrato, sm.institucion,sm.nombre_sede,c.cuposSostenibilidad,
-            (SELECT COUNT(s.id_oferente_persona) FROM cob_oferente_persona_simat s WHERE s.estado_certificacion='1' and s.id_contrato = sm.id_contrato) as matriculados,
-            (SELECT COUNT(s.id_oferente_persona) FROM cob_oferente_persona_simat s WHERE s.estado_certificacion='2' and s.id_contrato = sm.id_contrato) as pre_matriculas,
-            (SELECT COUNT(s.id_oferente_persona) FROM cob_oferente_persona_simat s WHERE s.estado_certificacion='3' and s.id_contrato = sm.id_contrato) as rechazados,
-            (SELECT COUNT(e.id_oferente_persona) FROM cob_oferente_persona_eliminado e WHERE e.id_contrato = sm.id_contrato) as eliminados
-            FROM cob_oferente_persona_simat sm 
-            join bc_sede_contrato c on c.id_contrato = sm.id_contrato
+            "SELECT  sm.id_contrato, sm.institucion,
+            (SELECT s.cuposSostenibilidad FROM bc_sede_contrato s WHERE s.id_contrato = sm.id_contrato  GROUP by s.id_contrato) as cuposSostenibilidad,
+            (SELECT count(s.id_oferente_persona) FROM cob_oferente_persona_eliminado s WHERE s.id_contrato = sm.id_contrato) as eliminados, 
+            sum(if(sm.estado_certificacion = 1 and estado_activo =1, 1, 0)) as matriculados,
+            sum(if(sm.estado_certificacion = 2 and estado_activo =1, 1, 0)) as pre_matriculas,
+            sum(if(sm.estado_certificacion = 3 and estado_activo =1, 1, 0)) as rechazados
+            FROM cob_oferente_persona_simat sm
             GROUP by sm.id_contrato");
 
         $oferente_contratos->setFetchMode(Phalcon\Db::FETCH_OBJ);
@@ -818,6 +818,7 @@ class BcSedeContratoController extends ControllerBase
       return $this->response->redirect("bc_sede_contrato/reportePrematricula");
     }
     ini_set('memory_limit', '-1');
+    ini_set('max_execution_time', 120); // 120 (seconds) = 2 Minutes
     $archivo ="";
     if($this->request->hasFiles() == true){
         $uploads = $this->request->getUploadedFiles();
@@ -835,24 +836,25 @@ class BcSedeContratoController extends ControllerBase
       
     $db = $this->getDI()->getDb();
     $config = $this->getDI()->getConfig();
+    // $db->query("DROP TABLE $tabla_mat");
     $timestamp = new DateTime();
     $tabla_mat = "m" . $timestamp->getTimestamp();
+    
     $archivo_mat = $config->application->basePath . "public/files/bc_bd/" . $archivo;
     $db->query("CREATE TEMPORARY TABLE $tabla_mat (
      ano VARCHAR(20),
      estado VARCHAR(20),
      institucion VARCHAR(100),
-     dane VARCHAR(50),
+     codigo_dane VARCHAR(50),
      prestacion_servicio VARCHAR(50),
      sector VARCHAR(20), 
-     sede VARCHAR(100), 
+     nombre_sede VARCHAR(100), 
      zona_sede VARCHAR(100), 
-     jornada VARCHAR(50),
+     nombre_jornada VARCHAR(50),
      modelo VARCHAR(50),
      fecha_ini VARCHAR(50),
      estrato VARCHAR(50),
-     persona_id VARCHAR(50),
-     tipo_doc VARCHAR(50),
+     tipo_documento VARCHAR(50),
      documento VARCHAR(20),
      id_contrato VARCHAR(50),
      apellido1 VARCHAR(50),
@@ -865,7 +867,8 @@ class BcSedeContratoController extends ControllerBase
      grupo_simat VARCHAR(50),
      matricula_contratada VARCHAR(10), 
      fuente_recursos VARCHAR(10),
-     pais_origen VARCHAR(100)) 
+     pais_origen VARCHAR(100),
+     estado_certificacion VARCHAR(10)) 
      CHARACTER SET utf8 COLLATE utf8_bin");
     $db->query("LOAD DATA INFILE '$archivo_mat' IGNORE INTO TABLE $tabla_mat FIELDS TERMINATED BY ';' LINES TERMINATED BY '\n' IGNORE 1 LINES 
     (      
@@ -874,81 +877,140 @@ class BcSedeContratoController extends ControllerBase
      @ESTADO,
      @INSTITUCION,
      @DANE,
-     @PRESTACION_SERVICIO ,
+     @PRESTACION,
      @SECTOR,
      @SEDE,
      @ZONA_SEDE,
      @JORNADA,
-     @GRADO_COD_SIMAT,
-     @GRUPO_SIMAT,
+     @GRADO_COD,
+     @GRUPO,
      @MODELO,
      @FECHAINI,
      @ESTRATO,
-     @PER_ID,
-     @DOCUMENTO,
+     @DOC,
      @TIPODOC,
      @APELLIDO1,
      @APELLIDO2,
      @NOMBRE1,
      @NOMBRE2,
      @GENERO,
-     @FECHA_NACIMIENTO ,
-     @MATRICULA_CONTRATADA, 
-     @FUENTE_RECURSOS ,
+     @FECHA_NACIMIENTO,
+     @MATRICULACONTRATADA, 
+     @FUENTE_RECURSOS,
      @PAIS_ORIGEN 
-
     ) SET 
      Ano =  @ANO, 
+     id_contrato = @ID_CONTRATO,
      estado = @ESTADO,
      institucion = @INSTITUCION,
-     dane = @DANE,
-     prestacion_servicio = @PRESTACION_SERVICIO ,
+     codigo_dane = @DANE,
+     prestacion_servicio = @PRESTACION,
      sector = @SECTOR,
-     sede = @SEDE,
+     nombre_sede = @SEDE,
      zona_sede = @ZONA_SEDE,
-     jornada = @JORNADA,
+     nombre_jornada = @JORNADA,
+     grado_cod_simat = @GRADO_COD,
+     grupo_simat = @GRUPO,
      modelo = @MODELO,
      fecha_ini = @FECHAINI,
      estrato = @ESTRATO,
-     persona_id = @PER_ID,
-     tipo_doc = @TIPODOC,
-     documento = @DOCUMENTO,
-     id_contrato = @ID_CONTRATO,
+     documento = @DOC,
+     tipo_documento = @TIPODOC,
      apellido1 = @APELLIDO1,
      apellido2 = @APELLIDO2,
      nombre1 = @NOMBRE1,
      nombre2 = @NOMBRE2,
      genero = @GENERO,
      fecha_nacimiento = @FECHA_NACIMIENTO,
-     grado_cod_simat = @GRADO_COD_SIMAT,
-     grupo_simat = @GRUPO_SIMAT,
-     matricula_contratada=  @MATRICULA_CONTRATADA,
+     matricula_contratada= @MATRICULACONTRATADA,
      fuente_recursos = @FUENTE_RECURSOS,
-     pais_origen = @PAIS_ORIGEN"
-
+     pais_origen = @PAIS_ORIGEN,
+     estado_certificacion= 4"
     );
 
-      $beneficiario_sobrantes_simat = $db->query(
-       "SELECT t1.id_contrato, t1.documento, t1.nombre1, t1.nombre2, t1.apellido1, t1.apellido2, t1.grado_cod_simat, t1.grupo_simat
-        FROM  $tabla_mat t1
-        where t1.documento not in (select t2.documento from cob_oferente_persona_simat t2 where t2.id_contrato = t1.id_contrato)");
+  
+      // $beneficiario_sobrantes_simat = $db->query(
+      //  "SELECT t1.id_contrato, t1.documento, t1.nombre1, t1.nombre2, t1.apellido1, t1.apellido2, t1.grado_cod_simat, t1.grupo_simat
+      //   FROM  $tabla_mat t1
+      //   left join cob_oferente_persona_simat t2 on t2.documento = t1.documento and t1.id_contrato= t2.id_contrato
+      //   where t2.documento is null");
 
-      $beneficiario_sobrantes_simat->setFetchMode(Phalcon\Db::FETCH_OBJ);
+      // $beneficiario_sobrantes_simat->setFetchMode(Phalcon\Db::FETCH_OBJ);
 
-      $beneficiario_sobrantes_cobertura = $db->query(
-        "SELECT t1.*
-        FROM cob_oferente_persona_simat t1
-        where t1.documento not in (select t2.documento from $tabla_mat t2 where t2.id_contrato = t1.id_contrato)");
+      // $beneficiario_sobrantes_cobertura = $db->query(
+      //   "SELECT t1.*
+      //   FROM cob_oferente_persona_simat t1
+      //   left join $tabla_mat t2 on t2.documento = t1.documento and t1.id_contrato= t2.id_contrato
+      //   where t2.documento is null");
 
    
-      $beneficiario_sobrantes_cobertura->setFetchMode(Phalcon\Db::FETCH_OBJ);
-
-
+      // $beneficiario_sobrantes_cobertura->setFetchMode(Phalcon\Db::FETCH_OBJ);
       
-      $db->query("DROP TABLE $tabla_mat");
+      $Totalbeneficiarios = $db->query(
+       "SELECT  
+               t.*, if(estado_certificacion=1,'Retirado', 'Nuevo') as estado
+       FROM
+       (
+           SELECT tipo_documento,
+                  documento,
+                  id_contrato, 
+                  institucion,
+                  codigo_dane,
+                  prestacion_servicio,
+                  sector,
+                  nombre_sede,
+                  zona_sede,
+                  apellido1, 
+                  apellido2, 
+                  nombre1,
+                  nombre2,
+                  nombre_jornada,
+                  grado_cod_simat, 
+                  grupo_simat,
+                  modelo,
+                  fecha_ini,
+                  estrato,
+                  genero,
+                  fecha_nacimiento,
+                  fuente_recursos,
+                  pais_origen,
+                  estado_certificacion
 
-      $this->view->beneficiario_sobrantes_simat = $beneficiario_sobrantes_simat->fetchAll();
-      $this->view->beneficiario_sobrantes_cobertura = $beneficiario_sobrantes_cobertura->fetchAll();
+           FROM cob_oferente_persona_simat WHERE estado_activo=1 and estado_certificacion =1
+           UNION ALL 
+           SELECT tipo_documento,
+                  documento,
+                  id_contrato, 
+                  institucion,
+                  codigo_dane,
+                  prestacion_servicio,
+                  sector,
+                  nombre_sede,
+                  zona_sede,
+                  apellido1, 
+                  apellido2, 
+                  nombre1,
+                  nombre2,
+                  nombre_jornada,
+                  grado_cod_simat, 
+                  grupo_simat,
+                  modelo,
+                  fecha_ini,
+                  estrato,
+                  genero,
+                  fecha_nacimiento,
+                  fuente_recursos,
+                  pais_origen,
+                  estado_certificacion
+           FROM $tabla_mat
+       )  t
+       GROUP BY documento, id_contrato
+       HAVING COUNT(*) = 1");
+
+      $Totalbeneficiarios->setFetchMode(Phalcon\Db::FETCH_OBJ);
+      
+      $this->view->Totalbeneficiarios = $Totalbeneficiarios->fetchAll();
+      // $this->view->beneficiario_sobrantes_cobertura = $beneficiario_sobrantes_cobertura->fetchAll();
       $this->assets->addJs('js/jquery.fixedtableheader.min.js')
       ->addJs('js/alasql.min.js')
       ->addJs('js/xlsx.core.min.js');

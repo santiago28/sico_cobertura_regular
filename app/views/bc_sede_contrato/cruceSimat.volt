@@ -113,40 +113,22 @@
   <h1  style="margin:2%;"><span><b>CRUCE SIMAT</b></span></h1>
   <br>
   <br>
-  <button type="button" id="ExportaSimat"  class="btn btn-primary btn-lg">Descargar Estudiantes Sobrantes Simat</button> ||
-  <button type="button" id="ExportaCobertura" class="btn btn-default btn-lg">Descargar Estudiantes Sobrantes Cobertura</button>
+  <button type="button" id="ExportaSimat"  class="btn btn-primary btn-lg">Descargar Reporte Estudiantes Simat</button>
 </div>
 
-
 <script>
+  
   setTimeout(function(){
     $("#ExportaSimat").click(function(){
         var Export = [];
-        {% for beneficiario in beneficiario_sobrantes_simat %}
+        {% for beneficiario in Totalbeneficiarios %}
             Export.push({
-              "Documento": "<?php echo trim($beneficiario->documento); ?>",
               "Contrato": "<?php echo trim($beneficiario->id_contrato); ?>",
-              "Apellidos": "{{beneficiario.apellido1}}  {{beneficiario.apellido2}} ",
-              "Nombres": "{{beneficiario.nombre1}}  {{beneficiario.nombre2}}",
-              "Grado": "{{beneficiario.grado_cod_simat}}",
-              "Grupo": "<?php echo trim($beneficiario->grupo_simat); ?>"
-            });
-        {% endfor %}
-        alasql('SELECT * INTO XLSX("Reporte Simat.xlsx",{headers:true}) FROM ?', [Export]);
-    });
-
-    $("#ExportaCobertura").click(function(){
-        var Export = [];
-        {% for beneficiario in beneficiario_sobrantes_cobertura %}
-            Export.push({
-              "Año": "{{beneficiario.ano}}",
-              "Contrato": "<?php echo trim($beneficiario->id_contrato); ?>",
-              "Estado": "{{beneficiario.estado}}",
-              "Institucion": "{{beneficiario.institucion}}",
+              "Institucion": "<?php echo str_replace('"', '', $beneficiario->institucion); ?>",
               "Dane": "{{beneficiario.codigo_dane}}",
               "prestacion_servicio": "{{beneficiario.prestacion_servicio}}",
               "sector": "{{beneficiario.sector}}",
-              "sede": "{{beneficiario.nombre_sede}}",
+              "sede": "<?php echo str_replace('"', '', $beneficiario->nombre_sede); ?>",
               "zona_sede": "{{beneficiario.zona_sede}}",
               "nombre_jornada": "{{beneficiario.nombre_jornada}}",
               "grado": "{{beneficiario.grado_cod_simat}}",
@@ -154,7 +136,6 @@
               "modelo": "{{beneficiario.modelo}}",
               "fecha_ini": "{{beneficiario.fecha_ini}}",
               "estrato": "{{beneficiario.estrato}}",
-              "id_persona_simat": "{{beneficiario.id_persona_simat}}",
               "tipo_documento": "{{beneficiario.tipo_documento}}",
               "Documento": "<?php echo trim($beneficiario->documento); ?>",
               "Apellidos": "{{beneficiario.apellido1}}  {{beneficiario.apellido2}} ",
@@ -162,10 +143,13 @@
               "genero": "{{beneficiario.genero}}",
               "fecha_nacimiento": "{{beneficiario.fecha_nacimiento}}",
               "fuente_recursos": "{{beneficiario.fuente_recursos}}",
-              "pais_origen": "<?php echo trim($beneficiario->pais_origen); ?>"
+              "pais_origen": "<?php echo trim($beneficiario->pais_origen); ?>",
+              "estado_certificacion": "{{beneficiario.estado}}",//1 retirado, 4 nuevos 
             });
         {% endfor %}
-        alasql('SELECT * INTO XLSX("Reporte Cobertura.xlsx",{headers:true}) FROM ?', [Export]);
+        alasql('SELECT * INTO XLSX("Reporte Simat.xlsx",{headers:true}) FROM ?', [Export]);
     });
+  
   }, 1000);
+
 </script>

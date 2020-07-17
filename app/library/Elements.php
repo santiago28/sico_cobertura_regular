@@ -446,6 +446,11 @@ public function getMenu()
 					echo '<i class="material-icons"></i>';
 					echo '<span>'.$this->tag->linkTo("bc_sede_contrato/solicitudMatricula", "Matrículas").'</span>';
 					echo '</div>';
+
+					echo '<div class="item-menu">';
+					echo '<i class="material-icons"></i>';
+					echo '<span>'.$this->tag->linkTo("bc_sede_contrato/reportePrematricula", "Reporte Matrículas").'</span>';
+					echo '</div>';
 				}
 			if ($controller == "bc_reporte" && $user['nivel'] <= 2) {
 
