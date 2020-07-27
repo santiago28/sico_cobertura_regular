@@ -82,7 +82,7 @@
                 placeholder="Dirección Sede"
                 style="text-transform: uppercase;"
                 maxlength="80"
-                value="{{sedeContrato.sede_comuna}}"
+                value="{{sedeContrato.sede_direccion}}"
                 required>
             </input>
         </div>
@@ -103,7 +103,7 @@
                 required>
             </input>
         </div>
-    
+
         <div class="form-group col-md-4">
             <label for="">Número de cupos*</label>
             <input
@@ -118,12 +118,12 @@
         </div>
     </div>
     <div  class="form-group">
-        <button type="submit" class="btn btn-primary"  style="margin-top: 2%;">GUARDAR</button>  
+        <button type="submit" class="btn btn-primary"  style="margin-top: 2%;">GUARDAR</button>
     </div>
 </form>
 
 <script>
-    
+
     window.onload = function(){
         $("#oferente_nombre").val($('select[name="id_oferente"] option:selected').text());
         $("#modalidad_nombre").val($('select[name="id_modalidad"] option:selected').text());

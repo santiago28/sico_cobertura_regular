@@ -68,7 +68,11 @@
     {% set nombre = {beneficiario.primerApellido, beneficiario.segundoApellido, beneficiario.primerNombre, beneficiario.segundoNombre} %}
     <?php $fecha = $this->conversiones->fecha(2, $beneficiario->fechaInterventoria); ?>
     <tr<?php echo $beneficiario->getAsistenciaDetail(); ?>>
+    {% if(beneficiario.estaRetirado ==  1) %}
+    <td>{{ loop.index }} -R</td>
+    {% else %}
     <td>{{ loop.index }}</td>
+    {% endif %}
     <td>{{ beneficiario.numDocumento }}</td>
     <td>{{ nombre|join(' ') }}</td>
     <td><div class='hide id_grupo'>{{ beneficiario.id_grupo }}</div>{{ beneficiario.grupo }} - {{beneficiario.nombre_jornada}}</td>

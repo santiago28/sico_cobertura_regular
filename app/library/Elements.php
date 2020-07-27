@@ -136,12 +136,12 @@ class Elements extends Component
 			'action' => 'index'
 		),
 		'bc_reporte' => array(
-		'caption' => 'Reportes',
-		'action' => 'oferente_contratos'
+			'caption' => 'Reportes',
+			'action' => 'oferente_contratos'
 		),
 		'bc_sede_contrato' => array(
-		'caption' => 'Pre-matrícula',
-		'action' => 'beneficiarios'
+			'caption' => 'Pre-matrícula',
+			'action' => 'beneficiarios'
 		),
 		// 'ibc_mensaje' => array(
 		// 	'caption' => 'Ubicación Sedes',
@@ -431,17 +431,24 @@ public function getMenu()
 
 		foreach ($menu as $controller => $option) {
 
-				if ($controller == "bc_sede_contrato" && $user['nivel'] <= 2) {
+			if ($controller == "bc_sede_contrato" && $user['nivel'] <= 2) {
 
-					echo '<div class="item-menu-titulo">';
-					echo '<span>Gestión Matricula </span>';
+				echo '<div class="item-menu-titulo">';
+				echo '<span>Gestión Matricula </span>';
+				echo '</div>';
+
+
+				// echo '<div class="item-menu">';
+				// echo '<i class="material-icons"></i>';
+				// echo '<span>'.$this->tag->linkTo("bc_sede_contrato/modificarDocumentos", "Verificación Documento").'</span>';
+				// echo '</div>';
+				if ($user['nivel'] <= 1) {
+					echo '<div class="item-menu">';
+					echo '<i class="material-icons"></i>';
+					echo '<span>'.$this->tag->linkTo("bc_sede_contrato/sedeContrato", "Sedes x Contrato").'</span>';
 					echo '</div>';
-
-					// echo '<div class="item-menu">';
-					// echo '<i class="material-icons"></i>';
-					// echo '<span>'.$this->tag->linkTo("bc_sede_contrato/modificarDocumentos", "Verificación Documento").'</span>';
-					// echo '</div>';
-
+				}
+				if ($user['nivel'] <= 2) {
 					echo '<div class="item-menu">';
 					echo '<i class="material-icons"></i>';
 					echo '<span>'.$this->tag->linkTo("bc_sede_contrato/solicitudMatricula", "Matrículas").'</span>';
@@ -452,6 +459,8 @@ public function getMenu()
 					echo '<span>'.$this->tag->linkTo("bc_sede_contrato/reportePrematricula", "Reporte Matrículas").'</span>';
 					echo '</div>';
 				}
+
+			}
 			if ($controller == "bc_reporte" && $user['nivel'] <= 2) {
 
 				// if ($controllerName == $controller) {
@@ -1163,248 +1172,248 @@ public function getSelect($select)
 														'20' => '20');
 														break;
 														case "tipo_documento":
-															return array(
-																""=>'Seleccione una opción',
-																"CC:CÉDULA DE CIUDADANÍA" => "CC:CÉDULA DE CIUDADANÍA",
-																"CCB:CERTIFICADO CABILDO" => "CCB:CERTIFICADO CABILDO",
-																"CE:CÉDULA DE EXTRANJERÍA" => "CE:CÉDULA DE EXTRANJERÍA",
-																"NES:NÚMERO ESTABLECIDO POR LA SECRETARÍA" => "NES:NÚMERO ESTABLECIDO POR LA SECRETARÍA",
-																"NUIP:NÚMERO UNICO DE IDENTIFICACIÓN PERSONAL" => "NUIP:NÚMERO UNICO DE IDENTIFICACIÓN PERSONAL",
-																"PEP:PERMISO ESPECIAL DE PERMANENCIA" => "PEP:PERMISO ESPECIAL DE PERMANENCIA",
-																'RC:REGISTRO CIVIL DE NACIMIENTO' => 'RC:REGISTRO CIVIL DE NACIMIENTO',
-																'TI:TARJETA DE IDENTIDAD' => 'TI:TARJETA DE IDENTIDAD',
-																'TMF: TARJETA DE MOVILIDAD FRONTERIZA' => 'TMF: TARJETA DE MOVILIDAD FRONTERIZA',
-																'VISA' => 'VISA',
-																"OTRO" => "OTRO"
-															);
-															break;
-															case "grados_simat":
-																return array (
-																	""=>'Seleccione una opción',
-																	'0' => '0',
-																	'1' => '1',
-																	'2' => '2',
-																	'3' => '3',
-																	'4' => '4',
-																	'5' => '5',
-																	'6' => '6',
-																	'7' => '7',
-																	'8' => '8',
-																	'9' => '9',
-																	'10' => '10',
-																	'11' => '11',
-																	'21' => '21 CLEI 1',
-																	'22' => '22 CLEI 2',
-																	'23' => '23 CLEI 3',
-																	'24' => '24 CLEI 4',
-																	'25' => '25 CLEI 5',
-																	'26' => '26 CLEI 6',
-																	'99' => '99 ACELERACIÓN',
-																);
-																	break;
-																	case "grupos_simat":
-																		return array (
-																			""=>'Seleccione una opción',
-																			'01' => '01',
-																			'02' => '02',
-																			'03' => '03',
-																			'04' => '04',
-																			'05' => '05',
-																			'06' => '06',
-																			'07' => '07',
-																			'08' => '08',
-																			'09' => '09',
-																			'10' => '10',
-																			'11' => '11',
-																			'12' => '12',
-																			'13' => '13',
-																			'14' => '14',
-																			'15' => '15',
-																			'16' => '16',
-																			'17' => '17',
-																			'18' => '18',
-																			'19' => '19',
-																			'20' => '20',
-																			'21' => '21',
-																			'22' => '22',
-																			'23' => '23',
-																			'24' => '24',
-																			'25' => '25',
-																			'26' => '26',
-																			'27' => '27',
-																			'28' => '28',
-																			'29' => '29',
-																			'30' => '30',
-																			'31' => '31',
-																			'32' => '32',
-																			'33' => '33',
-																			'34' => '34',
-																			'35' => '35',
-																			'36' => '36',
-																			'37' => '37',
-																			'38' => '38',
-																			'39' => '39',
-																			'40' => '40',
-																			'41' => '41',
-																			'42' => '42',
-																			'43' => '43',
-																			'44' => '44',
-																			'45' => '45',
-																			'46' => '46',
-																			'47' => '47',
-																			'48' => '48',
-																			'49' => '49',
-																			'50' => '50',
-																			'51' => '51',
-																			'52' => '52',
-																			'53' => '53',
-																			'54' => '54',
-																			'55' => '55',
-																			'56' => '56',
-																			'57' => '57',
-																			'58' => '58',
-																			'59' => '59',
-																			'60' => '60',
+														return array(
+															""=>'Seleccione una opción',
+															"CC:CÉDULA DE CIUDADANÍA" => "CC:CÉDULA DE CIUDADANÍA",
+															"CCB:CERTIFICADO CABILDO" => "CCB:CERTIFICADO CABILDO",
+															"CE:CÉDULA DE EXTRANJERÍA" => "CE:CÉDULA DE EXTRANJERÍA",
+															"NES:NÚMERO ESTABLECIDO POR LA SECRETARÍA" => "NES:NÚMERO ESTABLECIDO POR LA SECRETARÍA",
+															"NUIP:NÚMERO UNICO DE IDENTIFICACIÓN PERSONAL" => "NUIP:NÚMERO UNICO DE IDENTIFICACIÓN PERSONAL",
+															"PEP:PERMISO ESPECIAL DE PERMANENCIA" => "PEP:PERMISO ESPECIAL DE PERMANENCIA",
+															'RC:REGISTRO CIVIL DE NACIMIENTO' => 'RC:REGISTRO CIVIL DE NACIMIENTO',
+															'TI:TARJETA DE IDENTIDAD' => 'TI:TARJETA DE IDENTIDAD',
+															'TMF: TARJETA DE MOVILIDAD FRONTERIZA' => 'TMF: TARJETA DE MOVILIDAD FRONTERIZA',
+															'VISA' => 'VISA',
+															"OTRO" => "OTRO"
+														);
+														break;
+														case "grados_simat":
+														return array (
+															""=>'Seleccione una opción',
+															'0' => '0',
+															'1' => '1',
+															'2' => '2',
+															'3' => '3',
+															'4' => '4',
+															'5' => '5',
+															'6' => '6',
+															'7' => '7',
+															'8' => '8',
+															'9' => '9',
+															'10' => '10',
+															'11' => '11',
+															'21' => '21 CLEI 1',
+															'22' => '22 CLEI 2',
+															'23' => '23 CLEI 3',
+															'24' => '24 CLEI 4',
+															'25' => '25 CLEI 5',
+															'26' => '26 CLEI 6',
+															'99' => '99 ACELERACIÓN',
+														);
+														break;
+														case "grupos_simat":
+														return array (
+															""=>'Seleccione una opción',
+															'01' => '01',
+															'02' => '02',
+															'03' => '03',
+															'04' => '04',
+															'05' => '05',
+															'06' => '06',
+															'07' => '07',
+															'08' => '08',
+															'09' => '09',
+															'10' => '10',
+															'11' => '11',
+															'12' => '12',
+															'13' => '13',
+															'14' => '14',
+															'15' => '15',
+															'16' => '16',
+															'17' => '17',
+															'18' => '18',
+															'19' => '19',
+															'20' => '20',
+															'21' => '21',
+															'22' => '22',
+															'23' => '23',
+															'24' => '24',
+															'25' => '25',
+															'26' => '26',
+															'27' => '27',
+															'28' => '28',
+															'29' => '29',
+															'30' => '30',
+															'31' => '31',
+															'32' => '32',
+															'33' => '33',
+															'34' => '34',
+															'35' => '35',
+															'36' => '36',
+															'37' => '37',
+															'38' => '38',
+															'39' => '39',
+															'40' => '40',
+															'41' => '41',
+															'42' => '42',
+															'43' => '43',
+															'44' => '44',
+															'45' => '45',
+															'46' => '46',
+															'47' => '47',
+															'48' => '48',
+															'49' => '49',
+															'50' => '50',
+															'51' => '51',
+															'52' => '52',
+															'53' => '53',
+															'54' => '54',
+															'55' => '55',
+															'56' => '56',
+															'57' => '57',
+															'58' => '58',
+															'59' => '59',
+															'60' => '60',
 
-																		);
-																			break;
-																		case "matricula_simat";
-																			return array(
-																			'SI'=>'SI',
-																			'NO'=>'NO'
-																			);
-																		 break;
-																		 case "estado_simat";
-																			return array(
-																			""=>'Seleccione una opción',
-																			'MATRICULADO'=>'MATRICULADO',
-																			'NO MATRICULADO'=>'NO MATRICULADO'
-																			);
-																		 break;
-																		 case "jerarquia";
-																		 return array(
-																		 ""=>'Seleccione una opción',
-																		 'NUCLEO 914'=>'NUCLEO 914',
-																		 'NUCLEO 915'=>'NUCLEO 915',
-																		 'NUCLEO 916'=>'NUCLEO 916',
-																		 'NUCLEO 917'=>'NUCLEO 917',
-																		 'NUCLEO 918'=>'NUCLEO 918',
-																		 'NUCLEO 919'=>'NUCLEO 919',
-																		 'NUCLEO 920'=>'NUCLEO 920',
-																		 'NUCLEO 921'=>'NUCLEO 921',
-																		 'NUCLEO 922'=>'NUCLEO 922',
-																		 'NUCLEO 923'=>'NUCLEO 923',
-																		 'NUCLEO 924'=>'NUCLEO 924',
-																		 'NUCLEO 925'=>'NUCLEO 925',
-																		 'NUCLEO 926'=>'NUCLEO 926',
-																		 'NUCLEO 927'=>'NUCLEO 927',
-																		 'NUCLEO 928'=>'NUCLEO 928',
-																		 'NUCLEO 929'=>'NUCLEO 929',
-																		 'NUCLEO 930'=>'NUCLEO 930',
-																		 'NUCLEO 931'=>'NUCLEO 931',
-																		 'NUCLEO 932'=>'NUCLEO 932',
-																		 'NUCLEO 933'=>'NUCLEO 933',
-																		 'NUCLEO 934'=>'NUCLEO 934',
-																		 'NUCLEO 935'=>'NUCLEO 935',
-																		 'NUCLEO 936'=>'NUCLEO 936',
-																		 'NUCLEO 937'=>'NUCLEO 937',
-																		 );
-																	  break;
-																	  case "prestacion_servicio";
-																	  return array(
-																	   ""=>'Seleccione una opción',
-																	  'COBERTURA CONTRATADA'=>'COBERTURA CONTRATADA',
-																	  'CONFESIONES RELIGIOSAS'=>'CONFESIONES RELIGIOSAS',
-																	  );
-																	break;
-																	case "calendario";
-																	return array(
-																	""=>'Seleccione una opción',
-																	'A'=>'A',
-																	'B'=>'B',
-																	'OTRO'=>'OTRO',
-																	);
-																	break;
-																	case "sector";
-																	return array(
-																	""=>'Seleccione una opción',
-																	'OFICIAL'=>'OFICIAL',
-																	'NO OFICIAL'=>'NO OFICIAL',
-																	);
-																	break;
-																	case "modelo";
-																	return array(
-																	""=>'Seleccione una opción',
-																	'ACELERACIÓN DEL APRENDIZAJE'=>'ACELERACIÓN DEL APRENDIZAJE',
-																	'CAMINAR EN SECUNDARIA I'=>'CAMINAR EN SECUNDARIA I',
-																	'CAMINAR EN SECUNDARIA II'=>'CAMINAR EN SECUNDARIA II',
-																	'EDUCACIÓN TRADICIONAL'=>'EDUCACIÓN TRADICIONAL',
-																	'PROGRAMA PARA JÓVENES EN EXTRAEDAD Y ADULTOS'=>'PROGRAMA PARA JÓVENES EN EXTRAEDAD Y ADULTOS',
-																	'SAT PRESENCIAL'=>'SAT PRESENCIAL',
-																	);
-																	break;
-																	case "estrato";
-																	return array(
-																	""=>'Seleccione una opción',
-																	'ESTRATO 0'=>'ESTRATO 0',
-																	'ESTRATO 1'=>'ESTRATO 1',
-																	'ESTRATO 2'=>'ESTRATO 2',
-																	'ESTRATO 3'=>'ESTRATO 3',
-																	'ESTRATO 4'=>'ESTRATO 4',
-																	'ESTRATO 5'=>'ESTRATO 5',
-																	'ESTRATO 6'=>'ESTRATO 6',
-																	'NO APLICA'=>'NO APLICA',
+														);
+														break;
+														case "matricula_simat";
+														return array(
+															'SI'=>'SI',
+															'NO'=>'NO'
+														);
+														break;
+														case "estado_simat";
+														return array(
+															""=>'Seleccione una opción',
+															'MATRICULADO'=>'MATRICULADO',
+															'NO MATRICULADO'=>'NO MATRICULADO'
+														);
+														break;
+														case "jerarquia";
+														return array(
+															""=>'Seleccione una opción',
+															'NUCLEO 914'=>'NUCLEO 914',
+															'NUCLEO 915'=>'NUCLEO 915',
+															'NUCLEO 916'=>'NUCLEO 916',
+															'NUCLEO 917'=>'NUCLEO 917',
+															'NUCLEO 918'=>'NUCLEO 918',
+															'NUCLEO 919'=>'NUCLEO 919',
+															'NUCLEO 920'=>'NUCLEO 920',
+															'NUCLEO 921'=>'NUCLEO 921',
+															'NUCLEO 922'=>'NUCLEO 922',
+															'NUCLEO 923'=>'NUCLEO 923',
+															'NUCLEO 924'=>'NUCLEO 924',
+															'NUCLEO 925'=>'NUCLEO 925',
+															'NUCLEO 926'=>'NUCLEO 926',
+															'NUCLEO 927'=>'NUCLEO 927',
+															'NUCLEO 928'=>'NUCLEO 928',
+															'NUCLEO 929'=>'NUCLEO 929',
+															'NUCLEO 930'=>'NUCLEO 930',
+															'NUCLEO 931'=>'NUCLEO 931',
+															'NUCLEO 932'=>'NUCLEO 932',
+															'NUCLEO 933'=>'NUCLEO 933',
+															'NUCLEO 934'=>'NUCLEO 934',
+															'NUCLEO 935'=>'NUCLEO 935',
+															'NUCLEO 936'=>'NUCLEO 936',
+															'NUCLEO 937'=>'NUCLEO 937',
+														);
+														break;
+														case "prestacion_servicio";
+														return array(
+															""=>'Seleccione una opción',
+															'COBERTURA CONTRATADA'=>'COBERTURA CONTRATADA',
+															'CONFESIONES RELIGIOSAS'=>'CONFESIONES RELIGIOSAS',
+														);
+														break;
+														case "calendario";
+														return array(
+															""=>'Seleccione una opción',
+															'A'=>'A',
+															'B'=>'B',
+															'OTRO'=>'OTRO',
+														);
+														break;
+														case "sector";
+														return array(
+															""=>'Seleccione una opción',
+															'OFICIAL'=>'OFICIAL',
+															'NO OFICIAL'=>'NO OFICIAL',
+														);
+														break;
+														case "modelo";
+														return array(
+															""=>'Seleccione una opción',
+															'ACELERACIÓN DEL APRENDIZAJE'=>'ACELERACIÓN DEL APRENDIZAJE',
+															'CAMINAR EN SECUNDARIA I'=>'CAMINAR EN SECUNDARIA I',
+															'CAMINAR EN SECUNDARIA II'=>'CAMINAR EN SECUNDARIA II',
+															'EDUCACIÓN TRADICIONAL'=>'EDUCACIÓN TRADICIONAL',
+															'PROGRAMA PARA JÓVENES EN EXTRAEDAD Y ADULTOS'=>'PROGRAMA PARA JÓVENES EN EXTRAEDAD Y ADULTOS',
+															'SAT PRESENCIAL'=>'SAT PRESENCIAL',
+														);
+														break;
+														case "estrato";
+														return array(
+															""=>'Seleccione una opción',
+															'ESTRATO 0'=>'ESTRATO 0',
+															'ESTRATO 1'=>'ESTRATO 1',
+															'ESTRATO 2'=>'ESTRATO 2',
+															'ESTRATO 3'=>'ESTRATO 3',
+															'ESTRATO 4'=>'ESTRATO 4',
+															'ESTRATO 5'=>'ESTRATO 5',
+															'ESTRATO 6'=>'ESTRATO 6',
+															'NO APLICA'=>'NO APLICA',
 
-																	);
-																	break;
-																	case "genero";
-																	return array(
-																	""=>'Seleccione una opción',
-																	'MASCULINO'=>'MASCULINO',
-																	'FEMENINO'=>'FEMENINO',
-																	);
-																	break;
-																	case "apoyo_academico";
-																		return array(
-																		""=>'Seleccione una opción',
-																		'ATENCIÓN DOMICILIARIA'=>'ATENCIÓN DOMICILIARIA',
-																		'ATENCIÓN EN EL ESTABLECIMIENTO EDUCATIVO'=>'ATENCIÓN EN EL ESTABLECIMIENTO EDUCATIVO',
-																		'ATENCIÓN EN INSTITUCIONES DE APOYO'=>'ATENCIÓN EN INSTITUCIONES DE APOYO',
-																		'AULA HOSPITALARIA'=>'AULA HOSPITALARIA',
-																		'NO APLICA'=>'NO APLICA',
-																		);
-																	break;
-																	case "srpa";
-																		return array(
-																		""=>'Seleccione una opción',
-																		'NO PRIVADO DE LA LIBERTAD'=>'NO PRIVADO DE LA LIBERTAD',
-																		'PRIVADO DE LA LIBERTAD'=>'PRIVADO DE LA LIBERTAD',
-																		'NO APLICA'=>'NO APLICA',
-																		);
-																	case "zona_sede";
-																		return array(
-																		'URBANA'=>'URBANA',
-																		'RURAL'=>'RURAL',
-																	);
-																	case "error_archivo";
-																		return array(
-																		""=>'Seleccione una opción',
-																		'El archivo subido no corresponde'=>'El archivo subido no corresponde',
-																		'El archivo subido es ilegible'=>'El archivo subido es ilegible',
-																		'El número de documento no corresponde'=>'El número de documento no corresponde',
-																	);
-																	case "RH";
-																		return array(
-																		""=>'Seleccione una opción',
-																		'O+'=>'O+',
-																		'O-'=>'O-',
-																		'A+'=>'A+',
-																		'A-'=>'A-',
-																		'B+'=>'B+',
-																		'B-'=>'B-',
-																		'AB+'=>'AB+',
-																		'AB-'=>'AB-'
-																	);
+														);
+														break;
+														case "genero";
+														return array(
+															""=>'Seleccione una opción',
+															'MASCULINO'=>'MASCULINO',
+															'FEMENINO'=>'FEMENINO',
+														);
+														break;
+														case "apoyo_academico";
+														return array(
+															""=>'Seleccione una opción',
+															'ATENCIÓN DOMICILIARIA'=>'ATENCIÓN DOMICILIARIA',
+															'ATENCIÓN EN EL ESTABLECIMIENTO EDUCATIVO'=>'ATENCIÓN EN EL ESTABLECIMIENTO EDUCATIVO',
+															'ATENCIÓN EN INSTITUCIONES DE APOYO'=>'ATENCIÓN EN INSTITUCIONES DE APOYO',
+															'AULA HOSPITALARIA'=>'AULA HOSPITALARIA',
+															'NO APLICA'=>'NO APLICA',
+														);
+														break;
+														case "srpa";
+														return array(
+															""=>'Seleccione una opción',
+															'NO PRIVADO DE LA LIBERTAD'=>'NO PRIVADO DE LA LIBERTAD',
+															'PRIVADO DE LA LIBERTAD'=>'PRIVADO DE LA LIBERTAD',
+															'NO APLICA'=>'NO APLICA',
+														);
+														case "zona_sede";
+														return array(
+															'URBANA'=>'URBANA',
+															'RURAL'=>'RURAL',
+														);
+														case "error_archivo";
+														return array(
+															""=>'Seleccione una opción',
+															'El archivo subido no corresponde'=>'El archivo subido no corresponde',
+															'El archivo subido es ilegible'=>'El archivo subido es ilegible',
+															'El número de documento no corresponde'=>'El número de documento no corresponde',
+														);
+														case "RH";
+														return array(
+															""=>'Seleccione una opción',
+															'O+'=>'O+',
+															'O-'=>'O-',
+															'A+'=>'A+',
+															'A-'=>'A-',
+															'B+'=>'B+',
+															'B-'=>'B-',
+															'AB+'=>'AB+',
+															'AB-'=>'AB-'
+														);
 													}
 												}
 

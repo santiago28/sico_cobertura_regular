@@ -337,13 +337,22 @@ class CobActaconteo extends \Phalcon\Mvc\Model
 				$sql .= ")";
 				$db->query($sql);
 			}
-				$db->query("INSERT IGNORE INTO cob_actaconteo (id_periodo, recorrido, recorrido_virtual, id_sede_contrato, id_contrato, id_modalidad, modalidad_nombre, id_sede, sede_nombre, sede_barrio, sede_direccion, sede_telefono, id_oferente, oferente_nombre, id_jornada, nombre_jornada) SELECT $cob_periodo->id_periodo, $recorrido, $recorrido_virtual,  id_sede_contrato, id_contrato, id_modalidad, modalidad_nombre, id_sede, sede_nombre, sede_barrio, sede_direccion, sede_telefono, id_oferente, oferente_nombre, id_jornada,nombre_jornada FROM $tabla_mat group by id_sede_contrato");
 
-			$db->query("INSERT IGNORE INTO cob_actaconteo_persona (id_actaconteo, id_periodo, recorrido, id_contrato, id_persona, numDocumento, primerNombre, segundoNombre, primerApellido, segundoApellido, id_jornada, nombre_jornada, id_grupo, grupo, ingreso, codigo_dane, fecha_matricula, tipoDocumento, genero, prestacion_servicio, calendario, estaRetirado) SELECT (SELECT id_actaconteo FROM cob_actaconteo WHERE cob_actaconteo.id_sede_contrato = $tabla_mat.id_sede_contrato AND cob_actaconteo.id_periodo = $cob_periodo->id_periodo AND cob_actaconteo.recorrido = $recorrido ), $cob_periodo->id_periodo, $recorrido, id_contrato, id_persona, numDocumento, primerNombre, segundoNombre, primerApellido, segundoApellido,id_jornada, nombre_jornada, id_grupo, grupo, ingreso, codigo_dane, fecha_matricula, tipoDocumento, genero, prestacion_servicio, calendario, estaRetirado FROM $tabla_mat");
+			$group_jornada = "";
+			$validation_jornada ="";
+			if ($recorrido_virtual == 2) {
+				$group_jornada = ", id_jornada";
+				$validation_jornada = "and cob_actaconteo.id_jornada = $tabla_mat.id_jornada";
+			}
+
+			$db->query("INSERT IGNORE INTO cob_actaconteo (id_periodo, recorrido, recorrido_virtual, id_sede_contrato, id_contrato, id_modalidad, modalidad_nombre, id_sede, sede_nombre, sede_barrio, sede_direccion, sede_telefono, id_oferente, oferente_nombre, id_jornada, nombre_jornada) SELECT $cob_periodo->id_periodo, $recorrido, $recorrido_virtual,  id_sede_contrato, id_contrato, id_modalidad, modalidad_nombre, id_sede, sede_nombre, sede_barrio, sede_direccion, sede_telefono, id_oferente, oferente_nombre, id_jornada,nombre_jornada FROM $tabla_mat group by id_sede_contrato $group_jornada");
+
+			$db->query("INSERT IGNORE INTO cob_actaconteo_persona (id_actaconteo, id_periodo, recorrido, id_contrato, id_persona, numDocumento, primerNombre, segundoNombre, primerApellido, segundoApellido, id_jornada, nombre_jornada, id_grupo, grupo, ingreso, codigo_dane, fecha_matricula, tipoDocumento, genero, prestacion_servicio, calendario, estaRetirado) SELECT (SELECT id_actaconteo FROM cob_actaconteo WHERE cob_actaconteo.id_sede_contrato = $tabla_mat.id_sede_contrato AND cob_actaconteo.id_periodo = $cob_periodo->id_periodo AND cob_actaconteo.recorrido = $recorrido $validation_jornada), $cob_periodo->id_periodo, $recorrido, id_contrato, id_persona, numDocumento, primerNombre, segundoNombre, primerApellido, segundoApellido,id_jornada, nombre_jornada, id_grupo, grupo, ingreso, codigo_dane, fecha_matricula, tipoDocumento, genero, prestacion_servicio, calendario, estaRetirado FROM $tabla_mat");
 
 			$db->query("DROP TABLE $tabla_mat");
 			return TRUE;
 		}
+
 
 		public function generarActasR1($cob_periodo, $modalidades, $facturacion, $recorrido_virtual) {
 			$db = $this->getDI()->getDb();
@@ -379,8 +388,15 @@ class CobActaconteo extends \Phalcon\Mvc\Model
 			}
 
 			// $db->query("DELETE FROM $tabla_mat WHERE fechaRetiro > 0000-00-00");
-			$db->query("INSERT IGNORE INTO cob_actaconteo (id_periodo, recorrido, recorrido_virtual, id_sede_contrato, id_contrato, id_modalidad, modalidad_nombre, id_sede, sede_nombre, sede_barrio, sede_direccion, sede_telefono, id_oferente, oferente_nombre, id_jornada, nombre_jornada) SELECT $cob_periodo->id_periodo, '1', $recorrido_virtual,  id_sede_contrato, id_contrato, id_modalidad, modalidad_nombre, id_sede, sede_nombre, sede_barrio, sede_direccion, sede_telefono, id_oferente, oferente_nombre, id_jornada,nombre_jornada FROM $tabla_mat group by id_sede_contrato");
-			$db->query("INSERT IGNORE INTO cob_actaconteo_persona (id_actaconteo, id_periodo, recorrido, id_contrato, id_persona, numDocumento, primerNombre, segundoNombre, primerApellido, segundoApellido, id_jornada, nombre_jornada, id_grupo, grupo, ingreso, codigo_dane, fecha_matricula, tipoDocumento, genero, prestacion_servicio, calendario, estaRetirado) SELECT (SELECT id_actaconteo FROM cob_actaconteo WHERE cob_actaconteo.id_sede_contrato = $tabla_mat.id_sede_contrato AND cob_actaconteo.id_periodo = $cob_periodo->id_periodo AND cob_actaconteo.recorrido = 1), $cob_periodo->id_periodo, 1, id_contrato, id_persona, numDocumento, primerNombre, segundoNombre, primerApellido, segundoApellido, id_jornada, nombre_jornada, id_grupo, grupo, ingreso, codigo_dane, fecha_matricula, tipoDocumento, genero, prestacion_servicio, calendario, estaRetirado FROM $tabla_mat");
+			$group_jornada = "";
+			$validation_jornada ="";
+			if ($recorrido_virtual == 2) {
+				$group_jornada = ", id_jornada";
+				$validation_jornada = "and cob_actaconteo.id_jornada = $tabla_mat.id_jornada";
+			}
+
+			$db->query("INSERT IGNORE INTO cob_actaconteo (id_periodo, recorrido, recorrido_virtual, id_sede_contrato, id_contrato, id_modalidad, modalidad_nombre, id_sede, sede_nombre, sede_barrio, sede_direccion, sede_telefono, id_oferente, oferente_nombre, id_jornada, nombre_jornada) SELECT $cob_periodo->id_periodo, '1', $recorrido_virtual,  id_sede_contrato, id_contrato, id_modalidad, modalidad_nombre, id_sede, sede_nombre, sede_barrio, sede_direccion, sede_telefono, id_oferente, oferente_nombre, id_jornada,nombre_jornada FROM $tabla_mat group by id_sede_contrato $group_jornada");
+			$db->query("INSERT IGNORE INTO cob_actaconteo_persona (id_actaconteo, id_periodo, recorrido, id_contrato, id_persona, numDocumento, primerNombre, segundoNombre, primerApellido, segundoApellido, id_jornada, nombre_jornada, id_grupo, grupo, ingreso, codigo_dane, fecha_matricula, tipoDocumento, genero, prestacion_servicio, calendario, estaRetirado) SELECT (SELECT id_actaconteo FROM cob_actaconteo WHERE cob_actaconteo.id_sede_contrato = $tabla_mat.id_sede_contrato AND cob_actaconteo.id_periodo = $cob_periodo->id_periodo AND cob_actaconteo.recorrido = 1 $validation_jornada), $cob_periodo->id_periodo, 1, id_contrato, id_persona, numDocumento, primerNombre, segundoNombre, primerApellido, segundoApellido, id_jornada, nombre_jornada, id_grupo, grupo, ingreso, codigo_dane, fecha_matricula, tipoDocumento, genero, prestacion_servicio, calendario, estaRetirado FROM $tabla_mat");
 
 			$db->query("DROP TABLE $tabla_mat");
 			return TRUE;
@@ -945,7 +961,7 @@ class CobActaconteo extends \Phalcon\Mvc\Model
 		$html .= $encabezado;
 		$html .= $encabezado_beneficiarios;
 		if($acta->id_modalidad == 12){
-			foreach($acta->getCobActaconteoPersona(["tipoPersona = 0", 'order' => 'id_grupo, id_jornada, primerApellido asc']) as $row){
+			foreach($acta->getCobActaconteoPersona(["tipoPersona = 0", 'order' => 'estaRetirado, id_grupo, id_jornada, primerApellido asc']) as $row){
 				$mayor5 = "";
 				$mayor_5 = "";
 				if($row->fechaNacimiento){
@@ -974,7 +990,7 @@ class CobActaconteo extends \Phalcon\Mvc\Model
 			$html .= "<div class='clear'></div></div>" . $pie_pagina;
 			$html .= "<div class='paginacion'>PÁGINA $p</div>";
 		} else {
-			foreach($acta->getCobActaconteoPersona(["tipoPersona = 0", 'order' => 'id_grupo, id_jornada, primerApellido asc']) as $row){
+			foreach($acta->getCobActaconteoPersona(["tipoPersona = 0", 'order' => 'estaRetirado, id_grupo, id_jornada, primerApellido asc']) as $row){
 				$mayor5 = "";
 				$mayor_5 = "";
 				if($row->fechaNacimiento){

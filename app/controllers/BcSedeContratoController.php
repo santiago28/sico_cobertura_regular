@@ -10,7 +10,7 @@ class BcSedeContratoController extends ControllerBase
 
   public function initialize()
   {
-    $this->tag->setTitle("Acta de Conteo");
+    $this->tag->setTitle("Sede Contrato");
     $this->user = $this->session->get('auth');
     $this->usuario = $this->user['usuario'];
     parent::initialize();
@@ -724,7 +724,7 @@ class BcSedeContratoController extends ControllerBase
   }
 
   public function solicitudMatriculaAction(){
-    //Estado certificado 1= Matricualdo(amariillo), 2=Pre-matriculado(verde), 3=Rechazado(rojo) 
+    //Estado certificado 1= Matricualdo(amariillo), 2=Pre-matriculado(verde), 3=Rechazado(rojo)
     $beneficiarios = CobOferentePersonaSimat::find([
       'estado_certificacion =2 and estado_activo = 1']);
 
@@ -786,7 +786,7 @@ class BcSedeContratoController extends ControllerBase
         $oferente_contratos = $db->query(
             "SELECT  sm.id_contrato, sm.institucion,
             (SELECT s.cuposSostenibilidad FROM bc_sede_contrato s WHERE s.id_contrato = sm.id_contrato  GROUP by s.id_contrato) as cuposSostenibilidad,
-            (SELECT count(s.id_oferente_persona) FROM cob_oferente_persona_eliminado s WHERE s.id_contrato = sm.id_contrato) as eliminados, 
+            (SELECT count(s.id_oferente_persona) FROM cob_oferente_persona_eliminado s WHERE s.id_contrato = sm.id_contrato) as eliminados,
             sum(if(sm.estado_certificacion = 1 and estado_activo =1, 1, 0)) as matriculados,
             sum(if(sm.estado_certificacion = 2 and estado_activo =1, 1, 0)) as pre_matriculas,
             sum(if(sm.estado_certificacion = 3 and estado_activo =1, 1, 0)) as rechazados
@@ -798,7 +798,7 @@ class BcSedeContratoController extends ControllerBase
         $eliminados = CobOferentePersonaEliminado::find([]);
         $this->view->oferente_contratos = $oferente_contratos->fetchAll();
         $this->view->eliminados = $eliminados;
-      
+
         $this->assets->addJs('js/beneficiarios-oferente.js')
         ->addJs('js/jquery.fixedtableheader.min.js')
         ->addJs('js/alasql.min.js')
@@ -809,7 +809,7 @@ class BcSedeContratoController extends ControllerBase
         ->addJs('js/parsley.min.js')
         ->addJs('js/parsley.extend.js')
         ->addJs('js/cargarSimat.js');
-      } 
+      }
   }
 
   public function cruceSimatAction()
@@ -833,13 +833,13 @@ class BcSedeContratoController extends ControllerBase
           $i++;
         }
      }
-      
+
     $db = $this->getDI()->getDb();
     $config = $this->getDI()->getConfig();
     // $db->query("DROP TABLE $tabla_mat");
     $timestamp = new DateTime();
     $tabla_mat = "m" . $timestamp->getTimestamp();
-    
+
     $archivo_mat = $config->application->basePath . "public/files/bc_bd/" . $archivo;
     $db->query("CREATE TEMPORARY TABLE $tabla_mat (
      ano VARCHAR(20),
@@ -847,9 +847,9 @@ class BcSedeContratoController extends ControllerBase
      institucion VARCHAR(100),
      codigo_dane VARCHAR(50),
      prestacion_servicio VARCHAR(50),
-     sector VARCHAR(20), 
-     nombre_sede VARCHAR(100), 
-     zona_sede VARCHAR(100), 
+     sector VARCHAR(20),
+     nombre_sede VARCHAR(100),
+     zona_sede VARCHAR(100),
      nombre_jornada VARCHAR(50),
      modelo VARCHAR(50),
      fecha_ini VARCHAR(50),
@@ -865,13 +865,13 @@ class BcSedeContratoController extends ControllerBase
      fecha_nacimiento VARCHAR(20),
      grado_cod_simat VARCHAR(50),
      grupo_simat VARCHAR(50),
-     matricula_contratada VARCHAR(10), 
+     matricula_contratada VARCHAR(10),
      fuente_recursos VARCHAR(10),
      pais_origen VARCHAR(100),
-     estado_certificacion VARCHAR(10)) 
+     estado_certificacion VARCHAR(10))
      CHARACTER SET utf8 COLLATE utf8_bin");
-    $db->query("LOAD DATA INFILE '$archivo_mat' IGNORE INTO TABLE $tabla_mat FIELDS TERMINATED BY ';' LINES TERMINATED BY '\n' IGNORE 1 LINES 
-    (      
+    $db->query("LOAD DATA INFILE '$archivo_mat' IGNORE INTO TABLE $tabla_mat FIELDS TERMINATED BY ';' LINES TERMINATED BY '\n' IGNORE 1 LINES
+    (
      @ANO,
      @ID_CONTRATO,
      @ESTADO,
@@ -895,11 +895,11 @@ class BcSedeContratoController extends ControllerBase
      @NOMBRE2,
      @GENERO,
      @FECHA_NACIMIENTO,
-     @MATRICULACONTRATADA, 
+     @MATRICULACONTRATADA,
      @FUENTE_RECURSOS,
-     @PAIS_ORIGEN 
-    ) SET 
-     Ano =  @ANO, 
+     @PAIS_ORIGEN
+    ) SET
+     Ano =  @ANO,
      id_contrato = @ID_CONTRATO,
      estado = @ESTADO,
      institucion = @INSTITUCION,
@@ -928,7 +928,7 @@ class BcSedeContratoController extends ControllerBase
      estado_certificacion= 4"
     );
 
-  
+
       // $beneficiario_sobrantes_simat = $db->query(
       //  "SELECT t1.id_contrato, t1.documento, t1.nombre1, t1.nombre2, t1.apellido1, t1.apellido2, t1.grado_cod_simat, t1.grupo_simat
       //   FROM  $tabla_mat t1
@@ -943,29 +943,29 @@ class BcSedeContratoController extends ControllerBase
       //   left join $tabla_mat t2 on t2.documento = t1.documento and t1.id_contrato= t2.id_contrato
       //   where t2.documento is null");
 
-   
+
       // $beneficiario_sobrantes_cobertura->setFetchMode(Phalcon\Db::FETCH_OBJ);
-      
+
       $Totalbeneficiarios = $db->query(
-       "SELECT  
+       "SELECT
                t.*, if(estado_certificacion=1,'Retirado', 'Nuevo') as estado
        FROM
        (
            SELECT tipo_documento,
                   documento,
-                  id_contrato, 
+                  id_contrato,
                   institucion,
                   codigo_dane,
                   prestacion_servicio,
                   sector,
                   nombre_sede,
                   zona_sede,
-                  apellido1, 
-                  apellido2, 
+                  apellido1,
+                  apellido2,
                   nombre1,
                   nombre2,
                   nombre_jornada,
-                  grado_cod_simat, 
+                  grado_cod_simat,
                   grupo_simat,
                   modelo,
                   fecha_ini,
@@ -977,22 +977,22 @@ class BcSedeContratoController extends ControllerBase
                   estado_certificacion
 
            FROM cob_oferente_persona_simat WHERE estado_activo=1 and estado_certificacion =1
-           UNION ALL 
+           UNION ALL
            SELECT tipo_documento,
                   documento,
-                  id_contrato, 
+                  id_contrato,
                   institucion,
                   codigo_dane,
                   prestacion_servicio,
                   sector,
                   nombre_sede,
                   zona_sede,
-                  apellido1, 
-                  apellido2, 
+                  apellido1,
+                  apellido2,
                   nombre1,
                   nombre2,
                   nombre_jornada,
-                  grado_cod_simat, 
+                  grado_cod_simat,
                   grupo_simat,
                   modelo,
                   fecha_ini,
@@ -1008,7 +1008,7 @@ class BcSedeContratoController extends ControllerBase
        HAVING COUNT(*) = 1");
 
       $Totalbeneficiarios->setFetchMode(Phalcon\Db::FETCH_OBJ);
-      
+
       $this->view->Totalbeneficiarios = $Totalbeneficiarios->fetchAll();
       // $this->view->beneficiario_sobrantes_cobertura = $beneficiario_sobrantes_cobertura->fetchAll();
       $this->assets->addJs('js/jquery.fixedtableheader.min.js')
@@ -1017,7 +1017,7 @@ class BcSedeContratoController extends ControllerBase
       $this->assets
       ->addJs('js/parsley.min.js')
       ->addJs('js/parsley.extend.js');
-    
+
   }
 
   //--------------------Crud Sede Contrato -----------------------------
@@ -1080,7 +1080,7 @@ class BcSedeContratoController extends ControllerBase
     if (isset($this->usuario)) {
       $this->view->disable();
       $id_oferente = $_GET['valor_busqueda'];
-      $contratos = BcSedeContrato::find(['id_oferente='. $id_oferente]);  
+      $contratos = BcSedeContrato::find(['id_oferente='. $id_oferente]);
       echo json_encode($contratos);
     }
   }
@@ -1109,7 +1109,7 @@ class BcSedeContratoController extends ControllerBase
     $sede_contrato->modalidad_nombre = $modalidad->modalidad_nombre;
     $sede_contrato->cuposSostenibilidad = $this->request->getPost("cuposSostenibilidad");
     $sede_contrato->estado = 1;
-
+    $sede_contrato->id_sede_contrato = $idSede.substr($this->request->getPost("id_contrato"), 5);
     if (!$sede_contrato->save()) {
       foreach ($sede_contrato->getMessages() as $message) {
         $this->flash->error($message);
@@ -1164,7 +1164,7 @@ class BcSedeContratoController extends ControllerBase
           id_oferente ='$id_oferente',
           oferente_nombre='$oferente_nombre',
           id_contrato='$id_contrato',
-          id_sede='$id_sede_contrato',
+          /*id_sede='$id_sede_contrato',*/
           sede_nombre='$sede_nombre',
           sede_barrio='$sede_barrio',
           sede_comuna='$sede_comuna',
