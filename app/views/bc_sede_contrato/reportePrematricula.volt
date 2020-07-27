@@ -107,13 +107,14 @@
     </style>
     
     <div class="form-group" >
-      <h1 align="center" style="margin:2%;"><span><b>Reporte Pre-matriculas</b></span></h1>
+      <h1 align="center" style="margin:2%;"><span><b>Reporte Prematriculas</b></span></h1>
       <br>
       <br>
     
       <button class="btn btn-success" id="ExportarExcel">EXPORTAR REGISTROS</button>
       <button class="btn btn-success" id="ExportarEliminados">ESTUDIANTES ELIMINADOS</button>
       <button class="btn btn-primary" onclick="abrirModal()" >CARGAR SIMAT</button>
+      <button class="btn btn-primary" id="estado_periodo" onclick="bloquearPeriodo()">{% if(periodo_bloqueo[0].estado_periodo == 1) %} DESACTIVAR PERIODO {% else %} ACTIVAR PERIODO {% endif %}</button>
     
       <div id="contenedo">
         <div class="loader" id="loader"></div>
@@ -188,6 +189,19 @@
 
   <script> 
       
+    function bloquearPeriodo(){
+      var url = window.location.protocol + "//" + window.location.host + "/sico_cobertura_regular/" + "bc_sede_contrato/cambiarEstadoPeriodo";
+      $.ajax({
+          url: url,
+          type: 'POST',
+          dataType: 'json',
+          success: function (data) {
+            console.log(data);
+            data==1? $("#estado_periodo").html("DESACTIVAR PERIODO"): $("#estado_periodo").html("ACTIVAR PERIODO");
+          }
+        });
+    } 
+
     function abrirModal(){
       $("#modal_cargar_simat").modal("show");
       $('#archivo').val('')
@@ -244,6 +258,8 @@
             "Jornada": "{{eliminado.nombre_jornada}}",
             "Grado": "{{eliminado.grado_cod_simat}}",
             "Grupo": "{{eliminado.grupo_simat}}",
+            "Motivo_retiro": "<?php echo str_replace(' ', '', $eliminado->observaciones_retiro); ?>",
+            "Fecha_retiro": "{{eliminado.fecha_retiro}}",
             "Acta_Ingreso": "{{eliminado.ingreso}}",
           });
           {% endfor %}

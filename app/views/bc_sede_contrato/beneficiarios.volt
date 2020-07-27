@@ -120,9 +120,11 @@ th     { background:#eee; }
     <span style="margin-left: 2%;"><b>Total Beneficiarios Contrato:</b> {{cuposTotal}}</span>
   </div>
   <button class="btn btn-success" id="ExportarExcel">EXPORTAR REGISTROS</button>
+  {% if(periodo_bloqueo[0].estado_periodo == 1) %}
   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
-    Pre-matricular Estudiante
+    Pre-matricular Estudiante 
   </button>
+  {% endif %}
   <img src="/sico_cobertura_regular/public/img/semaforo.png" width="600" height="30" style="float:right">
   <div id="contenedo">
     <div class="loader" id="loader"></div>
@@ -154,13 +156,15 @@ th     { background:#eee; }
       {% for beneficiario in beneficiarios %}
       <tr<?php echo $beneficiario->getMatriculaDetail(); ?>>  
         <td>
+          {% if(periodo_bloqueo[0].estado_periodo == 1) %}
           {{ link_to("bc_sede_contrato/editar_persona/?id_persona="~beneficiario.id_oferente_persona, '<i class="glyphicon glyphicon-pencil"></i> ', "rel": "tooltip", "title":"Editar") }}
           <a style="margin-left:7%;" onclick="abrirModal('{{beneficiario.documento}}','{{beneficiario.nombre1}} {{beneficiario.nombre2}} {{beneficiario.apellido1}} {{beneficiario.apellido2}}')" rel="tooltip" title="Retirar Estudiante" class="eliminar_fila" data-toggle = "modal" id="{{ beneficiario.id_oferente_persona }}"><i class="glyphicon glyphicon-trash"></i></a>
          <?php if ($beneficiario->estado_certificacion==3) {?>
            <a style="margin-left:7%;" onclick="abrirModalEvidencia('{{beneficiario.id_oferente_persona}}','{{beneficiario.documento}}','{{beneficiario.motivo_certificacion}}')" rel="tooltip" title="Adjuntar nueva evidencia" class="eliminar_fila" data-toggle = "modal" id="{{ beneficiario.id_oferente_persona }}"><i class="glyphicon glyphicon-file"></i></a>
          <?php }?>
+         {% endif %}
         </td>
-        <td id="documentoIdentidad"><span style="display:outline"> {{ beneficiario.documento }}</span> <a style="display:outline" rel="tooltip" title="Editar Documento" class="eliminar_fila" data-toggle = "modal" id="{{ beneficiario.documento}}"><i class="glyphicon glyphicon-pencil"></i></a></td>
+        <td id="documentoIdentidad"><span style="display:outline"> {{ beneficiario.documento }}</span> {% if(periodo_bloqueo[0].estado_periodo == 1) %} <a style="display:outline" rel="tooltip" title="Editar Documento" class="eliminar_fila" data-toggle = "modal" id="{{ beneficiario.documento}}"><i class="glyphicon glyphicon-pencil"></i></a>{% endif %}</td>
         <td>{{ beneficiario.apellido1 }} {{ beneficiario.apellido2 }} {{ beneficiario.nombre1 }} {{ beneficiario.nombre2 }}</td>
         <td>{{ beneficiario.codigo_dane }}</td>
         <td>{{ beneficiario.sede_simat }}</td>

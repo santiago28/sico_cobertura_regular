@@ -57,7 +57,7 @@
             </div>
             <div class="form-group" id="rechazo">
               <label for="inputEmail4">Motivo Rechazo</label>
-              {{ select("error_archivo", error_archivo,  "class" : "form-control", "required":"required") }}
+              <textarea class="form-control" name="error_archivo" id="error_archivo" rows="2" maxlength="180" required></textarea>
             </div>
             <div class="modal-footer">
                <button type="submit" class="btn btn-primary">Aceptar</button>

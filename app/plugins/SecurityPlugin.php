@@ -632,6 +632,9 @@ class SecurityPlugin extends Plugin
       'reportePrematricula' => array(
         'nivelPermiso' => '1'
       ),
+      'cambiarEstadoPeriodo' => array(
+        'nivelPermiso' => '1'
+      ),
       'cruceSimat' => array(
         'nivelPermiso' => '1'
       ),

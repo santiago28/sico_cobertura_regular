@@ -133,6 +133,10 @@ class BcSedeContratoController extends ControllerBase
         $sedes = BcSedeContrato::find(['id_contrato = '. $this->usuario, 'order' => 'oferente_nombre asc']);
         $modalidad = BcModalidad::find(['id_modalidad = '. $id_modalidad]);
 
+        $periodo_bloqueo = $db->query("SELECT * FROM  cob_periodo_bloqueo");
+        $periodo_bloqueo->setFetchMode(Phalcon\Db::FETCH_OBJ);
+
+
         $sedes_array = array();
         foreach ($sedes as $row) {
           $sedes_array[$row->id_sede] = $row->sede_nombre;
@@ -148,6 +152,7 @@ class BcSedeContratoController extends ControllerBase
         $this->view->modalidad =  $modalidad;
         $this->view->oferente =   $oferente;
         $this->view->porcentaje_cobertura =   $porcentaje_cobertura;
+        $this->view->periodo_bloqueo =  $periodo_bloqueo->fetchAll();
         // $this->view->sedes = $sedes_array;
         $this->view->id_contrato = $this->usuario;
         $this->view->fecha_fin_eliminado = date('Y-m-d');
@@ -617,20 +622,20 @@ class BcSedeContratoController extends ControllerBase
       return $this->response->redirect("bc_sede_contrato/beneficiarios");
     }
 
-    $beneficiario_validacion = CobOferentePersonaSimat::findFirst(['documento = '.  $this->request->getPost("documento_nuevo")]);
+    $beneficiario_validacion = CobOferentePersonaSimat::findFirst(['documento = "'.  $this->request->getPost("documento_nuevo").'"']);
     if (!empty($beneficiario_validacion)) {
       $this->flash->error("El nuevo documento que intenta ingresar ya esta registrado a nombre de otra persona en el sistema, con el operador ".  $beneficiario_validacion->institucion);
       return $this->response->redirect("bc_sede_contrato/beneficiarios");
     }
 
-    $beneficiario_editado = CobEditarDocPersona::findFirst(['documento_anterior = '.  $this->request->getPost("documento_anterior")]);
+    $beneficiario_editado = CobEditarDocPersona::findFirst(['documento_anterior = "'.  $this->request->getPost("documento_anterior").'"']);
 
     if (!empty($beneficiario_editado)) {
       $this->flash->error("El documento que intenta editar se modificó recientemente y no es posible editarlo, si cree que aún hay un error comuníquese con el administdor del sistema".  $beneficiario_validacion->institucion);
       return $this->response->redirect("bc_sede_contrato/beneficiarios");
     }
 
-    $beneficiario = CobOferentePersonaSimat::findFirst(['documento = '.  $this->request->getPost("documento_anterior")]);
+    $beneficiario = CobOferentePersonaSimat::findFirst(['documento = "'.$this->request->getPost("documento_anterior").'"']);
 
     $edit_documento = new CobEditarDocPersona();
     $edit_documento->id_contrato = $this->request->getPost("id_contrato");
@@ -794,9 +799,12 @@ class BcSedeContratoController extends ControllerBase
             GROUP by sm.id_contrato");
 
         $oferente_contratos->setFetchMode(Phalcon\Db::FETCH_OBJ);
+        $periodo_bloqueo = $db->query("SELECT * FROM  cob_periodo_bloqueo");
+        $periodo_bloqueo->setFetchMode(Phalcon\Db::FETCH_OBJ);
 
         $eliminados = CobOferentePersonaEliminado::find([]);
         $this->view->oferente_contratos = $oferente_contratos->fetchAll();
+        $this->view->periodo_bloqueo = $periodo_bloqueo->fetchAll();
         $this->view->eliminados = $eliminados;
 
         $this->assets->addJs('js/beneficiarios-oferente.js')
@@ -1017,6 +1025,30 @@ class BcSedeContratoController extends ControllerBase
       $this->assets
       ->addJs('js/parsley.min.js')
       ->addJs('js/parsley.extend.js');
+
+  }
+
+  public function cambiarEstadoPeriodoAction()
+  {
+    $this->view->disable();
+    $db = $this->getDI()->getDb();
+    $config = $this->getDI()->getConfig();
+    // $periodo_bloqueo = CobPeriodoBloqueo::find();
+    
+    $periodo_bloqueo=$db->query("SELECT estado_periodo FROM cob_periodo_bloqueo");
+    $periodo_bloqueo->setFetchMode(Phalcon\Db::FETCH_OBJ);
+    // $periodo_bloqueo->fetchAll();
+
+    $estado=0;
+    foreach ($periodo_bloqueo->fetchAll() as $key => $value) {
+      $estado = $value->estado_periodo;
+    }
+  
+    $estado == "0"? $estado= 1: $estado=0;
+    
+    $db->query("UPDATE cob_periodo_bloqueo SET estado_periodo ='$estado'");
+
+    echo json_encode($estado);
 
   }
 
