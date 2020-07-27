@@ -112,6 +112,9 @@ th     { background:#eee; }
 <div class="form-group" >
   <h4 align="center" style="margin:2%;"><span><b>{{oferente}}</b></span></h4>
   <h5 align="center" style="margin:2%;"><span><b>CONTRATO: {{id_contrato}} MODALIDAD:</b> {{modalidad[0].nombre}}</span></h5>
+  {% if(periodo_bloqueo[0].estado_periodo == 0)%}
+   <h5 align="center" style="margin:2%;"><span><b>El período se encuntra cerrado por motivo de verificación de la atención</b></span></h5>
+  {% endif %}
   <div class="alert alert-info" role="alert" style="justify-content: center; text-align:center;">
     <!-- <span><b>Total Cupos Matriculados: </b> {{total_beneficiarios}}</span> -->
     <span style="margin-left: 2%;"><b>Total Beneficiarios Activos: </b>{{beneficiarios_activos}}</span>

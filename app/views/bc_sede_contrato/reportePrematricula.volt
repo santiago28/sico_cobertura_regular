@@ -246,6 +246,7 @@
       $("#ExportarEliminados").click(function(){
           var Export = [];
           {% for eliminado in eliminados %}
+         
           Export.push({
             "Contrato": "{{eliminado.id_contrato}}",
             "Oferente": "<?php echo str_replace('"','', $eliminado->institucion); ?>",
@@ -258,7 +259,7 @@
             "Jornada": "{{eliminado.nombre_jornada}}",
             "Grado": "{{eliminado.grado_cod_simat}}",
             "Grupo": "{{eliminado.grupo_simat}}",
-            "Motivo_retiro": "<?php echo str_replace(' ', '', $eliminado->observaciones_retiro); ?>",
+            "Motivo_retiro":  "<?php echo trim($eliminado->observaciones_retiro); ?>",
             "Fecha_retiro": "{{eliminado.fecha_retiro}}",
             "Acta_Ingreso": "{{eliminado.ingreso}}",
           });
