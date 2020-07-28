@@ -659,6 +659,9 @@ class SecurityPlugin extends Plugin
       'guardarEdicionSede' => array(
         'nivelPermiso' => '1'
       ),
+      'exportar_beneficiarios' => array(
+        'nivelPermiso' => '2'
+      )
     )
 
   );

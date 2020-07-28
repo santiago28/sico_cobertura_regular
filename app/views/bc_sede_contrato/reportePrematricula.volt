@@ -3,7 +3,7 @@
         .tablesorter-filter {
           width: 90px;
         }
-        
+
         .boton-abrir{
           width: 45px;
           height: 45px;
@@ -22,7 +22,7 @@
           cursor: pointer;
           z-index: 1000;
         }
-        
+
         .boton-exportar{
           width: 45px;
           height: 45px;
@@ -43,12 +43,12 @@
         }
         .tableFixHead          { overflow-y: auto; height: 600px; }
         .tableFixHead thead th { position: sticky; top: 0; }
-        
+
         /* Just common table stuff. Really. */
         table  { border-collapse: collapse; width: 100%; }
         th, td { padding: 8px 16px; }
         th     { background:#eee; }
-        
+
         .loader,
         .loader:before,
         .loader:after {
@@ -105,17 +105,18 @@
           }
         }
     </style>
-    
+
     <div class="form-group" >
       <h1 align="center" style="margin:2%;"><span><b>Reporte Prematriculas</b></span></h1>
       <br>
       <br>
-    
+
       <button class="btn btn-success" id="ExportarExcel">EXPORTAR REGISTROS</button>
+      {{ link_to("bc_sede_contrato/exportar_beneficiarios", 'EXPORTAR BENEFICIARIOS ACTIVOS', "class": "btn btn-success", "target": "_blank") }}
       <button class="btn btn-success" id="ExportarEliminados">ESTUDIANTES ELIMINADOS</button>
       <button class="btn btn-primary" onclick="abrirModal()" >CARGAR SIMAT</button>
       <button class="btn btn-primary" id="estado_periodo" onclick="bloquearPeriodo()">{% if(periodo_bloqueo[0].estado_periodo == 1) %} DESACTIVAR PERIODO {% else %} ACTIVAR PERIODO {% endif %}</button>
-    
+
       <div id="contenedo">
         <div class="loader" id="loader"></div>
         <h6 align="center"><b>Cargando información en la tabla, un momento por favor</b></h6>
@@ -124,7 +125,7 @@
     <br>
     <br>
     <div class="tableFixHead">
-    
+
       <table class="table table-bordered table-hover" id="tabla_beneficiarios">
         <thead>
           <tr>
@@ -139,7 +140,7 @@
         </thead>
         <tbody>
           {% for oferente_contrato in oferente_contratos %}
-          <tr>  
+          <tr>
             <td>{{ oferente_contrato.id_contrato }}</td>
             <td>{{ oferente_contrato.institucion }}</td>
             <td>{{ oferente_contrato.cuposSostenibilidad }}</td>
@@ -152,7 +153,7 @@
         </tbody>
       </table>
     </div>
-     
+
 
 <!-- Modal cargar excel-->
 <div class="modal fade" id="modal_cargar_simat" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -187,8 +188,8 @@
   </div>
 </div>
 
-  <script> 
-      
+  <script>
+
     function bloquearPeriodo(){
       var url = window.location.protocol + "//" + window.location.host + "/sico_cobertura_regular/" + "bc_sede_contrato/cambiarEstadoPeriodo";
       $.ajax({
@@ -200,7 +201,7 @@
             data==1? $("#estado_periodo").html("DESACTIVAR PERIODO"): $("#estado_periodo").html("ACTIVAR PERIODO");
           }
         });
-    } 
+    }
 
     function abrirModal(){
       $("#modal_cargar_simat").modal("show");
@@ -208,7 +209,7 @@
       $(archivo).parent().find('#progress .progress-bar').css(
          "width", "0%"
        );
-  
+
     }
 
     window.onload = function() {
@@ -246,7 +247,7 @@
       $("#ExportarEliminados").click(function(){
           var Export = [];
           {% for eliminado in eliminados %}
-         
+
           Export.push({
             "Contrato": "{{eliminado.id_contrato}}",
             "Oferente": "<?php echo str_replace('"','', $eliminado->institucion); ?>",
@@ -271,7 +272,7 @@
 
       setTimeout(function(){
             $(function() {
-      
+
               $.extend($.tablesorter.themes.bootstrap, {
                 // these classes are added to the table. To see other table classes available,
                 // look here: http://twitter.github.com/bootstrap/base-css.html#tables
@@ -290,39 +291,38 @@
                 even       : '', // odd row zebra striping
                 odd        : ''  // even row zebra striping
               });
-      
+
               // call the tablesorter plugin and apply the uitheme widget
               $("table").tablesorter({
                 // this will apply the bootstrap theme if "uitheme" widget is included
                 // the widgetOptions.uitheme is no longer required to be set
                 theme : "bootstrap",
-      
+
                 widthFixed: true,
                 // headers: { 0: { sorter: false, filter:false}}  ,
-      
+
                 headerTemplate : '{content} {icon}', // new in v2.7. Needed to add the bootstrap icon!
-      
+
                 // widget code contained in the jquery.tablesorter.widgets.js file
                 // use the zebra stripe widget if you plan on hiding any rows (filter widget)
                 widgets : [ "uitheme", "filter", "zebra" ],
-      
+
                 widgetOptions : {
                   // using the default zebra striping class name, so it actually isn't included in the theme variable above
                   // this is ONLY needed for bootstrap theming if you are using the filter widget, because rows are hidden
                   zebra : ["even", "odd"],
-      
+
                   // reset filters button
                   filter_reset : ".reset",
-      
+
                   // set the uitheme widget to use the bootstrap theme class names
                   // this is no longer required, if theme is set
                   // ,uitheme : "bootstrap"
-      
+
                 }
               });
-      
+
             });
        }, 1000);
-      
+
   </script>
-    
