@@ -5,7 +5,7 @@
 <br>
 <br>
 <!-- <form style="margin-top: 4%;" action="bc_sede_contrato/guardar_update_beneficiario" method="POST" > -->
-{{ form("bc_sede_contrato/guardar_beneficiario/", "method":"post", "parsley-validate" : "", "id" : "beneficiarios_form") }}
+{{ form("bc_sede_contrato/guardar_beneficiario/", "method":"post", "parsley-validate" : "", "id" : "beneficiarios_form","onsubmit":"return onSubmit()") }}
 {{ hidden_field("id_contrato", "value": id_contrato) }}
 {{ hidden_field("ingreso", "value": beneficiario.proviene) }}
 {{ hidden_field("nombre_jornada") }}
@@ -418,7 +418,7 @@
         </div>        
     </div>
     <div  class="form-group col-md-4" style="margin-top: 2%;">
-        <button type="submit" class="btn btn-primary submit">GUARDAR</button>  
+        <button type="submit" class="btn btn-primary submit" id="guardar"  >GUARDAR</button>  
     </div>
 </form>
 
@@ -435,10 +435,24 @@
         }
     }
 
-      
     function obtener_jornada(){
         $("#nombre_jornada").val($('select[name="id_jornada"] option:selected').text());
     }
+  
+
+    var enviado = false;
+    function onSubmit(){
+    
+        if(!enviado){
+            $("#guardar").prop("disabled", true);
+            enviado=true;
+            return true;
+        }else{
+            $("#guardar").prop("disabled", false);
+            return false;
+        }
+      };
+    
     // window.onload = function() {
     //     var getDate = function (input) {
     //         return new Date(input.date.valueOf());

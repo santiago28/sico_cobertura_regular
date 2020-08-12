@@ -210,6 +210,7 @@ th     { background:#eee; }
         {{ form("bc_sede_contrato/crearBeneficiario/", "method":"post", "parsley-validate" : "", "id" : "beneficiarios_form") }}
         {{ hidden_field("activos", "value": beneficiarios_activos) }}
         {{ hidden_field("cuposTotal", "value": cuposTotal) }}
+        {{ hidden_field("id_contrato", "value": id_contrato) }}
           <div class="form-group">
             <label for="inputPassword4">Documento</label>
             <input type="text" class="form-control" name="documento" placeholder="Documento" maxlength="15" required>

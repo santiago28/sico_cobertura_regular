@@ -37,7 +37,7 @@
                 class="form-control"
                 name="sede_nombre"
                 placeholder="Nombre Sede"
-                style="text-transform: uppercase;"
+                onkeyup="this.value = this.value.toUpperCase()"
                 maxlength="80"
                 value="{{sedeContrato.sede_nombre}}"
                 required>
@@ -54,7 +54,7 @@
                 class="form-control"
                 name="sede_barrio"
                 placeholder="Barrio Sede"
-                style="text-transform: uppercase;"
+                onkeyup="this.value = this.value.toUpperCase()"
                 maxlength="80"
                 value="{{sedeContrato.sede_barrio}}"
                 required>
@@ -67,7 +67,7 @@
                 class="form-control"
                 name="sede_comuna"
                 placeholder="Comuna Sede"
-                style="text-transform: uppercase;"
+                onkeyup="this.value = this.value.toUpperCase()"
                 maxlength="80"
                 value="{{sedeContrato.sede_comuna}}"
                 required>
@@ -80,7 +80,7 @@
                 class="form-control"
                 name="sede_direccion"
                 placeholder="Dirección Sede"
-                style="text-transform: uppercase;"
+                onkeyup="this.value = this.value.toUpperCase()"
                 maxlength="80"
                 value="{{sedeContrato.sede_direccion}}"
                 required>
