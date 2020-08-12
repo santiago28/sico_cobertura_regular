@@ -792,12 +792,15 @@ class CobActaconteo extends \Phalcon\Mvc\Model
 				</div>
 				<div class='seccion' id='observaciones'>
 				<div class='fila center bold'><div style='border:none; width: 100%'>3. 3. OBSERVACIONES AL MOMENTO DE LA VERIFICACIÓN DE EVIDENCIAS</div></div>
-				<div class='fila observacion' style='margin-top:0px; height: 320px !important; font-size: 10px !important;'><div>3.1 OBSERVACIÓN DEL TÉCNICO DE CONTEO: <br><br>Tras la declaratoria de “Emergencia Sanitaria” en todo el territorio colombiano por parte del Ministerio de Salud y Protección Social, según Resolución 385
+				<div class='fila observacion' style='margin-top:0px; height: 320px !important; font-size: 10px !important;'><div>3.1 OBSERVACIÓN DEL TÉCNICO DE CONTEO: <br><br><!--Tras la declaratoria de “Emergencia Sanitaria” en todo el territorio colombiano por parte del Ministerio de Salud y Protección Social, según Resolución 385
 				del 12 de marzo de 2020 y de calamidad pública por Decreto Municipal 373 del 16 de marzo de 2020, la interventoría a través de medios no presenciales
 				realizará la verificación de evidencias de atención a los estudiantes. Adicional a lo anterior, mediante Decreto 457 del 22 de marzo de 2020, el Gobierno
 				Nacional ordenó el aislamiento preventivo obligatorio de todas las personas habitantes de la República de Colombia, entre el 25 de marzo y el 11 de mayo
 				de 2020, con algunas excepciones. Con fundamento en lo anterior, el equipo de interventoría realiza labores de verificación, haciendo uso de herramientas
-				de las TIC`s, que permitan en forma remota la certificación de los estudiantes en el período de abril.<br><br>".$acta->CobActaconteoDatos->observacionUsuario."</div></div>
+				de las TIC`s, que permitan en forma remota la certificación de los estudiantes en el período de abril.-->
+				Tras la declaratoria de “Emergencia Sanitaria” en todo el territorio colombiano, como consecuencia del COVID-19, la interventoría viene implementando de manera excepcional estrategias para la verificación virtual de la efectiva atención de los estudiantes de cobertura educativa 2020, permitiendo de forma remota la certificación de los mismos en cada periodo y se continuará trabajando en dichas estrategias mientras se mantenga el estado de emergencia sanitaria en el país. La verificación de la atención de los estudiantes relacionados en la presente acta, corresponde a las evidencias presentadas y a la información registrada por la entidad contratista en el sistema de información de la interventoría, asimismo lo reportado en el sistema de matrícula SIMAT.
+				<br><br>
+				Posterior a la certificación de la atención de los estudiantes relacionados en el acta, la entidad podrá realizar la solicitud de verificación de los estudiantes no certificados del mes, teniendo en cuenta el proceso establecido por la interventoría para su reconocimiento.<br><br>".$acta->CobActaconteoDatos->observacionUsuario."</div></div>
 				<div class='fila observacion' style='height: 160px !important'><div>3.2 OBSERVACIONES DEL CONTRATISTA: ".$acta->CobActaconteoDatos->observacionEncargado."</div></div>
 				<div class='clear'></div>
 				</div>";
@@ -818,12 +821,16 @@ class CobActaconteo extends \Phalcon\Mvc\Model
 				</div>
 				<div class='seccion' id='observaciones'>
 				<div class='fila center bold'><div style='border:none; width: 100%'>3. 3. OBSERVACIONES AL MOMENTO DE LA VERIFICACIÓN DE EVIDENCIAS</div></div>
-				<div class='fila observacion' style='margin-top:0px;'><div>3.1 OBSERVACIÓN DEL TÉCNICO DE CONTEO:<br><br>Tras la declaratoria de “Emergencia Sanitaria” en todo el territorio colombiano por parte del Ministerio de Salud y Protección Social, según Resolución 385
+				<div class='fila observacion' style='margin-top:0px; height: 320px !important; font-size: 10px !important;'><div>3.1 OBSERVACIÓN DEL TÉCNICO DE CONTEO:<br><br><!--Tras la declaratoria de “Emergencia Sanitaria” en todo el territorio colombiano por parte del Ministerio de Salud y Protección Social, según Resolución 385
 				del 12 de marzo de 2020 y de calamidad pública por Decreto Municipal 373 del 16 de marzo de 2020, la interventoría a través de medios no presenciales
 				realizará la verificación de evidencias de atención a los estudiantes. Adicional a lo anterior, mediante Decreto 457 del 22 de marzo de 2020, el Gobierno
 				Nacional ordenó el aislamiento preventivo obligatorio de todas las personas habitantes de la República de Colombia, entre el 25 de marzo y el 11 de mayo
 				de 2020, con algunas excepciones. Con fundamento en lo anterior, el equipo de interventoría realiza labores de verificación, haciendo uso de herramientas
-				de las TIC`s, que permitan en forma remota la certificación de los estudiantes en el período de abril.</div></div>
+				de las TIC`s, que permitan en forma remota la certificación de los estudiantes en el período de abril.-->
+				Tras la declaratoria de “Emergencia Sanitaria” en todo el territorio colombiano, como consecuencia del COVID-19, la interventoría viene implementando de manera excepcional estrategias para la verificación virtual de la efectiva atención de los estudiantes de cobertura educativa 2020, permitiendo de forma remota la certificación de los mismos en cada periodo y se continuará trabajando en dichas estrategias mientras se mantenga el estado de emergencia sanitaria en el país. La verificación de la atención de los estudiantes relacionados en la presente acta, corresponde a las evidencias presentadas y a la información registrada por la entidad contratista en el sistema de información de la interventoría, asimismo lo reportado en el sistema de matrícula SIMAT.
+				<br><br>
+				Posterior a la certificación de la atención de los estudiantes relacionados en el acta, la entidad podrá realizar la solicitud de verificación de los estudiantes no certificados del mes, teniendo en cuenta el proceso establecido por la interventoría para su reconocimiento.
+				</div></div>
 				<div class='fila observacion'><div>3.2 OBSERVACIONES DEL CONTRATISTA:</div></div>
 				<div class='clear'></div>
 				</div>";
