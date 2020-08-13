@@ -335,20 +335,25 @@ class BcSedeContratoController extends ControllerBase
             ]
        ]);
 
-       $beneficiarios_totales = (count($beneficiarios_pendientes )) +$activos;
+       if ($beneficiarios_pendientes != null) {
+        $beneficiarios_totales = (count($beneficiarios_pendientes )) +$activos;
+       }else{
+        $beneficiarios_totales = $activos;
+       }
 
       if($beneficiarios_totales>=$cuposTotal){
         $this->flash->error("No es posible registrar un estudiante nuevo, tiene beneficiarios pendientes por aprobación los cuales podrián completar el total de sus cupos");
-         return $this->response->redirect("bc_sede_contrato/beneficiarios");
+        return $this->response->redirect("bc_sede_contrato/beneficiarios");
       }
 
       $beneficiario_simat_pendiente = CobOferentePersonaSimat::findFirst([
         'columns'    => '*',
-        'conditions' => 'documento = ?1 AND estado_certificacion = ?2 AND id_contrato = ?3',
+        'conditions' => 'documento = ?1 AND estado_certificacion = ?2 AND id_contrato = ?3 AND estado_activo = ?4',
         'bind'       => [
                 1 => $documento,
                 2 => 2,
-                3 => $id_contrato
+                3 => $id_contrato,
+                4 => '1',
             ]
        ]);
 
@@ -382,15 +387,18 @@ class BcSedeContratoController extends ControllerBase
         
       if (empty($beneficiario)) {
         $this->flash->error("El documento ". $documento ." no se encuentra registrado en ningún comité asociado a su contrato");
-        return $this->response->redirect("bc_sede_contrato/beneficiarios");
+         return $this->response->redirect("bc_sede_contrato/beneficiarios");
       }
 
-      $sedes = BcSedeContrato::find(['id_contrato = '. $this->usuario, 'order' => 'oferente_nombre asc']);
+      $sedes = BcSedeContrato::find(['id_contrato = '. $this->usuario, 'and estado = 1']);
+
       $oferente = BcOferente::findFirst(['id_contrato= '.  $this->usuario]);
 
       $sedes_array = array();
       foreach ($sedes as $row) {
-        $sedes_array[$row->id_sede] = $row->sede_nombre;
+        if($row->estado == 1){
+          $sedes_array[$row->id_sede] = $row->sede_nombre;
+        }
       }
 
       $fecha_inicio_min = new DateTime(date('Y-m-d'));
