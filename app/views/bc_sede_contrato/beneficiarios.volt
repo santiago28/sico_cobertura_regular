@@ -165,7 +165,7 @@ th     { background:#eee; }
         {{ link_to("bc_sede_contrato/editar_persona/?id_persona="~beneficiario.id_oferente_persona, '<i class="glyphicon glyphicon-pencil"></i> ', "rel": "tooltip", "title":"Editar") }}
         <a style="margin-left:7%;" onclick="abrirModal('{{beneficiario.documento}}','{{beneficiario.nombre1}} {{beneficiario.nombre2}} {{beneficiario.apellido1}} {{beneficiario.apellido2}}')" rel="tooltip" title="Retirar Estudiante" class="eliminar_fila" data-toggle = "modal" id="{{ beneficiario.id_oferente_persona }}"><i class="glyphicon glyphicon-trash"></i></a>
         <?php if ($beneficiario->estado_certificacion==3) {?>
-          <a style="margin-left:7%;" onclick="abrirModalEvidencia('{{beneficiario.id_oferente_persona}}','{{beneficiario.documento}}','{{beneficiario.motivo_certificacion}}')" rel="tooltip" title="Adjuntar nueva evidencia" class="eliminar_fila" data-toggle = "modal" id="{{ beneficiario.id_oferente_persona }}"><i class="glyphicon glyphicon-file"></i></a>
+          <a style="margin-left:7%;" onclick="abrirModalEvidencia('{{beneficiario.id_oferente_persona}}','{{beneficiario.documento}}','{{beneficiario.motivo_certificacion|trim}}')" rel="tooltip" title="Adjuntar nueva evidencia" class="eliminar_fila" data-toggle = "modal" id="{{ beneficiario.id_oferente_persona }}"><i class="glyphicon glyphicon-file"></i></a>
         <?php }?>
         {% endif %}
       </td>
@@ -383,8 +383,10 @@ function confirmarEliminar(){
 function abrirModalEvidencia(id_oferente_persona, documento, motivo){
   $("#id_oferente_persona").val(id_oferente_persona);
   $("#documento").val(documento);
+
   $("#motivo_rechazo").text("La evidencia de matrícula anterior fue rechazada por: " + motivo + ", por favor cargue correctamente el nuevo archivo.")
   $("#modal_editar_evidencia").modal("show");
+ 
 }
 
 window.onload = function() {

@@ -450,13 +450,13 @@ class BcSedeContratoController extends ControllerBase
       'columns'    => '*',
       'conditions' => 'documento = ?1 AND estado_activo = ?2',
       'bind'       => [
-      1 => $this->request->getPost("documento"),
-      2 => 0,
-      ]
+          1 => $this->request->getPost("documento"),
+          2 => 0,
+          ]
       ]);
 
       if (empty($beneficiario)) {
-      $beneficiario = new CobOferentePersonaSimat();
+        $beneficiario = new CobOferentePersonaSimat();
       }
 
       $fecha_fin = date('Y').'-12-31';
@@ -518,6 +518,7 @@ class BcSedeContratoController extends ControllerBase
       $beneficiario->estado_activo = 1;
       $beneficiario->estado_certificacion = 2;
       $beneficiario->fecha_pre_matricula = date('Y-m-d');
+      $beneficiario->fecha_retiro = null;
 
       if (!$beneficiario->save()) {
       foreach ($beneficiario->getMessages() as $message) {
