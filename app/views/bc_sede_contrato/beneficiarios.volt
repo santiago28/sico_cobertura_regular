@@ -114,7 +114,7 @@ th     { background:#eee; }
   <h5 align="center" style="margin:2%;"><span><b>CONTRATO: {{id_contrato}} MODALIDAD:</b> {{modalidad[0].nombre}}</span></h5>
   {% if(periodo_bloqueo[0].estado_periodo == 0)%}
   <div class="alert alert-danger" role="alert" style="justify-content: center; text-align:center;">
-    <span><b>El período se encuntra cerrado por motivo de verificación de la atención</b></span>
+    <span><b>El período se encuentra cerrado por motivo de verificación de la atención</b></span>
   </div>
   {% endif %}
   <div class="alert alert-info" role="alert" style="justify-content: center; text-align:center;">
@@ -408,18 +408,20 @@ setTimeout(function(){
   $("#ExportarExcel").click(function(){
     var Export = [];
     {% for beneficiario in beneficiarios %}
-    Export.push({
-      "Documento": "{{beneficiario.documento}}",
-      "Apellidos": "{{beneficiario.apellido1}}  {{beneficiario.apellido2}} ",
-      "Nombres": "{{beneficiario.nombre1}}  {{beneficiario.nombre2}}",
-      "Codigo_dane": "{{beneficiario.codigo_dane}}",
-      "Sede_simat": "<?php echo str_replace('"', '', $beneficiario->sede_simat); ?>",
-      "Sede": "<?php echo str_replace('"', '', $beneficiario->nombre_sede); ?>",
-      "Jornada": "{{beneficiario.nombre_jornada}}",
-      "Grado": "{{beneficiario.grado_cod_simat}}",
-      "Grupo": "{{beneficiario.grupo_simat}}",
-      "Acta_Ingreso": "{{beneficiario.ingreso}}",
-    });
+      {% if (beneficiario.estado_certificacion == 1) %}
+        Export.push({
+          "Documento": "{{beneficiario.documento}}",
+          "Apellidos": "{{beneficiario.apellido1}}  {{beneficiario.apellido2}} ",
+          "Nombres": "{{beneficiario.nombre1}}  {{beneficiario.nombre2}}",
+          "Codigo_dane": "{{beneficiario.codigo_dane}}",
+          "Sede_simat": "<?php echo str_replace('"', '', $beneficiario->sede_simat); ?>",
+          "Sede": "<?php echo str_replace('"', '', $beneficiario->nombre_sede); ?>",
+          "Jornada": "{{beneficiario.nombre_jornada}}",
+          "Grado": "{{beneficiario.grado_cod_simat}}",
+          "Grupo": "{{beneficiario.grupo_simat}}",
+          "Acta_Ingreso": "{{beneficiario.ingreso}}",
+        });
+      {% endif %}
     {% endfor %}
     alasql('SELECT * INTO XLSX("Reporte.xlsx",{headers:true}) FROM ?', [Export]);
   });

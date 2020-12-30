@@ -48,7 +48,8 @@ setTimeout(function(){
       "ID_JORNADA": "{{ beneficiario.id_jornada }}",
       "JORNADA": "{{ beneficiario.nombre_jornada }}",
       "INGRESO": "{{ beneficiario.ingreso }}",
-      "FECHA MATRÍCULA": "{{ beneficiario.fecha_ini }}"
+      "FECHA MATRÍCULA": "{{ beneficiario.fecha_ini }}",
+      "FECHA PREMATRÍCULA": "{{ beneficiario.fecha_pre_matricula }}"
     })
     {% endfor %}
     alasql('SELECT * INTO XLSX("Reporte Beneficiarios Activos.xlsx",{headers:true}) FROM ?', [Export]);

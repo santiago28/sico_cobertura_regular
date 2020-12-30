@@ -742,7 +742,7 @@ class BcSedeContratoController extends ControllerBase
       WHERE id_oferente_persona='$id_oferente_persona'");
       if (!$query) {
       foreach ($query->getMessages() as $message) {
-      $this->flash->error($message);
+         $this->flash->error($message);
       }
       return $this->response->redirect("bc_sede_contrato/modificarDocumentos");
       }
@@ -751,20 +751,20 @@ class BcSedeContratoController extends ControllerBase
       $documento= CobEditarDocPersona::find(['id_oferente_persona='. $id_oferente_persona ]);
       $doc= $documento[0]->documento_nuevo;
       $query = $db->query("UPDATE cob_oferente_persona_simat
-      SET
-      documento = '$doc'
-      WHERE id_oferente_persona='$id_oferente_persona'");
+                          SET
+                            documento = '$doc'
+                          WHERE id_oferente_persona='$id_oferente_persona'");
 
       $query1 = $db->query("UPDATE cob_editar_doc_persona
-      SET
-      estado=0
-      WHERE id_oferente_persona='$id_oferente_persona'");
+                            SET
+                             estado=0
+                            WHERE id_oferente_persona='$id_oferente_persona'");
 
       if (!$query) {
       foreach ($query->getMessages() as $message) {
-      $this->flash->error($message);
+         $this->flash->error($message);
       }
-      return $this->response->redirect("bc_sede_contrato/modificarDocumentos");
+        return $this->response->redirect("bc_sede_contrato/modificarDocumentos");
       }
       $this->flash->success("El documento fue actualizado exitosamente");
       return $this->response->redirect("bc_sede_contrato/modificarDocumentos");

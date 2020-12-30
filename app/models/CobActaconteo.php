@@ -649,7 +649,7 @@ class CobActaconteo extends \Phalcon\Mvc\Model
 		if ($acta->recorrido_virtual == 1) {
 			$totalizacion_asistencia = "<div class='seccion' id='totalizacion_asistencia'>
 			<div class='fila center bold'><div style='border:none; width: 100%'>1. TOTALIZACIÓN DE EVIDENCIAS</div></div>
-			<div class='fila'><div>1.1 PRESENTA EVIDENCIA DE ATENCIÓN VÁLIDA* (Boletín de notas, Consolidado de notas)</div>&nbsp;&nbsp;".count($asiste1)."</div>
+			<div class='fila'><div>1.1 PRESENTA EVIDENCIA DE ATENCIÓN VÁLIDA*</div>&nbsp;&nbsp;".count($asiste1)."</div>
 			<div class='fila'><div>1.2 NO PRESENTA EVIDENCIA DE ATENCIÓN VÁLIDA</div>&nbsp;&nbsp;".count($asiste2)."</div>
 			<div class='fila'><div>1.3 NO PRESENTA EVIDENCIA DE ATENCIÓN</div>&nbsp;&nbsp;".count($asiste3)."</div>
 			<div class='fila'><div>1.4 RETIRADO / CANCELADO</div>&nbsp;&nbsp;".count($asiste4)."</div>
